@@ -1,0 +1,4 @@
+.scrapy
+.env
+
+sc01/__pycache__/*
