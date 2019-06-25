@@ -24,9 +24,9 @@ class NkthedaySpider(CrawlSpider):
         ),
     )
 
-    def __init__(self, cdate = cdate, *args, **kwargs):
+    def __init__(self, date = cdate, *args, **kwargs):
         super(NkthedaySpider, self).__init__(*args, **kwargs)
-        self.start_urls = ['http://race.netkeiba.com/?pid=race_list_sub&id=' + cdate]
+        self.start_urls = ['http://race.netkeiba.com/?pid=race_list_sub&id=' + date]
 
     # def start_requests(self):
     #     url = 'http://race.netkeiba.com/?pid=race_list_sub&id=c' + cdate
@@ -42,11 +42,23 @@ class NkthedaySpider(CrawlSpider):
         mainracedata = raceinfo.css('.mainrace_data')[0]
         otherdata = mainracedata.css('.race_otherdata')[0]
         dateweek = otherdata.css('p')[0].css('::text').get()
-        schedule = otherdata.css('p')[1].css('::text').get()
-        item['place'] = re.split('\d', schedule.split('回')[1])[0]
+        scheduletype = otherdata.css('p')[1].css('::text').get()
+        raceclass = otherdata.css('p')[2].css('::text').get()
+        addedmoney = otherdata.css('p')[3].css('::text').get()
+        item['place'] = re.split('\d', scheduletype.split('回')[1])[0]
         # item['place'] = raceinfo.css('ul.race_place a.active::text').get()
         item['racenum'] = raceinfo.css('div.race_num a.active::text').get().split('R')[0]
-        item['title'] = raceinfo.css('dl.racedata h1::text').get().strip()
+        racedata = raceinfo.css('.data_intro dl.racedata')[0]
+        item['title'] = racedata.css('h1::text').get().strip()
+        racetype = racedata.css('dd p')[0].css('::text').get()
+        courcetype = re.split('(\d+)|m', racetype)
+        item['cource'] = courcetype[0]
+        item['distance'] = courcetype[1]
+        item['cw_ccw'] = racetype.split('(')[1][0]
+        racecondition = racedata.css('dd p')[1].css('::text').get().split('\xa0/\xa0')
+        item['weather'] = racecondition[0].split('：')[1]
+        item['condition'] = racecondition[1].split('：')[1]
+        item['posttime'] = racecondition[2].split('：')[1]
         # # datadetail = raceinfo.css('div.data_intro p.smalltxt')
         # racedetails = raceinfo.css('dl.racedata + p.smalltxt::text').get()
         # racedatejp = racedetails.split()[0]
@@ -54,7 +66,10 @@ class NkthedaySpider(CrawlSpider):
         # racemonth = racedatejp.split('年')[1].split('月')[0].zfill(2)
         # raceday = racedatejp.split('月')[1].split('日')[0].zfill(2)
         # item['date'] = raceyear + '-' + racemonth + '-' + raceday
-        item['date'] = otherdata0.split('(')[0].replace('/', '-')
+        item['date'] = dateweek.split('(')[0].replace('/', '-')
+        item['raceage'] = raceclass.split('\xa0')[0]
+        item['starters'] = raceclass.split('\xa0')[1][:-1]
+        item['addedmoneylist'] = addedmoney.split('：')[1].split('万円')[0].replace('、', ',')
         # item['schedule'] = racedetails.split()[1]
         # item['racegrade'] = racedetails.split()[2]
         # item['category'] = racedetails.split()[3]
