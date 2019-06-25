@@ -13,7 +13,7 @@ def create_table(engine):
     Base.metadata.create_all(engine)
 
 class nkdb_races(Base):
-    __tablename__ = 'nkdb_races'
+    __tablename__ = 'nkthedayraces'
 
     raceid = Column(Text, primary_key=True)
     place = Column(Text)
@@ -21,8 +21,9 @@ class nkdb_races(Base):
     title = Column(Text)
     date = Column(Date)
     schedule = Column(Text)
-    classification = Column(Text)
+    racegrade = Column(Text)
     category = Column(Text)
+
     placenum = Column(Integer, primary_key=True)
     postnum = Column(Integer)
     horsenum = Column(Integer)
@@ -37,11 +38,11 @@ class nkdb_races(Base):
     last3f = Column(Float)
     odds = Column(Float)
     fav = Column(Integer)
+    trainer = Column(Text)
     horseweight = Column(Integer)
     horseweightdiff = Column(Integer)
-    trainer = Column(Text)
-    owner = Column(Text)
-    addedmoney = Column(Integer)
+    # owner = Column(Text)
+    # addedmoney = Column(Integer)
 
     # def __repr__(self):
     #    return "f<User(name='{}', fullname='{}', nickname='{}')>".format(

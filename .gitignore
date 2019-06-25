@@ -1,4 +1,5 @@
 .scrapy
 .env
 
-sc01/__pycache__/*
+nkc01/__pycache__/
+nkc01/spiders/__pycache__/
