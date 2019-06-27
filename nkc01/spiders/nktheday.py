@@ -40,11 +40,11 @@ class NkthedaySpider(CrawlSpider):
         raceplaceurl = response.request.url
         item['raceid'] = raceplaceurl.split('=')[2][1:].split('&')[0]
         mainracedata = raceinfo.css('.mainrace_data')[0]
-        otherdata = mainracedata.css('.race_otherdata')[0]
-        dateweek = otherdata.css('p')[0].css('::text').get()
-        scheduletype = otherdata.css('p')[1].css('::text').get()
-        raceclass = otherdata.css('p')[2].css('::text').get()
-        addedmoney = otherdata.css('p')[3].css('::text').get()
+        otherdata = mainracedata.css('.race_otherdata')[0].css('p')
+        dateweek = otherdata[0].css('::text').get()
+        scheduletype = otherdata[1].css('::text').get()
+        raceclass = otherdata[2].css('::text').get()
+        addedmoney = otherdata[3].css('::text').get()
         item['place'] = re.split('\d', scheduletype.split('回')[1])[0]
         # item['place'] = raceinfo.css('ul.race_place a.active::text').get()
         item['racenum'] = raceinfo.css('div.race_num a.active::text').get().split('R')[0]
@@ -52,9 +52,9 @@ class NkthedaySpider(CrawlSpider):
         item['title'] = racedata.css('h1::text').get().strip()
         racetype = racedata.css('dd p')[0].css('::text').get()
         courcetype = re.split('(\d+)|m', racetype)
-        item['cource'] = courcetype[0]
+        item['courcetype'] = courcetype[0]
         item['distance'] = courcetype[1]
-        item['cw_ccw'] = racetype.split('(')[1][0]
+        item['direction'] = re.split('[()]', racetype)[1]#racetype.split('(')[1][0]
         racecondition = racedata.css('dd p')[1].css('::text').get().split('\xa0/\xa0')
         item['weather'] = racecondition[0].split('：')[1]
         item['condition'] = racecondition[1].split('：')[1]
@@ -67,9 +67,10 @@ class NkthedaySpider(CrawlSpider):
         # raceday = racedatejp.split('月')[1].split('日')[0].zfill(2)
         # item['date'] = raceyear + '-' + racemonth + '-' + raceday
         item['date'] = dateweek.split('(')[0].replace('/', '-')
-        item['raceage'] = raceclass.split('\xa0')[0]
+        item['racegrade'] = raceclass.split('\xa0')[0]
         item['starters'] = raceclass.split('\xa0')[1][:-1]
-        item['addedmoneylist'] = addedmoney.split('：')[1].split('万円')[0].replace('、', ',')
+        addedarr = addedmoney.split('：')[1].split('万円')[0].split('、')
+        item['raceaddedmoney'] = ','.join([str(int(x) * 1000) for x in addedarr])
         # item['schedule'] = racedetails.split()[1]
         # item['racegrade'] = racedetails.split()[2]
         # item['category'] = racedetails.split()[3]
