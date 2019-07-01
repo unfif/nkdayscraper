@@ -23,6 +23,7 @@ class Nkc01Item(scrapy.Item):
     racegrade = scrapy.Field()
     starters = scrapy.Field()
     raceaddedmoney = scrapy.Field()
+    requrl = scrapy.Field()
 
     placenum = scrapy.Field()
     postnum = scrapy.Field()

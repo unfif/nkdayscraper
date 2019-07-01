@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
-import scrapy, re
+import scrapy, re, requests
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from nkc01.items import Nkc01Item
 import datetime as dt
 
-now = dt.datetime.now()
+# now = dt.datetime.now()
 # cYmd = "{0:%Y%m%d}".format(now)
-cdate = "{0:%m%d}".format(now)
+today = dt.date.today()
+targetdate = today - dt.timedelta((today.weekday() + 1) % 7)
+targetday = "{0:%m%d}".format(targetdate)
+
+baseurl = 'http://race.netkeiba.com/?pid=race_list_sub&id='
+starturl = baseurl + 'p' + targetday
+req = requests.get(starturl)
+if len(req.text) < 50: starturl = baseurl + 'c' + targetday
 
 class NkthedaySpider(CrawlSpider):
     name = 'nktheday'
@@ -24,9 +31,10 @@ class NkthedaySpider(CrawlSpider):
         ),
     )
 
-    def __init__(self, date = cdate, *args, **kwargs):
+    def __init__(self, date='c'+targetday, *args, **kwargs):
         super(NkthedaySpider, self).__init__(*args, **kwargs)
-        self.start_urls = ['http://race.netkeiba.com/?pid=race_list_sub&id=' + date]
+        self.start_urls = [starturl]
+        # print('targetday: ', cdate)
 
     # def start_requests(self):
     #     url = 'http://race.netkeiba.com/?pid=race_list_sub&id=c' + cdate
@@ -94,5 +102,6 @@ class NkthedaySpider(CrawlSpider):
             item['trainer'] = tr.css('td')[13].css('a::text').get()
             item['horseweight'] = tr.css('td')[14].css('::text').get().split('(')[0]
             item['horseweightdiff'] = tr.css('td')[14].css('::text').get().split('(')[1][:-1].replace('+', '')
+            item['requrl'] = response.request.url
 
             yield item
