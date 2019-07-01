@@ -13,7 +13,7 @@ import os
 import pathlib as pl
 from dotenv import load_dotenv
 
-load_dotenv(pl.Path.cwd()/'.env')
+load_dotenv(pl.Path(__file__).parent.parent/'.env')
 
 BOT_NAME = 'nkc01'
 
@@ -89,15 +89,15 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-#HTTPCACHE_ENABLED = True
-#HTTPCACHE_EXPIRATION_SECS = 0
-#HTTPCACHE_DIR = 'httpcache'
-#HTTPCACHE_IGNORE_HTTP_CODES = []
-#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-DEPTH_LIMIT = 1
+HTTPCACHE_ENABLED = True
+HTTPCACHE_EXPIRATION_SECS = 0
+HTTPCACHE_DIR = 'httpcache'
+HTTPCACHE_IGNORE_HTTP_CODES = []
+HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+DEPTH_LIMIT = 0
 
 FEED_EXPORT_ENCODING='utf-8'
 
 # USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
-
-URI = os.environ['URI']
+# print(os.environ)
+URI = os.environ.get('URI')

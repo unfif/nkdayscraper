@@ -12,7 +12,7 @@ import pandas as pd
 class Nkc01Pipeline(object):
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
-        engine = db_connect(True)
+        engine = db_connect(False)
         # drop_table(engine, nkthedayraces)
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
