@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>NKC_Scrapy_01</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+
+<body>
+  <h1>NKC_Scrapy_01</h1>
+
+  <form action="/additem" method="post" name="registerform">
+    <p>
+      something to do:
+      <input type="text" name="title">
+      <a href="javascript:document.registerform.submit()" class="button">submit</a>
+    </p>
+  </form>
+
+  {% if todolist %}
+  <p>here your todos</p>
+  <form action="/updatedone" method="post" name="updatedoneform">
+    <ul style="list-style-type: none; padding-left: 10px">
+      {% for item in todolist %}
+      <li {% if item.done %} style="color: lightgray" {% endif %}>
+        <input type="checkbox" {% if item.done %} checked="checked" {% endif %}
+          name="{{ item.item_id }}" value="{{ item.title }}"
+          onchange="javascript:document.updatedoneform.submit()">
+        {{ item.title }}
+        <a href="/deleteitem/{{ item.item_id }}">[delete]</a>
+      </li>
+      {% endfor %}
+    </ul>
+    <a href="/deletealldoneitems" class="button">delete all done items</a>
+  </form>
+  {% else %}
+  <p>you can register something to do.</p>
+  {% endif %}
+</body>
+
+</html>
