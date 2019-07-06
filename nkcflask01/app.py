@@ -2,18 +2,18 @@ from flask import Flask, render_template, redirect, request
 from model import ToDoList, init_db
 
 app = Flask(__name__)
-
 db = init_db(app)
 
 todolist = ToDoList()
 
-# @app.route("/")
-# def show_todolist():
-#   return render_template("index.html", todolist=todolist.get_all())
-
 @app.route("/")
-def index():
-  return render_template("index.html")
+def show_todolist():
+    return render_template("index.html", todolist=todolist.get_all())
+
+@app.route("/getraces")
+def getraces():
+    racesdf = todolist.getRaces()
+    return render_template("index.html", racesdf=racesdf)
 
 @app.route("/additem", methods=["POST"])
 def add_item():
