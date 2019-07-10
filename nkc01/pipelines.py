@@ -19,6 +19,8 @@ class Nkc01Pipeline(object):
         session = self.Session()
         session.query(nkthedayraces).delete()
         session.commit()
+        model = nkthedayraces()
+        # print(model.getCommentList())
 
     # def open_spider(self, spider: scrapy.Spider):# コネクションの開始
     #     URI = nkc01.settings.get('URI')

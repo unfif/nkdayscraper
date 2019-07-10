@@ -11,10 +11,26 @@ table = meta.tables['nkthedayraces']
 cols = table.c
 # print(cols.keys())
 con = engine.connect()
-sql = table.select().where(cols.raceid.like('2019030202__')).where(cols.placenum.in_([1, 2, 3])).order_by(cols.racenum).order_by(cols.placenum)
+sql = table.select().where(cols.raceid.like('2019030203__')).where(cols.placenum.in_([1, 2, 3])).order_by(cols.racenum).order_by(cols.placenum)
 # sql = "SELECT * FROM nkthedayraces AS nk "
 # sql += "WHERE nk.raceid LIKE '2019030202__' AND nk.placenum IN (1, 2, 3) "
 # sql += "ORDER BY nk.racenum, nk.placenum"
-pd.read_sql_query(sql, con)
+racesdf = pd.read_sql_query(sql, con)
+racesdf.columns
+
+for index, row in racesdf.iterrows():
+    if index == 0:
+        sr = row
+        for column in row:
+            print(type(column))
+
+sr
+type(sr)
+sr.items()
+for index, val in sr.items():
+    print(index, val)
+
+for index, val in sr.to_dict().items:
+    print(index, val)
 
 con.close()

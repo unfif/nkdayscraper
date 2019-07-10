@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request
-from model import ToDoList, init_db
+from model import NkTheDayRaces, ToDoList, init_db
 
 app = Flask(__name__)
 db = init_db(app)
@@ -12,7 +12,7 @@ def show_todolist():
 
 @app.route("/getraces")
 def getraces():
-    racesdf = todolist.getRaces()
+    racesdf = NkTheDayRaces.getRaces()
     return render_template("index.html", racesdf=racesdf)
 
 @app.route("/additem", methods=["POST"])
