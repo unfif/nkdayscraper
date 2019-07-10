@@ -13,8 +13,11 @@ targetday = "{0:%m%d}".format(targetdate)
 
 baseurl = 'http://race.netkeiba.com/?pid=race_list_sub&id='
 starturl = baseurl + 'p' + targetday
-req = requests.get(starturl)
-if len(req.text) < 50: starturl = baseurl + 'c' + targetday
+try:
+    req = requests.get(starturl)
+    if len(req.text) < 50: starturl = baseurl + 'c' + targetday
+except:
+    starturl = baseurl + 'c' + targetday
 
 class NkthedaySpider(CrawlSpider):
     name = 'nktheday'
@@ -33,7 +36,8 @@ class NkthedaySpider(CrawlSpider):
 
     def __init__(self, date='c'+targetday, *args, **kwargs):
         super(NkthedaySpider, self).__init__(*args, **kwargs)
-        self.start_urls = [starturl]
+        # print(starturl, baseurl + date, date)
+        self.start_urls = [baseurl + date]
         # print('targetday: ', cdate)
 
     # def start_requests(self):

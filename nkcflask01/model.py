@@ -1,29 +1,47 @@
 from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
+import re
 
 db = SQLAlchemy()
-engine = db.create_engine("postgresql+psycopg2://postgres:marehito@localhost:5432/postgres", echo=False)
+engine = db.create_engine("postgresql+psycopg2://postgres:marehito@localhost:5432/postgres", {})
 meta = db.MetaData()
 meta.reflect(bind=engine)
 table = meta.tables['nkthedayraces']
 cols = table.c
 
 def init_db(app):
-  app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:marehito@localhost:5432/postgres"#?charset=utf8"
-  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-  db.init_app(app)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:marehito@localhost:5432/postgres"#?charset=utf8"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
 
 class ToDoItem(db.Model):
-  __tablename__ = "todoitems"
-  item_id = db.Column(db.Integer, primary_key=True)
-  title = db.Column(db.String(100), nullable=False, default=False)
-  done = db.Column(db.Boolean, nullable=False)
+    __tablename__ = "todoitems"
+    item_id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False, default=False)
+    done = db.Column(db.Boolean, nullable=False)
 
 class NkTheDayRaces():
     def getRaces():
         con = engine.connect()
-        sql = table.select().where(cols.raceid.like('2019030202__')).where(cols.placenum.in_([1, 2, 3])).order_by(cols.racenum).order_by(cols.placenum)
-        racesdf = pd.read_sql_query(sql, con)
+        sql = table.select().where(cols.raceid.like('20190302____')).where(cols.placenum.in_([1, 2, 3])).order_by(cols.racenum).order_by(cols.placenum)
+        racesdf = pd.read_sql(sql, con)
+        racesdf.title = racesdf.title.apply(lambda x: x.rstrip('クラス'))
+        racesdf.posttime = racesdf.posttime.apply(lambda x: x.strftime('%H:%M'))
+        racesdf.time = racesdf.time.apply(lambda x: x.strftime('%M:%S %f').strip('0'))
+
+        sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
+        sql += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
+        sql += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'nkthedayraces') "
+        sql += "and psat.relname = 'nkthedayraces' and psat.relid=pd.objoid "
+        sql += "and pd.objsubid != 0 and pd.objoid=pa.attrelid and pd.objsubid=pa.attnum "
+        sql += "ORDER BY pd.objsubid"
+
+        colnames = {}
+        comments = pd.read_sql(sql, con)
+        for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
+            colnames.update({comment[1].column_name: comment[1].column_comment})
+
+        racesdf = racesdf.rename(columns = colnames)
         con.close()
         return racesdf
 
