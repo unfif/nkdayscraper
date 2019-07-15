@@ -23,8 +23,9 @@ class ToDoItem(db.Model):
 class NkTheDayRaces():
     def getRaces():
         con = engine.connect()
-        sql = table.select().where(cols.raceid.like('20190302____')).where(cols.placenum.in_([1, 2, 3])).order_by(cols.racenum).order_by(cols.placenum)
+        sql = table.select().where(cols.raceid.like('20190302____')).order_by(cols.racenum).order_by(cols.placenum)
         racesdf = pd.read_sql(sql, con)
+        """.where(cols.placenum.in_([1, 2, 3]))"""
         racesdf.title = racesdf.title.apply(lambda x: x.rstrip('クラス'))
         racesdf.posttime = racesdf.posttime.apply(lambda x: x.strftime('%H:%M'))
         racesdf.time = racesdf.time.apply(lambda x: x.strftime('%M:%S %f').strip('0'))
@@ -43,6 +44,13 @@ class NkTheDayRaces():
 
         racesdf = racesdf.rename(columns = colnames)
         con.close()
+        # i = 0
+        # for index, row in racesdf.iteritems():
+        #     if i == 0:
+        #         print(row)
+        #         i += 1
+        # print(racesdf)
+
         return racesdf
 
 class ToDoList:
