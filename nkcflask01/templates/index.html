@@ -33,15 +33,24 @@
     .col_レースID, .col_タイトル, .col_天候, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl{
       display: none;
     }
-    table.table tr:nth-of-type(3n) td{
-      border-bottom: 3px double #999;
+    /* td:not(.順位_1, .順位_2, .順位_3){
+      display: none;
+    } */
+    tr.順位_4, tr.順位_5, tr.順位_6, tr.順位_7, tr.順位_8, tr.順位_9, tr.順位_10, tr.順位_11, tr.順位_12, tr.順位_13, tr.順位_14, tr.順位_15, tr.順位_16, tr.順位_17, tr.順位_18, tr.順位_19, tr.順位_20, tr.順位_21, tr.順位_22{
+      display: none;
     }
+    /* tr:not(.順位_4, .順位_5, .順位_6, .順位_7, .順位_8, .順位_9, .順位_10, .順位_11, .順位_12, .順位_13, .順位_14, .順位_15, .順位_16, .順位_17, .順位_18, .順位_19, .順位_20, .順位_21, .順位_22):last-of-type td{
+      border-bottom: 3px double #999;
+    } */
+    /* table.table tr:nth-of-type(3n) td{
+      border-bottom: 3px double #999;
+    } */
   </style>
   <script src="{{url_for('static', filename='js/jquery-3.4.1.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.bundle.js')}}"></script>
 </head>
 <body>
-  <table class="table table-sm table-striped table-hover">
+  <table class="raceresults table table-sm table-striped table-hover">
     <thead class="thead-dark">
       {%- for column in racesdf.columns: %}
       <th class="col_{{column}}">{{column}}</th>
@@ -49,9 +58,9 @@
     </thead>
     <tbody>
       {%- for index, row in racesdf.iterrows(): %}
-        <tr>
-          {%- for index, val in row.items(): %}
-          <td class="col_{{index}}">{{val}}</td>
+        <tr class="場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}" data-racenum="{{row.R}}" data-placenum="{{row.順位}}">
+          {%- for column, val in row.items(): %}
+          <td class="col_{{column}} 場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}">{{val}}</td>
           {%- endfor %}
         </tr>
       {%- endfor %}
@@ -101,6 +110,18 @@
         console.log(document.updatedoneform);
         console.log(JSON.parse(JSON.stringify($('form[name="updatedoneform"]').serializeArray())));
       })
+      $('.raceresults tbody tr').click(function(){
+        var racenum = $(this).attr('data-racenum');
+        var $sameracetr = $(this).closest('tbody').find('tr[data-racenum="' + racenum + '"]');
+        $sameracetr.last().css('border-bottom', '3px double #999');
+        $sameracetr.not('.順位_1, .順位_2, .順位_3').toggle();
+        // console.log('test', $('.raceresults tbody').find('tr:not([style="display: none;"])'));
+        var disp$trs = [];
+        $('.raceresults tbody').find('tr:not([style="display: none;"])').each(function(){
+
+        })
+      })
+      // console.log($('.raceresults tbody').find('tr[style="display: table-row;"]'));
     })
   </script>
 </body>
