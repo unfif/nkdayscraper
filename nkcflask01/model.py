@@ -30,6 +30,15 @@ class NkTheDayRaces():
         racesdf.posttime = racesdf.posttime.apply(lambda x: x.strftime('%H:%M'))
         racesdf.time = racesdf.time.apply(lambda x: x.strftime('%M:%S %f').strip('0'))
 
+        # racesdf = pd.read_json('C:/Users/pathz/Documents/scrapy/nkc01/results01.json', encoding='utf-8')
+        racesdf = racesdf.sort_values(['place', 'racenum', 'placenum']).reset_index(drop=True)
+        racesdf['racerank'] = racesdf[['place', 'racenum', 'placenum']].groupby(['place', 'racenum']).rank()
+        racesdf['nextracerank'] = racesdf.loc[1:, 'racerank'].reset_index(drop=True)
+        racesdf.loc[racesdf['racerank'] < 4.0, 'rankinfo'] = 'initdisp'
+        racesdf.loc[(racesdf['racerank'] < 4.0) & (racesdf['nextracerank'] >= 4.0), 'rankinfo'] = 'initend'
+        racesdf.loc[racesdf['racerank'] >= 4.0, 'rankinfo'] = 'initnone'
+        racesdf.loc[racesdf['nextracerank'] - racesdf['racerank'] < 0, 'rankinfo'] = 'raceend'
+
         sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
         sql += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
         sql += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'nkthedayraces') "
@@ -39,17 +48,14 @@ class NkTheDayRaces():
 
         colnames = {}
         comments = pd.read_sql(sql, con)
+        con.close()
+
         for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
             colnames.update({comment[1].column_name: comment[1].column_comment})
 
         racesdf = racesdf.rename(columns = colnames)
-        con.close()
-        # i = 0
-        # for index, row in racesdf.iteritems():
-        #     if i == 0:
-        #         print(row)
-        #         i += 1
-        # print(racesdf)
+
+        print(racesdf.iloc[[0]])
 
         return racesdf
 

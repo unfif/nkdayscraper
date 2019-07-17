@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
   <style>
     body{
-      padding: 20px;
+      padding: 0px;
       background: #EEE;
     }
     .container{
@@ -23,28 +23,28 @@
       margin-top: 0;
       text-decoration: underline;
     }
-    /* table{
-      border-collapse: collapse;
-    } */
     th, td{
       white-space: nowrap;
-      /* border: 1px solid; */
     }
     .col_レースID, .col_タイトル, .col_天候, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl{
       display: none;
     }
-    /* td:not(.順位_1, .順位_2, .順位_3){
-      display: none;
-    } */
-    tr.順位_4, tr.順位_5, tr.順位_6, tr.順位_7, tr.順位_8, tr.順位_9, tr.順位_10, tr.順位_11, tr.順位_12, tr.順位_13, tr.順位_14, tr.順位_15, tr.順位_16, tr.順位_17, tr.順位_18, tr.順位_19, tr.順位_20, tr.順位_21, tr.順位_22{
+    /* tr.順位_4, tr.順位_5, tr.順位_6, tr.順位_7, tr.順位_8, tr.順位_9, tr.順位_10, tr.順位_11, tr.順位_12, tr.順位_13, tr.順位_14, tr.順位_15, tr.順位_16, tr.順位_17, tr.順位_18, tr.順位_19, tr.順位_20, tr.順位_21, tr.順位_22{ */
+    .rankinfo_initnone,
+    .rankinfo_raceend{
       display: none;
     }
-    /* tr:not(.順位_4, .順位_5, .順位_6, .順位_7, .順位_8, .順位_9, .順位_10, .順位_11, .順位_12, .順位_13, .順位_14, .順位_15, .順位_16, .順位_17, .順位_18, .順位_19, .順位_20, .順位_21, .順位_22):last-of-type td{
-      border-bottom: 3px double #999;
-    } */
-    /* table.table tr:nth-of-type(3n) td{
-      border-bottom: 3px double #999;
-    } */
+    .col_racerank,
+    .col_nextracerank,
+    .col_rankinfo{
+      display: none;
+    }
+    .rankinfo_initend{
+      border-bottom: 3px double #999
+    }
+    .rankinfo_raceend{
+      border-bottom: 3px solid #999
+    }
   </style>
   <script src="{{url_for('static', filename='js/jquery-3.4.1.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.bundle.js')}}"></script>
@@ -57,21 +57,20 @@
       {%- endfor %}
     </thead>
     <tbody>
+      {%- set lastpalcenum = [0] %}
       {%- for index, row in racesdf.iterrows(): %}
-        <tr class="場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}" data-racenum="{{row.R}}" data-placenum="{{row.順位}}">
+        <tr class="場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}} rankinfo_{{row.rankinfo}}" data-racenum="{{row.R}}" data-placenum="{{row.順位}}">
           {%- for column, val in row.items(): %}
           <td class="col_{{column}} 場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}">{{val}}</td>
           {%- endfor %}
         </tr>
+        {%- do lastpalcenum.append(row.順位) %}
       {%- endfor %}
     </tbody>
   </table>
   <pre>
     {%- for index, row in racesdf.iterrows(): %}
-    {%-     print('index: ', index) %}
-    <br>
-    {%-     print(row) %}
-    <br><br>
+      {%- if index < 5 %}{%- print(row) %}<br><br>{%- endif %}
     {%- endfor %}
   </pre>
   <div class=container>
@@ -102,26 +101,16 @@
     {%- else %}
     <p>you can register something to do.</p>
     {%- endif %}
-    <button class="button test" style="margin: 8px 0">test</button>
   </div>
   <script>
     $(function(){
-      $('button.test').click(function(){
-        console.log(document.updatedoneform);
-        console.log(JSON.parse(JSON.stringify($('form[name="updatedoneform"]').serializeArray())));
-      })
       $('.raceresults tbody tr').click(function(){
         var racenum = $(this).attr('data-racenum');
         var $sameracetr = $(this).closest('tbody').find('tr[data-racenum="' + racenum + '"]');
-        $sameracetr.last().css('border-bottom', '3px double #999');
-        $sameracetr.not('.順位_1, .順位_2, .順位_3').toggle();
-        // console.log('test', $('.raceresults tbody').find('tr:not([style="display: none;"])'));
-        var disp$trs = [];
-        $('.raceresults tbody').find('tr:not([style="display: none;"])').each(function(){
-
-        })
+        // $sameracetr.last().css('border-bottom', '3px double #999');
+        // $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').toggle();
+        $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').animate({opacity: 'toggle'}, {duration: 200});
       })
-      // console.log($('.raceresults tbody').find('tr[style="display: table-row;"]'));
     })
   </script>
 </body>
