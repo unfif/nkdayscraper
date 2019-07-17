@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, request
 from model import NkTheDayRaces, ToDoList, init_db
 
 app = Flask(__name__)
+app.jinja_env.add_extension('jinja2.ext.do')
 db = init_db(app)
 
 todolist = ToDoList()
