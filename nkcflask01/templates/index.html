@@ -23,10 +23,16 @@
       margin-top: 0;
       text-decoration: underline;
     }
+    div.dispplace{
+      display: flex;
+      justify-content: space-around;
+      width: 12.5%;
+      padding: 4px 0;
+    }
     th, td{
       white-space: nowrap;
     }
-    .col_レースID, .col_タイトル, .col_天候, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl{
+    .col_レースID, .col_タイトル, .col_天候, .col_時刻, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl{
       display: none;
     }
     /* tr.順位_4, tr.順位_5, tr.順位_6, tr.順位_7, tr.順位_8, tr.順位_9, tr.順位_10, tr.順位_11, tr.順位_12, tr.順位_13, tr.順位_14, tr.順位_15, tr.順位_16, tr.順位_17, tr.順位_18, tr.順位_19, tr.順位_20, tr.順位_21, tr.順位_22{ */
@@ -45,26 +51,32 @@
     .rankinfo_raceend{
       border-bottom: 3px solid #999
     }
+    .raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
+      display: none;
+    }
   </style>
   <script src="{{url_for('static', filename='js/jquery-3.4.1.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.bundle.js')}}"></script>
 </head>
 <body>
-  <table class="raceresults table table-sm table-striped table-hover">
+  <div class="dispplace">
+    {%- for place in racesdf.場所.unique() %}
+    <button class="dispplace">{{place}}</button>
+    {%- endfor %}
+  </div>
+  <table class="raceresults table table-sm <!--table-striped -->table-hover">
     <thead class="thead-dark">
       {%- for column in racesdf.columns: %}
       <th class="col_{{column}}">{{column}}</th>
       {%- endfor %}
     </thead>
     <tbody>
-      {%- set lastpalcenum = [0] %}
       {%- for index, row in racesdf.iterrows(): %}
-        <tr class="場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}} rankinfo_{{row.rankinfo}}" data-racenum="{{row.R}}" data-placenum="{{row.順位}}">
-          {%- for column, val in row.items(): %}
-          <td class="col_{{column}} 場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}">{{val}}</td>
-          {%- endfor %}
-        </tr>
-        {%- do lastpalcenum.append(row.順位) %}
+      <tr class="場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}} rankinfo_{{row.rankinfo}}" data-place="{{row.場所}}" data-racenum="{{row.R}}" data-placenum="{{row.順位}}">
+        {%- for column, val in row.items(): %}
+        <td class="col_{{column}} 場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}">{{val}}</td>
+        {%- endfor %}
+      </tr>
       {%- endfor %}
     </tbody>
   </table>
@@ -105,11 +117,18 @@
   <script>
     $(function(){
       $('.raceresults tbody tr').click(function(){
+        var place = $(this).attr('data-place');
         var racenum = $(this).attr('data-racenum');
-        var $sameracetr = $(this).closest('tbody').find('tr[data-racenum="' + racenum + '"]');
+        var $sameracetr = $(this).closest('tbody').find('tr[data-place="' + place + '"][data-racenum="' + racenum + '"]');
+        // $('.rankinfo_initend[data-place="' + place + '"][data-racenum="' + racenum + '"]').animate({border: 'toggle'}, {duration: 200});
         // $sameracetr.last().css('border-bottom', '3px double #999');
         // $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').toggle();
         $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').animate({opacity: 'toggle'}, {duration: 200});
+      })
+      $('button.dispplace').click(function(){
+        $('.raceresults tbody tr.場所_' + this.innerText).show();
+        $('.raceresults tbody tr:not(.場所_' + this.innerText + ')').hide();
+        $('.rankinfo_initnone, .rankinfo_raceend').hide();
       })
     })
   </script>
