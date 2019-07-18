@@ -23,9 +23,9 @@ class ToDoItem(db.Model):
 class NkTheDayRaces():
     def getRaces():
         con = engine.connect()
-        sql = table.select().where(cols.raceid.like('20190302____')).order_by(cols.racenum).order_by(cols.placenum)
+        # sql = table.select().where(cols.raceid.like('20190302____')).order_by(cols.racenum, cols.placenum)
+        sql = table.select().order_by(cols.place, cols.racenum, cols.placenum)
         racesdf = pd.read_sql(sql, con)
-        """.where(cols.placenum.in_([1, 2, 3]))"""
         racesdf.title = racesdf.title.apply(lambda x: x.rstrip('クラス'))
         racesdf.posttime = racesdf.posttime.apply(lambda x: x.strftime('%H:%M'))
         racesdf.time = racesdf.time.apply(lambda x: x.strftime('%M:%S %f').strip('0'))
@@ -53,9 +53,11 @@ class NkTheDayRaces():
         for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
             colnames.update({comment[1].column_name: comment[1].column_comment})
 
+        # racesdf = racesdf.sort_values(['place', 'racenum', 'placenum']).reset_index(drop=True)
         racesdf = racesdf.rename(columns = colnames)
-
-        print(racesdf.iloc[[0]])
+        # print(racesdf.iloc[[0]])
+        # for place in racesdf.場所.unique(): print(place)
+        # print(racesdf.場所)
 
         return racesdf
 
