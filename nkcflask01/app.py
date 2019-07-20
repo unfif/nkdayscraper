@@ -13,8 +13,10 @@ def show_todolist():
 
 @app.route("/getraces")
 def getraces():
+    context = {}
     racesdf = NkTheDayRaces.getRaces()
-    return render_template("index.html", racesdf=racesdf)
+    context['racesdf'] = racesdf
+    return render_template("index.html", **context)
 
 @app.route("/additem", methods=["POST"])
 def add_item():

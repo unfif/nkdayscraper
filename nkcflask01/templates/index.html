@@ -11,6 +11,15 @@
       padding: 0px;
       background: #EEE;
     }
+    header{
+      padding: 8px;
+      background: #343a40;
+      color: #fff;
+    }
+    h1, h2, h3, h4, h5, h6{
+      margin: 0;
+      padding: 0;
+    }
     .container{
       width: 400px;
       margin: 0 auto;
@@ -19,22 +28,30 @@
       border-radius: 0.5em;
       background: #FFF;
     }
-    h1{
-      margin-top: 0;
-      text-decoration: underline;
-    }
-    div.dispplace{
+    div.dispplacerace > div{
       display: flex;
-      justify-content: space-around;
-      width: 12.5%;
-      padding: 4px 0;
+      padding: 4px;
+    }
+    div.dispplacerace > div > h5{
+      width: 64px;
+      margin: 0;
+    }
+    .dispplacerace button {
+      width: 48px;
+      margin-left: 10px;
     }
     th, td{
       white-space: nowrap;
     }
+    .raceresults tr td:nth-of-type(even){
+      background: #ddd;
+    }
     .col_レースID, .col_タイトル, .col_天候, .col_時刻, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl{
       display: none;
     }
+    /* .col_クラス, .col_情報, .col_調教師{
+      background: #ddd;
+    } */
     /* tr.順位_4, tr.順位_5, tr.順位_6, tr.順位_7, tr.順位_8, tr.順位_9, tr.順位_10, tr.順位_11, tr.順位_12, tr.順位_13, tr.順位_14, tr.順位_15, tr.順位_16, tr.順位_17, tr.順位_18, tr.順位_19, tr.順位_20, tr.順位_21, tr.順位_22{ */
     .rankinfo_initnone,
     .rankinfo_raceend{
@@ -59,10 +76,22 @@
   <script src="{{url_for('static', filename='js/bootstrap.bundle.js')}}"></script>
 </head>
 <body>
-  <div class="dispplace">
-    {%- for place in racesdf.場所.unique() %}
-    <button class="dispplace">{{place}}</button>
-    {%- endfor %}
+  <header><h2>{{racesdf.日程[0]}}</h2></header>
+  <div class="dispplacerace">
+    <div class="dispplace">
+      <h5>場所</h5>
+      <button class="dispallplaces">ALL</button>
+      {%- for place in racesdf.場所.unique() %}
+      <button class="dispplace">{{place}}</button>
+      {%- endfor %}
+    </div>
+    <div class="disprace">
+      <h5>レース</h5>
+      <button class="dispallraces">ALL</button>
+      {%- for idx in range(1, 13) %}
+      <button class="disprace">{{idx}}</button>
+      {%- endfor %}
+    </div>
   </div>
   <table class="raceresults table table-sm <!--table-striped -->table-hover">
     <thead class="thead-dark">
@@ -119,15 +148,42 @@
       $('.raceresults tbody tr').click(function(){
         var place = $(this).attr('data-place');
         var racenum = $(this).attr('data-racenum');
-        var $sameracetr = $(this).closest('tbody').find('tr[data-place="' + place + '"][data-racenum="' + racenum + '"]');
+        var $tbody = $(this).closest('tbody')
+        var sameracetr = 'tr[data-place="' + place + '"][data-racenum="' + racenum + '"]'
+        var $sameracetr = $tbody.find(sameracetr);
+        var is_disp_allsameracetr = true;
+        $sameracetr.each(function(){
+          if($(this).css('display') === 'none') is_disp_allsameracetr = is_disp_allsameracetr && false;
+        })
+        if(is_disp_allsameracetr){
+          $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
+          $tbody.find('tr').hide();
+          $tbody.find('tr.rankinfo_initdisp, tr.rankinfo_initend').show();
+        }else{
+          $('tr.rankinfo_initend').css('border-bottom', 'none');
+          $tbody.find('tr').not(sameracetr).hide();
+          $sameracetr.show();
+        }
         // $('.rankinfo_initend[data-place="' + place + '"][data-racenum="' + racenum + '"]').animate({border: 'toggle'}, {duration: 200});
         // $sameracetr.last().css('border-bottom', '3px double #999');
         // $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').toggle();
-        $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').animate({opacity: 'toggle'}, {duration: 200});
+        // $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').animate({opacity: 'toggle'}, {duration: 200});
       })
-      $('button.dispplace').click(function(){
+      $('button.dispallplaces, button.dispallraces').click(function(){
+        $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
+        $('.raceresults tbody tr:not(.initnone, .raceend)').show();
+        $('.rankinfo_initnone, .rankinfo_raceend').hide();
+      })
+      $('button.dispplace').click(function(){console.log(12345);
+        $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
         $('.raceresults tbody tr.場所_' + this.innerText).show();
         $('.raceresults tbody tr:not(.場所_' + this.innerText + ')').hide();
+        $('.rankinfo_initnone, .rankinfo_raceend').hide();
+      })
+      $('button.disprace').click(function(){console.log(12345);
+        $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
+        $('.raceresults tbody tr.R_' + this.innerText).show();
+        $('.raceresults tbody tr:not(.R_' + this.innerText + ')').hide();
         $('.rankinfo_initnone, .rankinfo_raceend').hide();
       })
     })
