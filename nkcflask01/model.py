@@ -22,6 +22,7 @@ class ToDoItem(db.Model):
 
 class NkTheDayRaces():
     def getRaces():
+        data = {}
         con = engine.connect()
         # sql = table.select().where(cols.raceid.like('20190302____')).order_by(cols.racenum, cols.placenum)
         sql = table.select().order_by(cols.place, cols.racenum, cols.placenum)
@@ -50,16 +51,23 @@ class NkTheDayRaces():
         comments = pd.read_sql(sql, con)
         con.close()
 
+        jockeyct = pd.crosstab([racesdf.place, racesdf.jockey], racesdf.placenum, margins=True)
+        jockeyct['単勝率'] = round(100 * jockeyct[1] / jockeyct.All, 2)
+        jockeyct['連対率'] = round(100 * jockeyct[2] / jockeyct.All, 2)
+        jockeyct['複勝率'] = round(100 * jockeyct[3] / jockeyct.All, 2)
+        data['jockeys'] = jockeyct.loc[:, [1,2,3, '単勝率', '連対率', '複勝率', 'All']].sort_values(['place',1,2,3], ascending=False)
+        print(data['jockeys'].loc[('福島')])
+
         for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
             colnames.update({comment[1].column_name: comment[1].column_comment})
 
-        # racesdf = racesdf.sort_values(['place', 'racenum', 'placenum']).reset_index(drop=True)
-        racesdf = racesdf.rename(columns = colnames)
+        # racesdf = racesdf.sort_values(['place', 'racenum', 'placenum']).dataet_index(drop=True)
+        data['racesdf'] = racesdf.rename(columns = colnames)
         # print(racesdf.iloc[[0]])
         # for place in racesdf.場所.unique(): print(place)
         # print(racesdf.場所)
 
-        return racesdf
+        return data
 
 class ToDoList:
   def add(self, title):
