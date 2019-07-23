@@ -12,6 +12,7 @@
       background: #EEE;
     }
     header{
+      display: flex;
       padding: 8px;
       background: #343a40;
       color: #fff;
@@ -28,13 +29,17 @@
       border-radius: 0.5em;
       background: #FFF;
     }
+    div.dispplacerace{
+      display: flex;
+    }
     div.dispplacerace > div{
       display: flex;
       padding: 4px;
     }
     div.dispplacerace > div > h5{
       width: 64px;
-      margin: 0;
+      margin: 0 8px;
+      text-align: center;
     }
     .dispplacerace button {
       width: 48px;
@@ -109,11 +114,19 @@
       {%- endfor %}
     </tbody>
   </table>
-  <pre>
+  <table>
+    <thead>
+      
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+  <!-- <pre>
     {%- for index, row in racesdf.iterrows(): %}
       {%- if index < 5 %}{%- print(row) %}<br><br>{%- endif %}
     {%- endfor %}
-  </pre>
+  </pre> -->
   <div class=container>
     <h1>ToDo List</h1>
     <form action="/additem" method="post" name="registerform">
@@ -147,7 +160,7 @@
     $(function(){
       $('.col_レースID, .col_タイトル, .col_天候, .col_時刻, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl').addClass('hiddentd');
       $('.raceresults tr').find('td:not(.hiddentd):even').css('background', '#ddd');
-      
+
       $('.raceresults tbody tr').click(function(){
         var place = $(this).attr('data-place');
         var racenum = $(this).attr('data-racenum');
