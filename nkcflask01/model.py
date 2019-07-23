@@ -52,11 +52,12 @@ class NkTheDayRaces():
         con.close()
 
         jockeyct = pd.crosstab([racesdf.place, racesdf.jockey], racesdf.placenum, margins=True)
-        jockeyct['単勝率'] = round(100 * jockeyct[1] / jockeyct.All, 2)
-        jockeyct['連対率'] = round(100 * jockeyct[2] / jockeyct.All, 2)
-        jockeyct['複勝率'] = round(100 * jockeyct[3] / jockeyct.All, 2)
+        rates = [round(100 * jockeyct[rank] / jockeyct.All, 2) for rank in range(1, 4)]
+        jockeyct['単勝率'], jockeyct['連対率'], jockeyct['複勝率'] = rates
         data['jockeys'] = jockeyct.loc[:, [1,2,3, '単勝率', '連対率', '複勝率', 'All']].sort_values(['place',1,2,3], ascending=False)
+        data['jockeys'] = data['jockeys'].rename(columns={1:'1着',2:'2着',3:'3着','All':'騎乗数'})
         print(data['jockeys'].loc[('福島')])
+
 
         for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
             colnames.update({comment[1].column_name: comment[1].column_comment})
