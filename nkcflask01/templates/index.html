@@ -73,8 +73,12 @@
     .rankinfo_raceend{
       border-bottom: 3px solid #999
     }
-    .raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
+    table.raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
       display: none;
+    }
+    table.racejockeys{
+      width: 480px;
+      margin: 0 auto;
     }
   </style>
   <script src="{{url_for('static', filename='js/jquery-3.4.1.js')}}"></script>
@@ -114,12 +118,28 @@
       {%- endfor %}
     </tbody>
   </table>
-  <table>
-    <thead>
-      
+  <table class="racejockeys table table-sm table-striped table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th>場所</th>
+        <th>騎手</th>
+        {%- for th in jockeys.columns: %}
+        <th>{{th}}</th>
+        {%- endfor %}
+      </tr>
     </thead>
     <tbody>
-
+      {%- for index, row in jockeys.iterrows(): %}
+      <!-- {%- if row[1] != 0.0 or row[2] != 0.0 or row[3] != 0.0: %} -->
+      <tr>
+        <th>{{index[0]}}</th>
+        <th>{{index[1]}}</th>
+        {%- for column, val in row.items(): %}
+        <td>{{val}}</td>
+        {%- endfor %}
+      </tr>
+      <!-- {%- endif %} -->
+      {%- endfor %}
     </tbody>
   </table>
   <!-- <pre>
@@ -184,6 +204,12 @@
         // $sameracetr.last().css('border-bottom', '3px double #999');
         // $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').toggle();
         // $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').animate({opacity: 'toggle'}, {duration: 200});
+      })
+      var lastplace = '';
+      $('.racejockeys tbody tr').each(function(){
+        var thisplace = $(this).find('th:first')
+        if(thisplace.text() === lastplace) thisplace.text('');
+        else lastplace = thisplace.text();
       })
       $('button.dispallplaces, button.dispallraces').click(function(){
         $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
