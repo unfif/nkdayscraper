@@ -80,6 +80,9 @@
       width: 480px;
       margin: 0 auto;
     }
+    table.racejockeys tr.hiddentr{
+      display: none;
+    }
   </style>
   <script src="{{url_for('static', filename='js/jquery-3.4.1.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.bundle.js')}}"></script>
@@ -129,16 +132,24 @@
       </tr>
     </thead>
     <tbody>
+      {%- set jockeystr = "activetr" %}
       {%- for index, row in jockeys.iterrows(): %}
-      <!-- {%- if row[1] != 0.0 or row[2] != 0.0 or row[3] != 0.0: %} -->
-      <tr>
+      {%- if row[1] == 0.0 and row[2] == 0.0 and row[3] == 0.0: %}
+      {%- set jockeystr = "hiddentr" %}
+      {%- endif %}
+      <tr class="{{jockeystr}}" data-place="{{index[0]}}">
         <th>{{index[0]}}</th>
         <th>{{index[1]}}</th>
-        {%- for column, val in row.items(): %}
+        {%- for col, val in row.items(): %}
+        {%- if col in ('1着','2着','3着','騎乗数') or (val+1) / (val|int + 1) == 1: %}
+        {%- set val = val|int %}
+        {%- endif %}
+        {%- if val == 0.0 or val == 0: %}
+        {%- set val = "" %}
+        {%- endif %}
         <td>{{val}}</td>
         {%- endfor %}
       </tr>
-      <!-- {%- endif %} -->
       {%- endfor %}
     </tbody>
   </table>
@@ -227,6 +238,10 @@
         $('.raceresults tbody tr.R_' + this.innerText).show();
         $('.raceresults tbody tr:not(.R_' + this.innerText + ')').hide();
         $('.rankinfo_initnone, .rankinfo_raceend').hide();
+      })
+      $('.racejockeys tr').click(function(){
+        var place = $(this).attr('data-place');
+        $('.racejockeys tr.hiddentr[data-place="' + place + '"]').toggle()
       })
     })
   </script>

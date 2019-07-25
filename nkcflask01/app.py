@@ -15,7 +15,7 @@ def show_todolist():
 def getraces():
     context = {}
     data = NkTheDayRaces.getRaces()
-    # context['racesdf'] = data['racesdf']
+    # print(data['jockeys'])
     return render_template("index.html", **data)
 
 @app.route("/additem", methods=["POST"])
