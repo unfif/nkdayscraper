@@ -66,7 +66,7 @@ class NkTheDayRaces():
             colnames.update({comment[1].column_name: comment[1].column_comment})
 
         # racesdf = racesdf.sort_values(['place', 'racenum', 'placenum']).dataet_index(drop=True)
-        data['racesdf'] = racesdf.rename(columns = colnames)
+        data['racesdf'] = racesdf.rename(columns=colnames)
         # print(racesdf.iloc[[0]])
         # for place in racesdf.場所.unique(): print(place)
         # print(racesdf.場所)
