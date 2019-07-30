@@ -4,3 +4,7 @@
 nkc01/__pycache__/
 nkc01/spiders/__pycache__/
 nkcflask01/__pycache__/
+
+*.bak
+*.log
+*.tmp

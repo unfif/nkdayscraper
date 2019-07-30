@@ -29,6 +29,9 @@
       border-radius: 0.5em;
       background: #FFF;
     }
+    .flex{
+      display: flex;
+    }
     div.dispplacerace{
       display: flex;
     }
@@ -73,12 +76,19 @@
     .rankinfo_raceend{
       border-bottom: 3px solid #999
     }
+    div.jockeysrank > table{
+      margin: 0 4px
+    }
     table.raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
       display: none;
     }
-    table.racejockeys{
+    /* table.racejockeys{
       width: 480px;
       margin: 0 auto;
+    } */
+    table.racejockeys th,
+    table.racejockeys td{
+      width: 0;
     }
     table.racejockeys tr.hiddentr{
       display: none;
@@ -121,71 +131,45 @@
       {%- endfor %}
     </tbody>
   </table>
-  <table class="racejockeys table table-sm table-striped table-hover">
-    <thead class="thead-dark">
-      <tr>
-        <th>場所</th>
-        <th>騎手</th>
-        {%- for th in jockeys.columns: %}
-        <th>{{th}}</th>
-        {%- endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {%- set jockeystr = "activetr" %}
-      {%- for index, row in jockeys.iterrows(): %}
-      {%- if row[1] == 0.0 and row[2] == 0.0 and row[3] == 0.0: %}
-      {%- set jockeystr = "hiddentr" %}
-      {%- endif %}
-      <tr class="{{jockeystr}}" data-place="{{index[0]}}">
-        <th>{{index[0]}}</th>
-        <th>{{index[1]}}</th>
-        {%- for col, val in row.items(): %}
-        {%- if col in ('1着','2着','3着','騎乗数') or (val+1) / (val|int + 1) == 1: %}
-        {%- set val = val|int %}
-        {%- endif %}
-        {%- if val == 0.0 or val == 0: %}
-        {%- set val = "" %}
-        {%- endif %}
-        <td>{{val}}</td>
-        {%- endfor %}
-      </tr>
-      {%- endfor %}
-    </tbody>
-  </table>
-  <!-- <pre>
-    {%- for index, row in racesdf.iterrows(): %}
-      {%- if index < 5 %}{%- print(row) %}<br><br>{%- endif %}
-    {%- endfor %}
-  </pre> -->
-  <div class=container>
-    <h1>ToDo List</h1>
-    <form action="/additem" method="post" name="registerform">
-      <p>
-        something to do:
-        <input type="text" name="title">
-        <a href="javascript:document.registerform.submit()" class="button">submit</a>
-      </p>
-    </form>
-    {%- if todolist %}
-    <p>here your todos</p>
-    <form action="/updatedone" method="post" name="updatedoneform">
-      <ul style="list-style-type: none; padding-left: 10px">
-        {%- for item in todolist %}
-        <li {% if item.done %} style="color: lightgray" {% endif %}>
-          <input type="checkbox" {% if item.done %} checked="checked" {% endif %}
-            name="{{ item.item_id }}" value="{{ item.title }}"
-            onchange="javascript:document.updatedoneform.submit()">
-          {{- item.title -}}
-          <a href="/deleteitem/{{ item.item_id }}">[del]</a>
-        </li>
-        {%- endfor %}
-      </ul>
-      <a href="/deletealldoneitems" class="button">delete all done items</a>
-    </form>
-    {%- else %}
-    <p>you can register something to do.</p>
+  <div class="jockeysrank flex">
+    {%- set jockeystr = "activetr" %}
+    {%- for index, row in jockeys.iterrows(): %}
+    {%- if row.dispmode == 'place1st': %}
+    <table class="racejockeys table table-sm table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>場所</th>
+          <th>騎手</th>
+          {%- for th in jockeys.columns[:-1]: %}
+          <th>{{th}}</th>
+          {%- endfor %}
+        </tr>
+      </thead>
+      <tbody>
     {%- endif %}
+        {%- if row[1] == 0.0 and row[2] == 0.0 and row[3] == 0.0: %}
+          {%- set jockeystr = "hiddentr" %}
+        {%- endif %}
+        <tr class="{{jockeystr}}" data-place="{{index[0]}}">
+          <th>{{index[0]}}</th>
+          <th>{{index[1]}}</th>
+          {%- for col, val in row.items(): %}
+            {%- if col != 'dispmode': %}
+              {%- if col in ('1着','2着','3着','騎乗数') or (val+1) / (val|int + 1) == 1: %}
+                {%- set val = val|int %}
+              {%- endif %}
+              {%- if val == 0.0 or val == 0: %}
+                {%- set val = "..." %}
+              {%- endif %}
+          <td>{{val}}</td>
+            {%- endif %}
+          {%- endfor %}
+        </tr>
+    {%- if row.dispmode == 'placelast': %}
+      </tbody>
+    </table>
+    {%- endif %}
+    {%- endfor %}
   </div>
   <script>
     $(function(){
