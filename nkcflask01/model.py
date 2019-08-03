@@ -27,6 +27,10 @@ class NkTheDayRaces():
         # sql = table.select().where(cols.raceid.like('20190302____')).order_by(cols.racenum, cols.placenum)
         sql = table.select().order_by(cols.place, cols.racenum, cols.placenum)
         racesdf = pd.read_sql(sql, con)
+
+        racesgp = racesdf[racesdf['placenum'] < 4].groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
+        racesgp = racesgp.agg(list)
+
         racesdf.title = racesdf.title.apply(lambda x: x.rstrip('クラス'))
         racesdf.posttime = racesdf.posttime.apply(lambda x: x.strftime('%H:%M'))
         racesdf.time = racesdf.time.apply(lambda x: x.strftime('%M:%S %f').strip('0'))
@@ -47,7 +51,7 @@ class NkTheDayRaces():
         sql += "and pd.objsubid != 0 and pd.objoid=pa.attrelid and pd.objsubid=pa.attnum "
         sql += "ORDER BY pd.objsubid"
 
-        colnames = {}
+        jplabels = {}
         comments = pd.read_sql(sql, con)
         con.close()
 
@@ -69,13 +73,10 @@ class NkTheDayRaces():
         data['jockeys'] = jockeyct.rename(columns={1:'1着',2:'2着',3:'3着','All':'騎乗数'})
 
         for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
-            colnames.update({comment[1].column_name: comment[1].column_comment})
+            jplabels.update({comment[1].column_name: comment[1].column_comment})
 
-        # racesdf = racesdf.sort_values(['place', 'racenum', 'placenum']).dataet_index(drop=True)
-        data['racesdf'] = racesdf.rename(columns=colnames)
-        # print(racesdf.iloc[[0]])
-        # for place in racesdf.場所.unique(): print(place)
-        # print(racesdf.場所)
+        data['racesdf'] = racesdf.rename(columns=jplabels)
+        data['racesgp'] = racesgp.rename(index=jplabels, columns=jplabels)
 
         return data
 

@@ -54,13 +54,6 @@
     .col_レースID, .col_タイトル, .col_天候, .col_時刻, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl{
       display: none;
     }
-    /* .raceresults tr td:not(.hiddentd):nth-of-type(even){
-      background: #ddd;
-    } */
-    /* .col_クラス, .col_情報, .col_調教師{
-      background: #ddd;
-    } */
-    /* tr.順位_4, tr.順位_5, tr.順位_6, tr.順位_7, tr.順位_8, tr.順位_9, tr.順位_10, tr.順位_11, tr.順位_12, tr.順位_13, tr.順位_14, tr.順位_15, tr.順位_16, tr.順位_17, tr.順位_18, tr.順位_19, tr.順位_20, tr.順位_21, tr.順位_22{ */
     .rankinfo_initnone,
     .rankinfo_raceend{
       display: none;
@@ -82,10 +75,6 @@
     table.raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
       display: none;
     }
-    /* table.racejockeys{
-      width: 480px;
-      margin: 0 auto;
-    } */
     table.racejockeys th,
     table.racejockeys td{
       width: 0;
@@ -170,6 +159,12 @@
     </table>
     {%- endif %}
     {%- endfor %}
+    <table>
+      <tbody>
+        <!-- <tr></tr> -->
+        {{racesgp}}
+      </tbody>
+    </table>
   </div>
   <script>
     $(function(){
