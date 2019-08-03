@@ -1,7 +1,14 @@
-import numpy as np
+# import numpy as np
 import pandas as pd
 
 racesdf = pd.read_json('C:/Users/pathz/Documents/scrapy/nkc01/results01.json', encoding='utf-8')
+# racesdf = racesdf.drop('requrl', axis=1)
+racesgp = racesdf[racesdf['placenum'] < 4].groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
+racesgp = racesgp.agg(list)
+racesgp.index[0]
+racesgp.columns
+racesgp.iloc[0]
+
 # dfp = jockeyct[['place', 'jockey', 'placenum']]#.query('placenum < 4')
 # dfp = jockeyct[['place', 'jockey', 'placenum'] and jockeyct['placenum'] < 4]
 data = {}
@@ -20,8 +27,10 @@ for index in jockeyct.index:
     lastindex = index
 
 jockeyct = jockeyct.drop([('All',), ('',)])
-
 jockeyct
+
+racesdf['racerank'] = racesdf[['place', 'racenum', 'placenum']].groupby(['place', 'racenum']).rank()
+racesdf.loc[racesdf['racerank'] < 4].groupby(['place', 'racenum'])['horsename'].apply(list)
 
 for col, row in jockeyct.iterrows():
     print(col)
