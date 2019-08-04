@@ -3,10 +3,12 @@ import pandas as pd
 
 racesdf = pd.read_json('C:/Users/pathz/Documents/scrapy/nkc01/results01.json', encoding='utf-8')
 # racesdf = racesdf.drop('requrl', axis=1)
-racesgp = racesdf[racesdf['placenum'] < 4].groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
+racesgp = racesdf.query('placenum < 4').groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
 racesgp = racesgp.agg(list)
+racesgp.groupby(['placenum','postnum','horsenum','horsename','sex','age','weight','jockey','time','margin','fav','odds','last3f','position','trainer','horseweight','horseweightdiff','requrl']).agg(list)
+racesgp.groupby('placenum').agg
 racesgp.index[0]
-racesgp.columns
+[x for x in racesgp.columns]
 racesgp.iloc[0]
 
 # dfp = jockeyct[['place', 'jockey', 'placenum']]#.query('placenum < 4')
@@ -27,34 +29,16 @@ for index in jockeyct.index:
     lastindex = index
 
 jockeyct = jockeyct.drop([('All',), ('',)])
-jockeyct
 
 racesdf['racerank'] = racesdf[['place', 'racenum', 'placenum']].groupby(['place', 'racenum']).rank()
-racesdf.loc[racesdf['racerank'] < 4].groupby(['place', 'racenum'])['horsename'].apply(list)
+racesdf.loc[racesdf['racerank'] < 4].groupby(['place', 'racenum'])['horsename'].agg(list)
 
-for col, row in jockeyct.iterrows():
-    print(col)
-
-jockeyct.iloc[0]
 data['jockeys'] = jockeyct.rename(columns={1:'1着',2:'2着',3:'3着','All':'騎乗数'})
-data['jockeys']
-for th in data['jockeys'].columns:
-    print(th)
 
-data['jockeys']['1着']
-
-for index, row in data['jockeys'].iterrows():
-    print(row)
-
-d.name
-i[0]
-
-
-
-jockeyct.query('placenum < 4').groupby(['place', 'jockey', 'placenum'])['placenum'].count().unstack().fillna(0)
+"""jockeyct.query('placenum < 4').groupby(['place', 'jockey', 'placenum'])['placenum'].count().unstack().fillna(0)
 jockeyct[['place', 'jockey', 'placenum']].query('placenum < 4').groupby(['place', 'jockey', 'placenum'])#.count(level='placenum')
 jockeyct[['place', 'jockey', 'placenum']].query('placenum < 4').sort_values(['place', 'jockey', 'placenum']).set_index(['place', 'jockey']).apply(pd.value_counts)#.placenum.value_counts()#.nunique()#.count(level='jockey')
 jockeyct.columns
 jockeyct.groupby(['place', 'racenum']).jockey.groups
 jockeygp = jockeyct.query('placenum < 4').groupby(['place', 'jockey']).placenum
-jockeygp.count()
+jockeygp.count()"""
