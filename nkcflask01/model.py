@@ -28,7 +28,7 @@ class NkTheDayRaces():
         sql = table.select().order_by(cols.place, cols.racenum, cols.placenum)
         racesdf = pd.read_sql(sql, con)
 
-        racesgp = racesdf[racesdf['placenum'] < 4].groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
+        racesgp = racesdf.query('placenum < 4').groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
         racesgp = racesgp.agg(list)
 
         racesdf.title = racesdf.title.apply(lambda x: x.rstrip('クラス'))
