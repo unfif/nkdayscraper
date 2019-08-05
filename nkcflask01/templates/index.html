@@ -104,7 +104,7 @@
       {%- endfor %}
     </div>
   </div>
-  <table class="raceresults table table-sm <!--table-striped -->table-hover">
+  <table class="raceresults table table-sm table-hover">
     <thead class="thead-dark">
       {%- for column in racesdf.columns: %}
       <th class="col_{{column}}">{{column}}</th>
@@ -113,8 +113,8 @@
     <tbody>
       {%- for index, row in racesdf.iterrows(): %}
       <tr class="場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}} rankinfo_{{row.rankinfo}}" data-place="{{row.場所}}" data-racenum="{{row.R}}" data-placenum="{{row.順位}}">
-        {%- for column, val in row.items(): %}
-        <td class="col_{{column}} 場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}">{{val}}</td>
+        {%- for col, val in row.items(): %}
+        <td class="col_{{col}} 場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}">{{val}}</td>
         {%- endfor %}
       </tr>
       {%- endfor %}
@@ -159,10 +159,29 @@
     </table>
     {%- endif %}
     {%- endfor %}
-    <table>
+  </div>
+  <div>
+    <table class="placeinfo table table-sm table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>場所</th>
+          <th>形式</th>
+          {%- for column in racesgp2.columns: %}
+          <th>{{column}}</th>
+          {%- endfor %}
+        </tr>
+      </thead>
       <tbody>
-        <!-- <tr></tr> -->
-        {{racesgp}}
+        {%- for index, races in racesgp2.iterrows(): %}
+        <tr>
+          {%- for th in index: %}
+          <th>{{th}}</th>
+          {%- endfor %}
+          {%- for col, val in races.items() %}
+          <td>{{val}}</td>
+          {%- endfor %}
+        </tr>
+        {%- endfor %}
       </tbody>
     </table>
   </div>
@@ -206,13 +225,13 @@
         $('.raceresults tbody tr:not(.initnone, .raceend)').show();
         $('.rankinfo_initnone, .rankinfo_raceend').hide();
       })
-      $('button.dispplace').click(function(){console.log(12345);
+      $('button.dispplace').click(function(){
         $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
         $('.raceresults tbody tr.場所_' + this.innerText).show();
         $('.raceresults tbody tr:not(.場所_' + this.innerText + ')').hide();
         $('.rankinfo_initnone, .rankinfo_raceend').hide();
       })
-      $('button.disprace').click(function(){console.log(12345);
+      $('button.disprace').click(function(){
         $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
         $('.raceresults tbody tr.R_' + this.innerText).show();
         $('.raceresults tbody tr:not(.R_' + this.innerText + ')').hide();
@@ -222,6 +241,7 @@
         var place = $(this).attr('data-place');
         $('.racejockeys tr.hiddentr[data-place="' + place + '"]').toggle()
       })
+      $("div.disprace button.disprace:contains('11')").click();
     })
   </script>
 </body>

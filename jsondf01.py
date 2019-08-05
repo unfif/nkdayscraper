@@ -2,14 +2,25 @@
 import pandas as pd
 
 racesdf = pd.read_json('C:/Users/pathz/Documents/scrapy/nkc01/results01.json', encoding='utf-8')
-# racesdf = racesdf.drop('requrl', axis=1)
-racesgp = racesdf.query('placenum < 4').groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
-racesgp = racesgp.agg(list)
-racesgp.groupby(['placenum','postnum','horsenum','horsename','sex','age','weight','jockey','time','margin','fav','odds','last3f','position','trainer','horseweight','horseweightdiff','requrl']).agg(list)
-racesgp.groupby('placenum').agg
-racesgp.index[0]
+comment = {'raceid':'レースID','place':'場所','racenum':'R','title':'クラス','courcetype':'形式','distance':'距離','direction':'情報','weather':'天候','condition':'状態','posttime':'時刻','date':'日程','racegrade':'グレード','starters':'頭数','raceaddedmoney':'賞金','placenum':'順位','postnum':'枠番','horsenum':'馬番','horsename':'馬名','sex':'性','age':'齢','weight':'斤量','jockey':'騎手','time':'タイム','margin':'着差','position':'通過','odds':'オッズ','fav':'人気','last3f':'上り','trainer':'調教師', 'horseweight':'馬体重','horseweightdiff':'増減'}
+data = {}
+data['racesdf'] = racesdf.rename(columns=comment)
+# racesgp = racesdf.query('placenum < 4').groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
+racesgp = data['racesdf'].query('順位 < 4').groupby(['場所','R','レースID','クラス','形式','距離','天候','状態','情報','時刻','日程','グレード','頭数','賞金'])
+racesgp2 = racesgp.agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
+racesgp2 = racesgp2.groupby(['場所','形式']).agg(list)
+data['racesgp2'] = racesgp2[['枠番','馬番','人気']]
+data['racesgp2'].index
+data['racesgp2'].columns
+# racesgp.groupby(['placenum','postnum','horsenum','horsename','sex','age','weight','jockey','time','margin','fav','odds','last3f','position','trainer','horseweight','horseweightdiff','requrl']).agg(list)
+racesgp.groupby(['順位','枠番','馬番','馬名','性','齢','斤量','騎手','タイム','着差','人気','オッズ','上り','通過','調教師','馬体重','増減','requrl'])
+racesgp.groupby(['順位']).agg(list)
+type(racesgp)
+
+
 [x for x in racesgp.columns]
-racesgp.iloc[0]
+racesgp.index[0]
+racesgp.iloc[0].index
 
 # dfp = jockeyct[['place', 'jockey', 'placenum']]#.query('placenum < 4')
 # dfp = jockeyct[['place', 'jockey', 'placenum'] and jockeyct['placenum'] < 4]

@@ -28,9 +28,6 @@ class NkTheDayRaces():
         sql = table.select().order_by(cols.place, cols.racenum, cols.placenum)
         racesdf = pd.read_sql(sql, con)
 
-        racesgp = racesdf.query('placenum < 4').groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
-        racesgp = racesgp.agg(list)
-
         racesdf.title = racesdf.title.apply(lambda x: x.rstrip('クラス'))
         racesdf.posttime = racesdf.posttime.apply(lambda x: x.strftime('%H:%M'))
         racesdf.time = racesdf.time.apply(lambda x: x.strftime('%M:%S %f').strip('0'))
@@ -76,7 +73,12 @@ class NkTheDayRaces():
             jplabels.update({comment[1].column_name: comment[1].column_comment})
 
         data['racesdf'] = racesdf.rename(columns=jplabels)
-        data['racesgp'] = racesgp.rename(index=jplabels, columns=jplabels)
+        racesgp = data['racesdf'].query('順位 < 4').groupby(['場所','R','レースID','クラス','形式','距離','天候','状態','情報','時刻','日程','グレード','頭数','賞金'])
+        # ['place','racenum','raceid','title','courcetype','distance','weather','condition','direction','posttime','date','racegrade','starters','raceaddedmoney']
+        racesgp = data['racesdf'].query('順位 < 4').groupby(['場所','R','レースID','クラス','形式','距離','天候','状態','情報','時刻','日程','グレード','頭数','賞金'])
+        racesgp2 = racesgp.agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
+        racesgp2 = racesgp2.groupby(['場所','形式']).agg(list)
+        data['racesgp2'] = racesgp2[['枠番','馬番','人気']]
 
         return data
 
