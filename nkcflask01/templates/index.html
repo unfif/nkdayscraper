@@ -10,6 +10,7 @@
     body{
       padding: 0px;
       background: #EEE;
+      font-size: 12px;
     }
     header{
       display: flex;
@@ -21,19 +22,24 @@
       margin: 0;
       padding: 0;
     }
-    .container{
+    /* .container{
       width: 400px;
       margin: 0 auto;
       padding: 40px;
       border: 1px solid;
       border-radius: 0.5em;
       background: #FFF;
+    } */
+    .contents{
+      margin: 0;
+      padding: 4px 10px;
     }
     .flex{
       display: flex;
     }
     div.dispplacerace{
       display: flex;
+      margin-bottom: 4px;
     }
     div.dispplacerace > div{
       display: flex;
@@ -64,13 +70,13 @@
       display: none;
     }
     .rankinfo_initend{
-      border-bottom: 3px double #999
+      border-bottom: 3px double #999;
     }
     .rankinfo_raceend{
-      border-bottom: 3px solid #999
+      border-bottom: 3px solid #999;
     }
     div.jockeysrank > table{
-      margin: 0 4px
+      margin: 0 4px 1rem;
     }
     table.raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
       display: none;
@@ -88,102 +94,104 @@
 </head>
 <body>
   <header><h2>{{racesdf.日程[0]}}</h2></header>
-  <div class="dispplacerace">
-    <div class="dispplace">
-      <h5>場所</h5>
-      <button class="dispallplaces">ALL</button>
-      {%- for place in racesdf.場所.unique() %}
-      <button class="dispplace">{{place}}</button>
-      {%- endfor %}
-    </div>
-    <div class="disprace">
-      <h5>レース</h5>
-      <button class="dispallraces">ALL</button>
-      {%- for idx in range(1, 13) %}
-      <button class="disprace">{{idx}}</button>
-      {%- endfor %}
-    </div>
-  </div>
-  <table class="raceresults table table-sm table-hover">
-    <thead class="thead-dark">
-      {%- for column in racesdf.columns: %}
-      <th class="col_{{column}}">{{column}}</th>
-      {%- endfor %}
-    </thead>
-    <tbody>
-      {%- for index, row in racesdf.iterrows(): %}
-      <tr class="場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}} rankinfo_{{row.rankinfo}}" data-place="{{row.場所}}" data-racenum="{{row.R}}" data-placenum="{{row.順位}}">
-        {%- for col, val in row.items(): %}
-        <td class="col_{{col}} 場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}">{{val}}</td>
+  <div class="contents">
+    <div class="dispplacerace">
+      <div class="dispplace">
+        <h5>場所</h5>
+        <button class="dispallplaces">ALL</button>
+        {%- for place in racesdf.場所.unique() %}
+        <button class="dispplace">{{place}}</button>
         {%- endfor %}
-      </tr>
-      {%- endfor %}
-    </tbody>
-  </table>
-  <div class="jockeysrank flex">
-    {%- set jockeystr = "activetr" %}
-    {%- for index, row in jockeys.iterrows(): %}
-    {%- if row.dispmode == 'place1st': %}
-    <table class="racejockeys table table-sm table-striped table-hover">
+      </div>
+      <div class="disprace">
+        <h5>レース</h5>
+        <button class="dispallraces">ALL</button>
+        {%- for idx in range(1, 13) %}
+        <button class="disprace">{{idx}}</button>
+        {%- endfor %}
+      </div>
+    </div>
+    <table class="raceresults table table-sm table-hover">
       <thead class="thead-dark">
-        <tr>
-          <th>場所</th>
-          <th>騎手</th>
-          {%- for th in jockeys.columns[:-1]: %}
-          <th>{{th}}</th>
-          {%- endfor %}
-        </tr>
+        {%- for column in racesdf.columns: %}
+        <th class="col_{{column}}">{{column}}</th>
+        {%- endfor %}
       </thead>
       <tbody>
-    {%- endif %}
-        {%- if row[1] == 0.0 and row[2] == 0.0 and row[3] == 0.0: %}
-          {%- set jockeystr = "hiddentr" %}
-        {%- endif %}
-        <tr class="{{jockeystr}}" data-place="{{index[0]}}">
-          <th>{{index[0]}}</th>
-          <th>{{index[1]}}</th>
+        {%- for index, row in racesdf.iterrows(): %}
+        <tr class="場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}} rankinfo_{{row.rankinfo}}" data-place="{{row.場所}}" data-racenum="{{row.R}}" data-placenum="{{row.順位}}">
           {%- for col, val in row.items(): %}
-            {%- if col != 'dispmode': %}
-              {%- if col in ('1着','2着','3着','騎乗数') or (val+1) / (val|int + 1) == 1: %}
-                {%- set val = val|int %}
-              {%- endif %}
-              {%- if val == 0.0 or val == 0: %}
-                {%- set val = "..." %}
-              {%- endif %}
-          <td>{{val}}</td>
-            {%- endif %}
-          {%- endfor %}
-        </tr>
-    {%- if row.dispmode == 'placelast': %}
-      </tbody>
-    </table>
-    {%- endif %}
-    {%- endfor %}
-  </div>
-  <div>
-    <table class="placeinfo table table-sm table-striped table-hover">
-      <thead class="thead-dark">
-        <tr>
-          <th>場所</th>
-          <th>形式</th>
-          {%- for column in racesgp2.columns: %}
-          <th>{{column}}</th>
-          {%- endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {%- for index, races in racesgp2.iterrows(): %}
-        <tr>
-          {%- for th in index: %}
-          <th>{{th}}</th>
-          {%- endfor %}
-          {%- for col, val in races.items() %}
-          <td>{{val}}</td>
+          <td class="col_{{col}} 場所_{{row.場所}} R_{{row.R}} 順位_{{row.順位}} idx_{{index}}">{{val}}</td>
           {%- endfor %}
         </tr>
         {%- endfor %}
       </tbody>
     </table>
+    <div class="jockeysrank flex">
+      {%- set jockeystr = "activetr" %}
+      {%- for index, row in jockeys.iterrows(): %}
+      {%- if row.dispmode == 'place1st': %}
+      <table class="racejockeys table table-sm table-striped table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>場所</th>
+            <th>騎手</th>
+            {%- for th in jockeys.columns[:-1]: %}
+            <th>{{th}}</th>
+            {%- endfor %}
+          </tr>
+        </thead>
+        <tbody>
+      {%- endif %}
+          {%- if row[1] == 0.0 and row[2] == 0.0 and row[3] == 0.0: %}
+            {%- set jockeystr = "hiddentr" %}
+          {%- endif %}
+          <tr class="{{jockeystr}}" data-place="{{index[0]}}">
+            <th>{{index[0]}}</th>
+            <th>{{index[1]}}</th>
+            {%- for col, val in row.items(): %}
+              {%- if col != 'dispmode': %}
+                {%- if col in ('1着','2着','3着','騎乗数') or (val+1) / (val|int + 1) == 1: %}
+                  {%- set val = val|int %}
+                {%- endif %}
+                {%- if val == 0.0 or val == 0: %}
+                  {%- set val = "..." %}
+                {%- endif %}
+            <td>{{val}}</td>
+              {%- endif %}
+            {%- endfor %}
+          </tr>
+      {%- if row.dispmode == 'placelast': %}
+        </tbody>
+      </table>
+      {%- endif %}
+      {%- endfor %}
+    </div>
+    <div style="font-size: 12px;">
+      <table class="placeinfo table table-sm table-striped table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>場所</th>
+            <th>形式</th>
+            {%- for column in racesgp2.columns: %}
+            <th>{{column}}</th>
+            {%- endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {%- for index, races in racesgp2.iterrows(): %}
+          <tr>
+            {%- for th in index: %}
+            <th>{{th}}</th>
+            {%- endfor %}
+            {%- for col, val in races.items() %}
+            <td>{{val}}</td>
+            {%- endfor %}
+          </tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
   <script>
     $(function(){
