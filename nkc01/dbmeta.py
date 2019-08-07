@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine, MetaData, select, and_, or_, not_
+from scrapy.utils.project import get_project_settings
 import pandas as pd
 
-engine = create_engine("postgresql+psycopg2://postgres:marehito@localhost:5432/postgres", echo=False)
+engine = create_engine(get_project_settings().get('URI'), echo=False)
 # print(engine.table_names())
 # meta = MetaData(engine)
 meta = MetaData()

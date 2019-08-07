@@ -8,7 +8,7 @@ data['racesdf'] = racesdf.rename(columns=comment)
 # racesgp = racesdf.query('placenum < 4').groupby(['place', 'racenum', 'raceid', 'title', 'courcetype', 'distance', 'weather', 'condition', 'direction', 'posttime', 'date', 'racegrade', 'starters', 'raceaddedmoney'])
 racesgp = data['racesdf'].query('順位 < 4').groupby(['場所','R','レースID','クラス','形式','距離','天候','状態','情報','時刻','日程','グレード','頭数','賞金'])
 racesgp2 = racesgp.agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
-racesgp2 = racesgp2.groupby(['場所','形式']).agg(list)
+racesgp2 = racesgp2.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
 data['racesgp2'] = racesgp2[['枠番','馬番','人気']]
 data['racesgp2'].index
 data['racesgp2'].columns

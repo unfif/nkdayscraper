@@ -1,16 +1,18 @@
 from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import re
+from settings import env
 
 db = SQLAlchemy()
-engine = db.create_engine("postgresql+psycopg2://postgres:marehito@localhost:5432/postgres", {})
+uri = env.get('uri')
+engine = db.create_engine(uri, {})
 meta = db.MetaData()
 meta.reflect(bind=engine)
 table = meta.tables['nkthedayraces']
 cols = table.c
 
 def init_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:marehito@localhost:5432/postgres"#?charset=utf8"
+    app.config["SQLALCHEMY_DATABASE_URI"] = uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
@@ -77,7 +79,7 @@ class NkTheDayRaces():
         # ['place','racenum','raceid','title','courcetype','distance','weather','condition','direction','posttime','date','racegrade','starters','raceaddedmoney']
         racesgp = data['racesdf'].query('順位 < 4').groupby(['場所','R','レースID','クラス','形式','距離','天候','状態','情報','時刻','日程','グレード','頭数','賞金'])
         racesgp2 = racesgp.agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
-        racesgp2 = racesgp2.groupby(['場所','形式']).agg(list)
+        racesgp2 = racesgp2.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
         data['racesgp2'] = racesgp2[['枠番','馬番','人気']]
 
         return data
