@@ -4,15 +4,15 @@ import re
 from settings import env
 
 db = SQLAlchemy()
-uri = env.get('uri')
-engine = db.create_engine(uri, {})
+URI = env.get('URI')
+engine = db.create_engine(URI, {})
 meta = db.MetaData()
 meta.reflect(bind=engine)
 table = meta.tables['nkthedayraces']
 cols = table.c
 
 def init_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = uri
+    app.config["SQLALCHEMY_DATABASE_URI"] = URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
