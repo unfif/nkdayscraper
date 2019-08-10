@@ -2,104 +2,27 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>To Do List sample app</title>
+  <title>NKTheDayRaces</title>
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap.css')}}">
   <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
-  <style>
-    body{
-      padding: 0px;
-      background: #EEE;
-      font-size: 12px;
-    }
-    header{
-      display: flex;
-      padding: 8px;
-      background: #343a40;
-      color: #fff;
-    }
-    h1, h2, h3, h4, h5, h6{
-      margin: 0;
-      padding: 0;
-    }
-    /* .container{
-      width: 400px;
-      margin: 0 auto;
-      padding: 40px;
-      border: 1px solid;
-      border-radius: 0.5em;
-      background: #FFF;
-    } */
-    .contents{
-      margin: 0;
-      padding: 4px 10px;
-    }
-    .flex{
-      display: flex;
-    }
-    div.dispplacerace{
-      display: flex;
-      margin-bottom: 4px;
-    }
-    div.dispplacerace > div{
-      display: flex;
-      padding: 4px;
-    }
-    div.dispplacerace > div > h5{
-      width: 64px;
-      margin: 0 8px;
-      text-align: center;
-    }
-    .dispplacerace button {
-      width: 48px;
-      margin-left: 10px;
-    }
-    th, td{
-      white-space: nowrap;
-    }
-    .col_レースID, .col_タイトル, .col_天候, .col_時刻, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl{
-      display: none;
-    }
-    .rankinfo_initnone,
-    .rankinfo_raceend{
-      display: none;
-    }
-    .col_racerank,
-    .col_nextracerank,
-    .col_rankinfo{
-      display: none;
-    }
-    .rankinfo_initend{
-      border-bottom: 3px double #999;
-    }
-    .rankinfo_raceend{
-      border-bottom: 3px solid #999;
-    }
-    div.jockeysrank > table{
-      margin: 0 4px 1rem;
-    }
-    table.raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
-      display: none;
-    }
-    table.racejockeys th,
-    table.racejockeys td{
-      width: 0;
-    }
-    table.racejockeys tr.hiddentr{
-      display: none;
-    }
-  </style>
   <script src="{{url_for('static', filename='js/jquery-3.4.1.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.bundle.js')}}"></script>
 </head>
 <body>
-  <header><h2>{{racesdf.日程[0]}}</h2></header>
+  {%- set places = racesdf.場所.unique() %}
+  <header>
+    <h2>{{racesdf.日程[0]}}</h2>
+    {%- for place in places %}
+    <h2>{{place}}</h2>
+    {%- endfor %}
+  </header>
   <div class="contents">
     <div class="dispplacerace">
       <div class="dispplace">
         <h5>場所</h5>
         <button class="dispallplaces">ALL</button>
-        {%- for place in racesdf.場所.unique() %}
+        {%- for place in places %}
         <button class="dispplace">{{place}}</button>
         {%- endfor %}
       </div>
@@ -127,47 +50,7 @@
         {%- endfor %}
       </tbody>
     </table>
-    <div class="jockeysrank flex">
-      {%- set jockeystr = "activetr" %}
-      {%- for index, row in jockeys.iterrows(): %}
-      {%- if row.dispmode == 'place1st': %}
-      <table class="racejockeys table table-sm table-striped table-hover">
-        <thead class="thead-dark">
-          <tr>
-            <th>場所</th>
-            <th>騎手</th>
-            {%- for th in jockeys.columns[:-1]: %}
-            <th>{{th}}</th>
-            {%- endfor %}
-          </tr>
-        </thead>
-        <tbody>
-      {%- endif %}
-          {%- if row[1] == 0.0 and row[2] == 0.0 and row[3] == 0.0: %}
-            {%- set jockeystr = "hiddentr" %}
-          {%- endif %}
-          <tr class="{{jockeystr}}" data-place="{{index[0]}}">
-            <th>{{index[0]}}</th>
-            <th>{{index[1]}}</th>
-            {%- for col, val in row.items(): %}
-              {%- if col != 'dispmode': %}
-                {%- if col in ('1着','2着','3着','騎乗数') or (val+1) / (val|int + 1) == 1: %}
-                  {%- set val = val|int %}
-                {%- endif %}
-                {%- if val == 0.0 or val == 0: %}
-                  {%- set val = "..." %}
-                {%- endif %}
-            <td>{{val}}</td>
-              {%- endif %}
-            {%- endfor %}
-          </tr>
-      {%- if row.dispmode == 'placelast': %}
-        </tbody>
-      </table>
-      {%- endif %}
-      {%- endfor %}
-    </div>
-    <div style="font-size: 12px;">
+    <div class="placeinfo">
       <table class="placeinfo table table-sm table-striped table-hover">
         <thead class="thead-dark">
           <tr>
@@ -193,64 +76,46 @@
       </table>
     </div>
   </div>
-  <script>
-    $(function(){
-      $('.col_レースID, .col_タイトル, .col_天候, .col_時刻, .col_発走時刻, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl').addClass('hiddentd');
-      $('.raceresults tr').find('td:not(.hiddentd):even').css('background', '#ddd');
-
-      $('.raceresults tbody tr').click(function(){
-        var place = $(this).attr('data-place');
-        var racenum = $(this).attr('data-racenum');
-        var $tbody = $(this).closest('tbody')
-        var sameracetr = 'tr[data-place="' + place + '"][data-racenum="' + racenum + '"]'
-        var $sameracetr = $tbody.find(sameracetr);
-        var is_disp_allsameracetr = true;
-        $sameracetr.each(function(){
-          if($(this).css('display') === 'none') is_disp_allsameracetr = is_disp_allsameracetr && false;
-        })
-        if(is_disp_allsameracetr){
-          $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
-          $tbody.find('tr').hide();
-          $tbody.find('tr.rankinfo_initdisp, tr.rankinfo_initend').show();
-        }else{
-          $('tr.rankinfo_initend').css('border-bottom', 'none');
-          $tbody.find('tr').not(sameracetr).hide();
-          $sameracetr.show();
-        }
-        // $('.rankinfo_initend[data-place="' + place + '"][data-racenum="' + racenum + '"]').animate({border: 'toggle'}, {duration: 200});
-        // $sameracetr.last().css('border-bottom', '3px double #999');
-        // $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').toggle();
-        // $sameracetr.not('.rankinfo_initdisp, .rankinfo_initend').animate({opacity: 'toggle'}, {duration: 200});
-      })
-      var lastplace = '';
-      $('.racejockeys tbody tr').each(function(){
-        var thisplace = $(this).find('th:first')
-        if(thisplace.text() === lastplace) thisplace.text('');
-        else lastplace = thisplace.text();
-      })
-      $('button.dispallplaces, button.dispallraces').click(function(){
-        $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
-        $('.raceresults tbody tr:not(.initnone, .raceend)').show();
-        $('.rankinfo_initnone, .rankinfo_raceend').hide();
-      })
-      $('button.dispplace').click(function(){
-        $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
-        $('.raceresults tbody tr.場所_' + this.innerText).show();
-        $('.raceresults tbody tr:not(.場所_' + this.innerText + ')').hide();
-        $('.rankinfo_initnone, .rankinfo_raceend').hide();
-      })
-      $('button.disprace').click(function(){
-        $('tr.rankinfo_initend').css('border-bottom', '3px double #999');
-        $('.raceresults tbody tr.R_' + this.innerText).show();
-        $('.raceresults tbody tr:not(.R_' + this.innerText + ')').hide();
-        $('.rankinfo_initnone, .rankinfo_raceend').hide();
-      })
-      $('.racejockeys tr').click(function(){
-        var place = $(this).attr('data-place');
-        $('.racejockeys tr.hiddentr[data-place="' + place + '"]').toggle()
-      })
-      $("div.disprace button.disprace:contains('11')").click();
-    })
-  </script>
+  <div class="jockeysrank flex">
+    {%- set jockeystr = "activetr" %}
+    {%- for index, row in jockeys.iterrows(): %}
+    {%- if row.dispmode == 'place1st': %}
+    <table class="racejockeys table table-sm table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>場所</th>
+          <th>騎手</th>
+          {%- for th in jockeys.columns[:-1]: %}
+          <th>{{th}}</th>
+          {%- endfor %}
+        </tr>
+      </thead>
+      <tbody>
+    {%- endif %}
+        {%- if row[1] == 0.0 and row[2] == 0.0 and row[3] == 0.0: %}
+          {%- set jockeystr = "hiddentr" %}
+        {%- endif %}
+        <tr class="{{jockeystr}}" data-place="{{index[0]}}">
+          <th>{{index[0]}}</th>
+          <th>{{index[1]}}</th>
+          {%- for col, val in row.items(): %}
+            {%- if col != 'dispmode': %}
+              {%- if col in ('1着','2着','3着','騎乗数') or (val+1) / (val|int + 1) == 1: %}
+                {%- set val = val|int %}
+              {%- endif %}
+              {%- if val == 0.0 or val == 0: %}
+                {%- set val = "..." %}
+              {%- endif %}
+          <td>{{val}}</td>
+            {%- endif %}
+          {%- endfor %}
+        </tr>
+    {%- if row.dispmode == 'placelast': %}
+      </tbody>
+    </table>
+    {%- endif %}
+    {%- endfor %}
+  </div>
+  <script src="{{url_for('static', filename='js/script.js')}}"></script>
 </body>
 </html>

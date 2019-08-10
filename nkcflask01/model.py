@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import re
+import copy as cp
 from settings import env
 
 db = SQLAlchemy()
@@ -26,7 +27,6 @@ class NkTheDayRaces():
     def getRaces():
         data = {}
         con = engine.connect()
-        # sql = table.select().where(cols.raceid.like('20190302____')).order_by(cols.racenum, cols.placenum)
         sql = table.select().order_by(cols.place, cols.racenum, cols.placenum)
         racesdf = pd.read_sql(sql, con)
 
@@ -69,18 +69,27 @@ class NkTheDayRaces():
             lastindex = index
 
         jockeyct = jockeyct.drop([('All',), ('',)])
-        data['jockeys'] = jockeyct.rename(columns={1:'1着',2:'2着',3:'3着','All':'騎乗数'})
+        jockeyct = jockeyct.rename(columns={1:'1着',2:'2着',3:'3着','All':'騎乗数'})
+        jockeysindex = list(jockeyct.columns)
+        jockeysindex.remove('騎乗数')
+        jockeysindex.insert(0,'騎乗数')
+        data['jockeys'] = jockeyct[jockeysindex]
 
         for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
             jplabels.update({comment[1].column_name: comment[1].column_comment})
 
         data['racesdf'] = racesdf.rename(columns=jplabels)
-        racesgp = data['racesdf'].query('順位 < 4').groupby(['場所','R','レースID','クラス','形式','距離','天候','状態','情報','時刻','日程','グレード','頭数','賞金'])
-        # ['place','racenum','raceid','title','courcetype','distance','weather','condition','direction','posttime','date','racegrade','starters','raceaddedmoney']
-        racesgp = data['racesdf'].query('順位 < 4').groupby(['場所','R','レースID','クラス','形式','距離','天候','状態','情報','時刻','日程','グレード','頭数','賞金'])
-        racesgp2 = racesgp.agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
+
+        racesgp = cp.deepcopy(data['racesdf'])
+        racesgp['R2'] = racesgp.R
+        racesgp = racesgp.query('順位 < 4').groupby(['場所','R','レースID','クラス','形式','距離','天候','状態','情報','時刻','日程','グレード','頭数','賞金'])
+        racesgp2 = racesgp.agg(list)
+        racesgp2.R2 = racesgp2.R2.apply(set)
+        racesgp2 = racesgp2.applymap(lambda x: '(' + ', '.join(map(str, x)) + ')')
         racesgp2 = racesgp2.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
-        data['racesgp2'] = racesgp2[['枠番','馬番','人気']]
+        racesgp2 = racesgp2.applymap(lambda x: x.strip('['']'))
+        racesgp2.R2 = racesgp2.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
+        data['racesgp2'] = racesgp2[['R2','枠番','馬番','人気']].rename(columns={'R2':'R'})
 
         return data
 
