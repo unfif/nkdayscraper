@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+scrapy = "*"
+flask = "*"
+pandas = "*"
+werkzeug = "==0.15.4"
+python-dotenv = "*"
+sqlalchemy = "*"
+flask-sqlalchemy = "*"
+psycopg2 = "*"
+
+[requires]
+python_version = "3.7"
