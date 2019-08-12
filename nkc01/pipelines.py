@@ -23,8 +23,8 @@ class Nkc01Pipeline(object):
         # print(model.getCommentList())
 
     # def open_spider(self, spider: scrapy.Spider):# コネクションの開始
-    #     URI = nkc01.settings.get('URI')
-    #     self.conn = psycopg2.connect(URI)
+    #     DATABASE_URL = nkc01.settings.get('DATABASE_URL')
+    #     self.conn = psycopg2.connect(DATABASE_URL)
     #
     # def close_spider(self, spider: scrapy.Spider):# コネクションの終了
     #     self.conn.close()

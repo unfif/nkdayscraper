@@ -5,15 +5,15 @@ import copy as cp
 from settings import env
 
 db = SQLAlchemy()
-URI = env.get('URI')
-engine = db.create_engine(URI, {})
+DATABASE_URL = env.get('DATABASE_URL')
+engine = db.create_engine(DATABASE_URL, {})
 meta = db.MetaData()
 meta.reflect(bind=engine)
 table = meta.tables['nkthedayraces']
 cols = table.c
 
 def init_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = URI
+    app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
