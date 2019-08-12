@@ -2,14 +2,14 @@ from sqlalchemy import create_engine, Column, Table, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, String, Text, Date, DateTime, Time, Float#, Boolean, LargeBinary, SmallInteger
 from scrapy.utils.project import get_project_settings
-# from settings import URI
+# from settings import DATABASE_URL
 
 Base = declarative_base()
 
 def db_connect(is_echo = False):
     """Performs database connection using database settings from settings.py. Returns sqlalchemy engine instance"""
-    engine = create_engine(get_project_settings().get('URI'))
-    # if URI is None: URI = URI
+    engine = create_engine(get_project_settings().get('DATABASE_URL'))
+    # if DATABASE_URL is None: DATABASE_URL = DATABASE_URL
     return engine
 
 def create_table(engine):
