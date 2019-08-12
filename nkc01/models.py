@@ -8,9 +8,9 @@ Base = declarative_base()
 
 def db_connect(is_echo = False):
     """Performs database connection using database settings from settings.py. Returns sqlalchemy engine instance"""
-    URI = create_engine(get_project_settings().get('URI'))
+    engine = create_engine(get_project_settings().get('URI'))
     # if URI is None: URI = URI
-    return URI
+    return engine
 
 def create_table(engine):
     Base.metadata.create_all(engine)
