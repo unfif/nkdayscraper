@@ -16,6 +16,7 @@ flask-sqlalchemy = "*"
 psycopg2 = "*"
 requests = "*"
 setuptools = "*"
+uvicorn = "*"
 
 [requires]
 python_version = "3.7"

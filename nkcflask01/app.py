@@ -1,5 +1,13 @@
 from flask import Flask, render_template, redirect, request
 from model import NkTheDayRaces, init_db#, ToDoList
+import argparse as argp
+import uvicorn
+
+parser = argp.ArgumentParser()
+parser.add_argument('-n', '--host', type=str, default='127.0.0.1')
+parser.add_argument('-p', '--port', type=int, default=5000)
+parser.add_argument('-l', '--log-level', type=str, default='info')
+args = parser.parse_args()
 
 app = Flask(__name__)
 app.jinja_env.add_extension('jinja2.ext.do')
@@ -47,3 +55,6 @@ def getraces():
 
 # if __name__ == '__main__':
 #     app.run(debug=False, host='0.0.0.0')
+
+if __name__ == '__main__':
+    uvicorn.run(app, host=args.host, port=args.port, log_level=args.log_level, interface='wsgi')
