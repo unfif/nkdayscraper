@@ -1,1 +1,1 @@
-web: flask run --host=0.0.0.0 --port=$PORT
+web: twistd web --wsgi nkcflask01.app.app --listen=tcp:$PORT
