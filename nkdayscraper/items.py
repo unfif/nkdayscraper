@@ -8,7 +8,7 @@
 import scrapy
 
 
-class Nkc01Item(scrapy.Item):
+class NkdayscraperItem(scrapy.Item):
     raceid = scrapy.Field()
     place = scrapy.Field()
     racenum = scrapy.Field()

@@ -8,12 +8,12 @@ engine = create_engine(get_project_settings().get('DATABASE_URL'), echo=False)
 meta = MetaData()
 meta.reflect(bind=engine)
 # print(meta.tables.keys())
-table = meta.tables['nkthedayraces']
+table = meta.tables['nkdayraces']
 cols = table.c
 # print(cols.keys())
 con = engine.connect()
 sql = table.select().where(cols.raceid.like('2019030203__')).where(cols.placenum.in_([1, 2, 3])).order_by(cols.racenum).order_by(cols.placenum)
-# sql = "SELECT * FROM nkthedayraces AS nk "
+# sql = "SELECT * FROM nkdayraces AS nk "
 # sql += "WHERE nk.raceid LIKE '2019030202__' AND nk.placenum IN (1, 2, 3) "
 # sql += "ORDER BY nk.racenum, nk.placenum"
 racesdf = pd.read_sql_query(sql, con)

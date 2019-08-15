@@ -2,7 +2,7 @@
 import scrapy, re, requests
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from nkc01.items import Nkc01Item
+from nkdayscraper.items import NkdayscraperItem
 import datetime as dt
 
 # now = dt.datetime.now()
@@ -19,8 +19,8 @@ try:
 except:
     starturl = baseurl + 'c' + targetday
 
-class NkthedaySpider(CrawlSpider):
-    name = 'nktheday'
+class NkdaySpider(CrawlSpider):
+    name = 'nkday'
     allowed_domains = ['race.netkeiba.com']
     # start_urls = ['http://race.netkeiba.com/']
 
@@ -35,7 +35,7 @@ class NkthedaySpider(CrawlSpider):
     )
 
     def __init__(self, date='c'+targetday, *args, **kwargs):
-        super(NkthedaySpider, self).__init__(*args, **kwargs)
+        super(NkdaySpider, self).__init__(*args, **kwargs)
         # print(starturl, baseurl + date, date)
         self.start_urls = [baseurl + date]
         # print('targetday: ', cdate)
@@ -45,7 +45,7 @@ class NkthedaySpider(CrawlSpider):
     #     yield scrapy.Request(url, callback=self.parse_races)
 
     def parse_races(self, response):
-        item = Nkc01Item()
+        item = NkdayscraperItem()
 
         raceinfo = response.css('.race_head_inner')
         raceplaceurl = raceinfo.css('ul.race_place a.active::attr(href)').get()
