@@ -1,9 +1,8 @@
 .scrapy
 .env
 
-nkc01/__pycache__/
-nkc01/spiders/__pycache__/
-nkcflask01/__pycache__/
+nkdayscraper/__pycache__/
+nkdayscraper/spiders/__pycache__/
 
 *.bak
 *.log

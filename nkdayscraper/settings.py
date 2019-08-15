@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for nkc01 project
+# Scrapy settings for nkdayscraper project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -15,14 +15,14 @@ from dotenv import load_dotenv
 
 load_dotenv(pl.Path(__file__).parent.parent/'.env')
 
-BOT_NAME = 'nkc01'
+BOT_NAME = 'nkdayscraper'
 
-SPIDER_MODULES = ['nkc01.spiders']
-NEWSPIDER_MODULE = 'nkc01.spiders'
+SPIDER_MODULES = ['nkdayscraper.spiders']
+NEWSPIDER_MODULE = 'nkdayscraper.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'nkc01 (+http://www.yourdomain.com)'
+#USER_AGENT = 'nkdayscraper (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -53,13 +53,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'nkc01.middlewares.Nkc01SpiderMiddleware': 543,
+#    'nkdayscraper.middlewares.NkdayscraperSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'nkc01.middlewares.Nkc01DownloaderMiddleware': 543,
+#    'nkdayscraper.middlewares.NkdayscraperDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -71,7 +71,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'nkc01.pipelines.Nkc01Pipeline': 300,
+   'nkdayscraper.pipelines.NkdayscraperPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

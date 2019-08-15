@@ -6,24 +6,23 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 from sqlalchemy.orm import sessionmaker
-from nkc01.models import nkthedayraces, db_connect, create_table
-import pandas as pd
+from nkdayscraper.models import Nkdayraces, db_connect, create_table
 
-class Nkc01Pipeline(object):
+class NkdayscraperPipeline(object):
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
         engine = db_connect(False)
-        # drop_table(engine, nkthedayraces)
+        # drop_table(engine, Nkdayraces)
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
         session = self.Session()
-        session.query(nkthedayraces).delete()
+        session.query(Nkdayraces).delete()
         session.commit()
-        model = nkthedayraces()
+        model = Nkdayraces()
         # print(model.getCommentList())
 
     # def open_spider(self, spider: scrapy.Spider):# コネクションの開始
-    #     DATABASE_URL = nkc01.settings.get('DATABASE_URL')
+    #     DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
     #     self.conn = psycopg2.connect(DATABASE_URL)
     #
     # def close_spider(self, spider: scrapy.Spider):# コネクションの終了
@@ -32,7 +31,7 @@ class Nkc01Pipeline(object):
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
         session = self.Session()
-        nkdbraces = nkthedayraces(**item)
+        nkdbraces = Nkdayraces(**item)
 
         try:
             session.add(nkdbraces)

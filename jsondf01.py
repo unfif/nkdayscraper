@@ -1,7 +1,7 @@
 # import numpy as np
 import pandas as pd
 
-racesdf = pd.read_json('C:/Users/pathz/Documents/scrapy/nkc01/results01.json', encoding='utf-8')
+racesdf = pd.read_json('C:/Users/pathz/Documents/scrapy/nkdayscraper/results01.json', encoding='utf-8')
 jplabels = {'raceid':'レースID','place':'場所','racenum':'R','title':'クラス','courcetype':'形式','distance':'距離','direction':'情報','weather':'天候','condition':'状態','posttime':'時刻','date':'日程','racegrade':'グレード','starters':'頭数','raceaddedmoney':'賞金','placenum':'順位','postnum':'枠番','horsenum':'馬番','horsename':'馬名','sex':'性','age':'齢','weight':'斤量','jockey':'騎手','time':'タイム','margin':'着差','position':'通過','odds':'オッズ','fav':'人気','last3f':'上り','trainer':'調教師', 'horseweight':'馬体重','horseweightdiff':'増減'}
 data = {}
 

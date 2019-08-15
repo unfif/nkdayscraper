@@ -7,15 +7,10 @@ verify_ssl = true
 
 [packages]
 scrapy = "*"
-flask = "*"
-pandas = "*"
-werkzeug = "==0.15.4"
-python-dotenv = "*"
 sqlalchemy = "*"
-flask-sqlalchemy = "*"
 psycopg2 = "*"
 requests = "*"
-setuptools = "*"
+python-dotenv = "*"
 uvicorn = "*"
 
 [requires]
