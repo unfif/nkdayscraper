@@ -70,7 +70,9 @@ class NkdaySpider(CrawlSpider):
         racecondition = racedata.css('dd p')[1].css('::text').get().split('\xa0/\xa0')
         item['weather'] = racecondition[0].split('：')[1]
         item['condition'] = racecondition[1].split('：')[1]
-        item['posttime'] = racecondition[2].split('：')[1]
+        item['date'] = dt.datetime.strptime(dateweek.split('(')[0].replace('/', '-') + ' ' + racecondition[2].split('：')[1] + ':00', '%Y-%m-%d %H:%M:%S')
+        item['day'] = dt.datetime.strptime(dateweek.split('(')[0].replace('/', '-'), '%Y-%m-%d').date()
+        item['posttime'] = dt.datetime.strptime(racecondition[2].split('：')[1], '%H:%M').time()
         # # datadetail = raceinfo.css('div.data_intro p.smalltxt')
         # racedetails = raceinfo.css('dl.racedata + p.smalltxt::text').get()
         # racedatejp = racedetails.split()[0]
@@ -78,11 +80,10 @@ class NkdaySpider(CrawlSpider):
         # racemonth = racedatejp.split('年')[1].split('月')[0].zfill(2)
         # raceday = racedatejp.split('月')[1].split('日')[0].zfill(2)
         # item['date'] = raceyear + '-' + racemonth + '-' + raceday
-        item['date'] = dateweek.split('(')[0].replace('/', '-')
         item['racegrade'] = raceclass.split('\xa0')[0]
         item['starters'] = raceclass.split('\xa0')[1][:-1]
         addedarr = addedmoney.split('：')[1].split('万円')[0].split('、')
-        item['raceaddedmoney'] = ','.join([str(int(x) * 1000) for x in addedarr])
+        item['raceaddedmoney'] = [str(int(x) * 1000) for x in addedarr]
         # item['schedule'] = racedetails.split()[1]
         # item['racegrade'] = racedetails.split()[2]
         # item['category'] = racedetails.split()[3]
@@ -96,16 +97,25 @@ class NkdaySpider(CrawlSpider):
             item['age'] = tr.css('td')[4].css('::text').get()[1:]
             item['weight'] = tr.css('td')[5].css('::text').get()
             item['jockey'] = tr.css('td')[6].css('a::text').get()
-            item['time'] = tr.css('td')[7].css('::text').get()
+            item['time'] = dt.datetime.strptime('0' + tr.css('td')[7].css('::text').get(), '%M:%S.%f').time()
             margin = tr.css('td')[8].css('::text').get()
             item['margin'] = margin if margin is not None else '0'
             item['fav'] = tr.css('td')[9].css('::text').get()
             item['odds'] = tr.css('td')[10].css('::text').get()
             item['last3f'] = tr.css('td')[11].css('::text').get()
-            item['position'] = tr.css('td')[12].css('::text').get()
+            item['position'] = (tr.css('td')[12].css('::text').get()).split('-')
             item['trainer'] = tr.css('td')[13].css('a::text').get()
             item['horseweight'] = tr.css('td')[14].css('::text').get().split('(')[0]
             item['horseweightdiff'] = tr.css('td')[14].css('::text').get().split('(')[1][:-1].replace('+', '')
             item['requrl'] = response.request.url
+
+            intkeys = []
+            itemkeys = list(item.keys())
+            for itemkey in itemkeys:
+                if itemkey.endswith('num'): intkeys.append(itemkey)
+
+            intkeys.extend(['distance', 'starters', 'age', 'fav', 'horseweight', 'horseweightdiff'])
+            for intkey in intkeys: item[intkey] = int(item[intkey])
+            for floatkey in ['weight', 'odds', 'last3f']: item[floatkey] = float(item[floatkey])
 
             yield item
