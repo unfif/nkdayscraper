@@ -18,7 +18,7 @@ for mongo in mongos:
     with open('results02.json', encoding='UTF8') as f:
         colc.insert_many(f2j(f))
 
-    mongo.close
+    # mongo.close
 
 
 # db = mg.testdb

@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Table, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, String, Text, Date, DateTime, Time, Float#, Boolean, LargeBinary, SmallInteger
+from sqlalchemy.dialects import postgresql as pg
 from scrapy.utils.project import get_project_settings
 
 Base = declarative_base()
@@ -30,7 +31,7 @@ class Nkdayraces(Base):
     posttime = Column(Time, comment='時刻')
     racegrade = Column(Text, comment='グレード')
     starters = Column(Integer, comment='頭数')
-    raceaddedmoney = Column(Text, comment='賞金')
+    raceaddedmoney = Column(pg.ARRAY(Integer), comment='賞金')
     requrl = Column(Text, comment='raceurl')
 
     placenum = Column(Integer, primary_key=True, comment='順位')
@@ -43,7 +44,7 @@ class Nkdayraces(Base):
     jockey = Column(Text, comment='騎手')
     time = Column(Time, comment='タイム')
     margin = Column(Text, comment='着差')
-    position = Column(Text, comment='通過')
+    position = Column(pg.ARRAY(Integer), comment='通過')
     last3f = Column(Float, comment='上り')
     odds = Column(Float, comment='オッズ')
     fav = Column(Integer, comment='人気')
