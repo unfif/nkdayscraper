@@ -10,12 +10,13 @@ twistd web --wsgi nkcflask01.app.app --listen=tcp:5000
 web: wistd web --wsgi nkcflask01.app.app --listen=tcp:$PORT
 
 ________________________________________________________________________________
-
-del results01.json; scrapy crawl nkday -a date=p0901 -o results01.json --nolog
+# results01.json for scrapy
+del results01.json; scrapy crawl nkday -a date=c0907 -o results01.json --nolog
 
 cat results01.json | jq -c '.[] | {"index": {"_index": "nkdayraces"}}, .' > es01.json
 
-cat results01.json | sed -r 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\1\\/\2\\/\3/g' | jq -c '.[] | {"index": {"_index": "nkdayraces"}}, .' > es01.json
+# es01.json for Elasticsearch
+cat results01.json | sed -r 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\1\/\2\/\3/g' | jq -c '.[] | {"index": {"_index": "nkdayraces"}}, .' > es01.json
 
 <!-- cat results01.json | jq -c '.[] | {"index": {"_index": "nkdayraces"}},.' | sed -z 's/\n/,\n/g' > es01.json -->
 
@@ -31,4 +32,5 @@ mongoimport --uri "mongodb+srv://undo5:marehito@mongui-t1cam.gcp.mongodb.net/net
 
 <!-- cat results01.json | sed -r 's/"([0-9]{4}-[0-9]{2}-[0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})"/ISODate("\1T\2Z")/g' > results02.json -->
 
+# results02.json for mongoDB
 cat results01.json | sed -r 's/"([0-9]{4}-[0-9]{2}-[0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})"/{"\$date": "\1T\2.000+09:00"}/g' | sed -r 's/"([0-9]{4}-[0-9]{2}-[0-9]{2})"/{"\$date": "\1T00:00:00.000+09:00"}/g' > results02.json

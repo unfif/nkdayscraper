@@ -83,7 +83,7 @@ class NkdaySpider(CrawlSpider):
         item['racegrade'] = raceclass.split('\xa0')[0]
         item['starters'] = raceclass.split('\xa0')[1][:-1]
         addedarr = addedmoney.split('：')[1].split('万円')[0].split('、')
-        item['raceaddedmoney'] = [str(int(x) * 1000) for x in addedarr]
+        item['raceaddedmoney'] = [int(x) * 1000 for x in addedarr]
         # item['schedule'] = racedetails.split()[1]
         # item['racegrade'] = racedetails.split()[2]
         # item['category'] = racedetails.split()[3]
@@ -103,7 +103,8 @@ class NkdaySpider(CrawlSpider):
             item['fav'] = tr.css('td')[9].css('::text').get()
             item['odds'] = tr.css('td')[10].css('::text').get()
             item['last3f'] = tr.css('td')[11].css('::text').get()
-            item['position'] = (tr.css('td')[12].css('::text').get()).split('-')
+            positiontext = tr.css('td')[12].css('::text').get()
+            item['position'] = [int(x) for x in positiontext.split('-')] if positiontext is not None else None
             item['trainer'] = tr.css('td')[13].css('a::text').get()
             item['horseweight'] = tr.css('td')[14].css('::text').get().split('(')[0]
             item['horseweightdiff'] = tr.css('td')[14].css('::text').get().split('(')[1][:-1].replace('+', '')
