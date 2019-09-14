@@ -4,10 +4,17 @@ from sqlalchemy import Integer, String, Text, Date, DateTime, Time, Float#, Bool
 from sqlalchemy.dialects import postgresql as pg
 from scrapy.utils.project import get_project_settings
 
-Base = declarative_base()
+class RBase():
+    def __repr__(self):
+        columns = ', '.join([
+            '{0}={1}'.format(key, repr(self.__dict__[key]))
+            for key in self.__dict__.keys() if not key.startswith('_')
+        ])
+        return '<{0}({1})>'.format(self.__class__.__name__, columns)
+
+Base = declarative_base(cls=RBase)
 
 def db_connect(is_echo = False):
-    """Performs database connection using database settings from settings.py. Returns sqlalchemy engine instance"""
     engine = create_engine(get_project_settings().get('DATABASE_URL'))
     return engine
 
@@ -54,6 +61,5 @@ class Nkdayraces(Base):
     # owner = Column(Text)
     # addedmoney = Column(Integer)
 
-    def __repr__(self):
-        return "f<nkdayraces(raceid='{}',place='{}',racenum='{}',title='{}',courcetype='{}',distance='{}',direction='{}',weather='{}',condition='{},datetime='{}',racegrade='{}',starters='{}',raceaddedmoney='{}',requrl='{}',placenum='{}',postnum='{}',horsenum='{}',horsename='{}',sex='{}',age='{}',weight='{}',jockey='{}',time='{}',margin='{}',position='{}',last3f='{}',odds='{}',fav='{}',trainer='{}',horseweight='{}',horseweightdiff='{}')>".format(self.raceid,self.place,self.racenum,self.title,self.courcetype,self.distance,self.direction,self.weather,self.condition,self.datetime,self.racegrade,self.starters,self.raceaddedmoney,self.requrl,self.placenum,self.postnum,self.horsenum,self.horsename,self.sex,self.age,self.weight,self.jockey,self.time,self.margin,self.position,self.last3f,self.odds,self.fav,self.trainer,self.horseweight,self.horseweightdiff
-        )
+    # def __repr__(self):
+    #     return  "<nkdayraces(raceid='{}',place='{}',racenum='{}',title='{}',courcetype='{}',distance='{}',direction='{}',weather='{}',condition='{},date='{}',day='{}',posttime='{}',racegrade='{}',starters='{}',raceaddedmoney='{}',requrl='{}',placenum='{}',postnum='{}',horsenum='{}',horsename='{}',sex='{}',age='{}',weight='{}',jockey='{}',time='{}',margin='{}',position='{}',last3f='{}',odds='{}',fav='{}',trainer='{}',horseweight='{}',horseweightdiff='{}')>".format(self.raceid,self.place,self.racenum,self.title,self.courcetype,self.distance,self.direction,self.weather,self.condition,self.date,self.day,self.posttime,self.racegrade,self.starters,self.raceaddedmoney,self.requrl,self.placenum,self.postnum,self.horsenum,self.horsename,self.sex,self.age,self.weight,self.jockey,self.time,self.margin,self.position,self.last3f,self.odds,self.fav,self.trainer,self.horseweight,self.horseweightdiff)

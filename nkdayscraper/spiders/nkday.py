@@ -36,9 +36,7 @@ class NkdaySpider(CrawlSpider):
 
     def __init__(self, date='c'+targetday, *args, **kwargs):
         super(NkdaySpider, self).__init__(*args, **kwargs)
-        # print(starturl, baseurl + date, date)
         self.start_urls = [baseurl + date]
-        # print('targetday: ', cdate)
 
     # def start_requests(self):
     #     url = 'http://race.netkeiba.com/?pid=race_list_sub&id=c' + cdate
