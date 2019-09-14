@@ -15,10 +15,6 @@ class NkdayscraperPipeline():
         if engine.has_table('nkdayraces'): Nkdayraces.__table__.drop(engine)
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
-        session = self.Session()
-        # session.query(Nkdayraces).delete()
-        session.commit()
-        model = Nkdayraces()
 
     # def open_spider(self, spider: scrapy.Spider):# コネクションの開始
     #     DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
@@ -35,7 +31,6 @@ class NkdayscraperPipeline():
         try:
             session.add(nkdbraces)
             session.commit()
-            pass
         except:
             session.rollback()
             raise
