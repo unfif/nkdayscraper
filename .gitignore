@@ -7,3 +7,4 @@ nkdayscraper/spiders/__pycache__/
 *.bak
 *.log
 *.tmp
+debug*
