@@ -6,15 +6,20 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 from sqlalchemy.orm import sessionmaker
-from nkdayscraper.models import Nkdayraces, db_connect, create_table
+from nkdayscraper.models import Nkdayraces, db_connect, create_table, mongo_connect
 
 class NkdayscraperPipeline():
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
-        engine = db_connect(False)
-        if engine.has_table('nkdayraces'): Nkdayraces.__table__.drop(engine)
-        create_table(engine)
-        self.Session = sessionmaker(bind=engine)
+        self.engine = db_connect()
+        if self.engine.has_table('nkdayraces'): Nkdayraces.__table__.drop(self.engine)
+        create_table(self.engine)
+        self.Session = sessionmaker(bind=self.engine)
+
+        mongo = mongo_connect()
+        mongodb = mongo.netkeiba
+        clct = mongodb.nkdayraces
+        clct.drop()
 
     # def open_spider(self, spider: scrapy.Spider):# コネクションの開始
     #     DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
@@ -26,6 +31,10 @@ class NkdayscraperPipeline():
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
         session = self.Session()
+        if self.engine.name != 'postgresql':
+            item['raceaddedmoney'] = str(item['raceaddedmoney'])
+            item['position'] = str(item['position'])
+
         nkdbraces = Nkdayraces(**item)
 
         try:
