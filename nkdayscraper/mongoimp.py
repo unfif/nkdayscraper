@@ -12,11 +12,11 @@ def f2j(f): return loads(json.dumps(json.load(f)))
 
 for mongo in mongos:
     db = mongo.netkeiba
-    colc = db.nkdayraces
+    clct = db.nkdayraces
 
-    colc.drop()#delete_many({})
+    clct.drop()#delete_many({})
     with open('results02.json', encoding='UTF8') as f:
-        colc.insert_many(f2j(f))
+        clct.insert_many(f2j(f))
 
     # mongo.close
 

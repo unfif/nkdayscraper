@@ -3,6 +3,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, String, Text, Date, DateTime, Time, Float#, Boolean, LargeBinary, SmallInteger
 from sqlalchemy.dialects import postgresql as pg
 from scrapy.utils.project import get_project_settings
+from pymongo import MongoClient
+
+DATABASE_URL = get_project_settings().get('DATABASE_URL')
+MONGO_URL = get_project_settings().get('MONGO_URL')
+basename = DATABASE_URL.split(':')[0].split('+')[0]
 
 class RBase():
     def __repr__(self):
@@ -14,9 +19,13 @@ class RBase():
 
 Base = declarative_base(cls=RBase)
 
-def db_connect(is_echo = False):
-    engine = create_engine(get_project_settings().get('DATABASE_URL'))
+def db_connect(url=DATABASE_URL, echo=False):
+    engine = create_engine(url, echo=echo)
     return engine
+
+def mongo_connect(url=MONGO_URL):
+    client = MongoClient(url)
+    return client
 
 def create_table(engine):
     Base.metadata.create_all(engine)
@@ -38,9 +47,10 @@ class Nkdayraces(Base):
     posttime = Column(Time, comment='時刻')
     racegrade = Column(Text, comment='グレード')
     starters = Column(Integer, comment='頭数')
-    raceaddedmoney = Column(pg.ARRAY(Integer), comment='賞金')
-    requrl = Column(Text, comment='raceurl')
+    if basename == 'postgresql': raceaddedmoney = Column(pg.ARRAY(Integer), comment='賞金')
+    else: raceaddedmoney = Column(Text, comment='賞金')
 
+    requrl = Column(Text, comment='raceurl')
     placenum = Column(Integer, primary_key=True, comment='順位')
     postnum = Column(Integer, comment='枠番')
     horsenum = Column(Integer, comment='馬番')
@@ -51,7 +61,9 @@ class Nkdayraces(Base):
     jockey = Column(Text, comment='騎手')
     time = Column(Time, comment='タイム')
     margin = Column(Text, comment='着差')
-    position = Column(pg.ARRAY(Integer), comment='通過')
+    if basename == 'postgresql': position = Column(pg.ARRAY(Integer), comment='通過')
+    else: position = Column(Text, comment='通過')
+
     last3f = Column(Float, comment='上り')
     odds = Column(Float, comment='オッズ')
     fav = Column(Integer, comment='人気')
