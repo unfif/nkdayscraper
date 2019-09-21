@@ -33,6 +33,7 @@ def create_table(engine):
 class Nkdayraces(Base):
     __tablename__ = 'nkdayraces'
 
+    # _id = None
     raceid = Column(Text, primary_key=True, comment='レースID')
     place = Column(Text, comment='場所')
     racenum = Column(Integer, comment='R')
@@ -42,12 +43,12 @@ class Nkdayraces(Base):
     direction = Column(Text, comment='情報')
     weather = Column(Text, comment='天候')
     condition = Column(Text, comment='状態')
-    date = Column(DateTime, comment='日時')
+    date = Column(DateTime(timezone=True), comment='日時')
     day = Column(Date, comment='日程')
-    posttime = Column(Time, comment='時刻')
+    posttime = Column(Time(timezone=True), comment='時刻')
     racegrade = Column(Text, comment='グレード')
     starters = Column(Integer, comment='頭数')
-    if basename == 'postgresql': raceaddedmoney = Column(pg.ARRAY(Integer), comment='賞金')
+    if basename in ['postgresql', 'mongodb']: raceaddedmoney = Column(pg.ARRAY(Integer), comment='賞金')
     else: raceaddedmoney = Column(Text, comment='賞金')
 
     requrl = Column(Text, comment='raceurl')
@@ -59,9 +60,9 @@ class Nkdayraces(Base):
     age = Column(Integer, comment='齢')
     weight = Column(Float, comment='斤量')
     jockey = Column(Text, comment='騎手')
-    time = Column(Time, comment='タイム')
+    time = Column(Time(timezone=True), comment='タイム')
     margin = Column(Text, comment='着差')
-    if basename == 'postgresql': position = Column(pg.ARRAY(Integer), comment='通過')
+    if basename in ['postgresql', 'mongodb']: position = Column(pg.ARRAY(Integer), comment='通過')
     else: position = Column(Text, comment='通過')
 
     last3f = Column(Float, comment='上り')
