@@ -68,9 +68,9 @@ class NkdaySpider(CrawlSpider):
         racecondition = racedata.css('dd p')[1].css('::text').get().split('\xa0/\xa0')
         item['weather'] = racecondition[0].split('：')[1]
         item['condition'] = racecondition[1].split('：')[1]
-        item['date'] = dt.datetime.strptime(dateweek.split('(')[0].replace('/', '-') + ' ' + racecondition[2].split('：')[1] + ':00', '%Y-%m-%d %H:%M:%S')
-        item['day'] = dt.datetime.strptime(dateweek.split('(')[0].replace('/', '-'), '%Y-%m-%d').date()
-        item['posttime'] = dt.datetime.strptime(racecondition[2].split('：')[1], '%H:%M').time()
+        item['date'] = dt.datetime.strptime(dateweek.split('(')[0].replace('/', '-') + ' ' + racecondition[2].split('：')[1] + ':00+09:00', '%Y-%m-%d %H:%M:%S%z')
+        item['day'] = dt.datetime.strptime(dateweek.split('(')[0].replace('/', '-') + '+09:00', '%Y-%m-%d%z')
+        item['posttime'] = dt.datetime.strptime(racecondition[2].split('：')[1] + '+09:00', '%H:%M%z').timetz()
         # # datadetail = raceinfo.css('div.data_intro p.smalltxt')
         # racedetails = raceinfo.css('dl.racedata + p.smalltxt::text').get()
         # racedatejp = racedetails.split()[0]
@@ -95,7 +95,7 @@ class NkdaySpider(CrawlSpider):
             item['age'] = tr.css('td')[4].css('::text').get()[1:]
             item['weight'] = tr.css('td')[5].css('::text').get()
             item['jockey'] = tr.css('td')[6].css('a::text').get()
-            item['time'] = dt.datetime.strptime('0' + tr.css('td')[7].css('::text').get(), '%M:%S.%f').time()
+            item['time'] = dt.datetime.strptime('0' + tr.css('td')[7].css('::text').get() + '+09:00', '%M:%S.%f%z').timetz()
             margin = tr.css('td')[8].css('::text').get()
             item['margin'] = margin if margin is not None else '0'
             item['fav'] = tr.css('td')[9].css('::text').get()

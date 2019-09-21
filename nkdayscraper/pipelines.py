@@ -7,6 +7,7 @@
 
 from sqlalchemy.orm import sessionmaker
 from nkdayscraper.models import Nkdayraces, db_connect, create_table, mongo_connect
+import datetime as dt
 
 class NkdayscraperPipeline():
     def __init__(self):
@@ -18,8 +19,8 @@ class NkdayscraperPipeline():
 
         mongo = mongo_connect()
         mongodb = mongo.netkeiba
-        clct = mongodb.nkdayraces
-        clct.drop()
+        self.collection = mongodb.nkdayraces
+        self.collection.drop()
 
     # def open_spider(self, spider: scrapy.Spider):# コネクションの開始
     #     DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
@@ -31,7 +32,7 @@ class NkdayscraperPipeline():
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
         session = self.Session()
-        if self.engine.name != 'postgresql':
+        if self.engine.name not in ['postgresql', 'mongodb']:
             item['raceaddedmoney'] = str(item['raceaddedmoney'])
             item['position'] = str(item['position'])
 
