@@ -95,7 +95,7 @@ class NkdaySpider(CrawlSpider):
             item['age'] = tr.css('td')[4].css('::text').get()[1:]
             item['weight'] = tr.css('td')[5].css('::text').get()
             item['jockey'] = tr.css('td')[6].css('a::text').get()
-            item['time'] = dt.datetime.strptime('0' + tr.css('td')[7].css('::text').get() + '+09:00', '%M:%S.%f%z').timetz()
+            item['time'] = dt.datetime.strptime('0' + tr.css('td')[7].css('::text').get(), '%M:%S.%f').time()
             margin = tr.css('td')[8].css('::text').get()
             item['margin'] = margin if margin is not None else '0'
             item['fav'] = tr.css('td')[9].css('::text').get()
