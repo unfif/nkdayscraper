@@ -13,6 +13,7 @@ doc['day'] = dt.datetime.combine(doc['day'], dt.time())
 doc['posttime'] = str(doc['posttime'])
 doc['time'] = str(doc['time'])
 collection.insert_one(doc)
+collection.find_one({})
 
     # mongo.close
 

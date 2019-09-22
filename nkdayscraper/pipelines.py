@@ -47,4 +47,8 @@ class NkdayscraperPipeline():
         finally:
             session.close()
 
+        item['posttime'] = str(item['posttime'])
+        item['time'] = str(item['time'])
+        self.collection.insert_one(dict(item))
+
         return item

@@ -60,7 +60,7 @@ class Nkdayraces(Base):
     age = Column(Integer, comment='齢')
     weight = Column(Float, comment='斤量')
     jockey = Column(Text, comment='騎手')
-    time = Column(Time(timezone=True), comment='タイム')
+    time = Column(Time(timezone=False), comment='タイム')
     margin = Column(Text, comment='着差')
     if basename in ['postgresql', 'mongodb']: position = Column(pg.ARRAY(Integer), comment='通過')
     else: position = Column(Text, comment='通過')
