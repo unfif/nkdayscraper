@@ -11,7 +11,7 @@ web: wistd web --wsgi nkcflask01.app.app --listen=tcp:$PORT
 
 ________________________________________________________________________________
 # results01.json for scrapy
-del results01.json; scrapy crawl nkday -a date=c0921 -o results01.json --nolog
+del results01.json; scrapy crawl nkday -a date=p0922 -o results01.json --nolog
 
 cat results01.json | jq -c '.[] | {"index": {"_index": "nkdayraces"}}, .' > es01.json
 

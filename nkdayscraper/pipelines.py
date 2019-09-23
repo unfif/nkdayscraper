@@ -33,8 +33,8 @@ class NkdayscraperPipeline():
         """Save deals in the database. This method is called for every item pipeline component."""
         session = self.Session()
         if self.engine.name not in ['postgresql', 'mongodb']:
-            item['raceaddedmoney'] = str(item['raceaddedmoney'])
-            item['position'] = str(item['position'])
+            item['addedmoneylist'] = str(item['addedmoneylist'])
+            item['positionlist'] = str(item['positionlist'])
 
         nkdbraces = Nkdayraces(**item)
 

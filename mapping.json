@@ -150,7 +150,7 @@
             }
           }
         },
-        "position": {
+        "positionlist": {
           "type": "text",
           "fields": {
             "keyword": {
@@ -177,7 +177,7 @@
             }
           }
         },
-        "raceaddedmoney": {
+        "addedmoneylist": {
           "type": "text",
           "fields": {
             "keyword": {
