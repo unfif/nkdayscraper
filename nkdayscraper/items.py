@@ -10,6 +10,7 @@ import scrapy
 
 class NkdayscraperItem(scrapy.Item):
     raceid = scrapy.Field()
+    year = scrapy.Field()
     place = scrapy.Field()
     racenum = scrapy.Field()
     title = scrapy.Field()
@@ -23,7 +24,7 @@ class NkdayscraperItem(scrapy.Item):
     posttime = scrapy.Field()
     racegrade = scrapy.Field()
     starters = scrapy.Field()
-    raceaddedmoney = scrapy.Field()
+    addedmoneylist = scrapy.Field()
     requrl = scrapy.Field()
 
     placenum = scrapy.Field()
@@ -39,7 +40,7 @@ class NkdayscraperItem(scrapy.Item):
     fav = scrapy.Field()
     odds = scrapy.Field()
     last3f = scrapy.Field()
-    position = scrapy.Field()
+    positionlist = scrapy.Field()
     trainer = scrapy.Field()
     horseweight = scrapy.Field()
     horseweightdiff = scrapy.Field()

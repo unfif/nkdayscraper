@@ -35,6 +35,7 @@ class Nkdayraces(Base):
 
     # _id = None
     raceid = Column(Text, primary_key=True, comment='レースID')
+    year = Column(Integer, comment='年')
     place = Column(Text, comment='場所')
     racenum = Column(Integer, comment='R')
     title = Column(Text, comment='クラス')
@@ -48,13 +49,13 @@ class Nkdayraces(Base):
     posttime = Column(Time(timezone=True), comment='時刻')
     racegrade = Column(Text, comment='グレード')
     starters = Column(Integer, comment='頭数')
-    if basename in ['postgresql', 'mongodb']: raceaddedmoney = Column(pg.ARRAY(Integer), comment='賞金')
-    else: raceaddedmoney = Column(Text, comment='賞金')
+    if basename in ['postgresql', 'mongodb']: addedmoneylist = Column(pg.ARRAY(Integer), comment='賞金')
+    else: addedmoneylist = Column(Text, comment='賞金')
 
     requrl = Column(Text, comment='raceurl')
-    placenum = Column(Integer, primary_key=True, comment='順位')
+    placenum = Column(Integer, comment='順位')
     postnum = Column(Integer, comment='枠番')
-    horsenum = Column(Integer, comment='馬番')
+    horsenum = Column(Integer, primary_key=True, comment='馬番')
     horsename = Column(Text, comment='馬名')
     sex = Column(Text, comment='性')
     age = Column(Integer, comment='齢')
@@ -62,8 +63,8 @@ class Nkdayraces(Base):
     jockey = Column(Text, comment='騎手')
     time = Column(Time(timezone=False), comment='タイム')
     margin = Column(Text, comment='着差')
-    if basename in ['postgresql', 'mongodb']: position = Column(pg.ARRAY(Integer), comment='通過')
-    else: position = Column(Text, comment='通過')
+    if basename in ['postgresql', 'mongodb']: positionlist = Column(pg.ARRAY(Integer), comment='通過')
+    else: positionlist = Column(Text, comment='通過')
 
     last3f = Column(Float, comment='上り')
     odds = Column(Float, comment='オッズ')
@@ -75,4 +76,4 @@ class Nkdayraces(Base):
     # addedmoney = Column(Integer)
 
     # def __repr__(self):
-    #     return  "<nkdayraces(raceid='{}',place='{}',racenum='{}',title='{}',courcetype='{}',distance='{}',direction='{}',weather='{}',condition='{},date='{}',day='{}',posttime='{}',racegrade='{}',starters='{}',raceaddedmoney='{}',requrl='{}',placenum='{}',postnum='{}',horsenum='{}',horsename='{}',sex='{}',age='{}',weight='{}',jockey='{}',time='{}',margin='{}',position='{}',last3f='{}',odds='{}',fav='{}',trainer='{}',horseweight='{}',horseweightdiff='{}')>".format(self.raceid,self.place,self.racenum,self.title,self.courcetype,self.distance,self.direction,self.weather,self.condition,self.date,self.day,self.posttime,self.racegrade,self.starters,self.raceaddedmoney,self.requrl,self.placenum,self.postnum,self.horsenum,self.horsename,self.sex,self.age,self.weight,self.jockey,self.time,self.margin,self.position,self.last3f,self.odds,self.fav,self.trainer,self.horseweight,self.horseweightdiff)
+    #     return  "<nkdayraces(raceid='{}',place='{}',racenum='{}',title='{}',courcetype='{}',distance='{}',direction='{}',weather='{}',condition='{},date='{}',day='{}',posttime='{}',racegrade='{}',starters='{}',addedmoneylist='{}',requrl='{}',placenum='{}',postnum='{}',horsenum='{}',horsename='{}',sex='{}',age='{}',weight='{}',jockey='{}',time='{}',margin='{}',positionlist='{}',last3f='{}',odds='{}',fav='{}',trainer='{}',horseweight='{}',horseweightdiff='{}')>".format(self.raceid,self.place,self.racenum,self.title,self.courcetype,self.distance,self.direction,self.weather,self.condition,self.date,self.day,self.posttime,self.racegrade,self.starters,self.addedmoneylist,self.requrl,self.placenum,self.postnum,self.horsenum,self.horsename,self.sex,self.age,self.weight,self.jockey,self.time,self.margin,self.positionlist,self.last3f,self.odds,self.fav,self.trainer,self.horseweight,self.horseweightdiff)
