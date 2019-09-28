@@ -17,10 +17,13 @@ class NkdayscraperPipeline():
         create_table(self.engine)
         self.Session = sessionmaker(bind=self.engine)
 
-        mongo = mongo_connect()
-        mongodb = mongo.netkeiba
-        self.collection = mongodb.nkdayraces
-        self.collection.drop()
+        self.mongoerr = False
+        mongo = mongo_connect(query={'serverSelectionTimeoutMS': 3000})
+        self.mongodb = mongo.netkeiba
+        self.collection = self.mongodb.nkdayraces
+
+        try: self.collection.drop()
+        except: self.mongoerr = True
 
     # def open_spider(self, spider: scrapy.Spider):# コネクションの開始
     #     DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
@@ -47,8 +50,9 @@ class NkdayscraperPipeline():
         finally:
             session.close()
 
-        item['posttime'] = str(item['posttime'])
-        item['time'] = str(item['time'])
-        self.collection.insert_one(dict(item))
+        if not self.mongoerr:
+            item['posttime'] = str(item['posttime'])
+            item['time'] = str(item['time'])
+            self.collection.insert_one(dict(item))
 
         return item
