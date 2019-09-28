@@ -23,7 +23,14 @@ def db_connect(url=DATABASE_URL, echo=False):
     engine = create_engine(url, echo=echo)
     return engine
 
-def mongo_connect(url=MONGO_URL):
+def mongo_connect(url=MONGO_URL, query=None):
+    if type(query) is dict:
+        if not url.endswith('/'): url += '/'
+        url += '?'
+        for key, val in query.items():
+            url += key + '=' + str(val)
+
+    print(url)
     client = MongoClient(url)
     return client
 
