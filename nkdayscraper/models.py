@@ -24,6 +24,7 @@ def db_connect(url=DATABASE_URL, echo=False):
     return engine
 
 def mongo_connect(url=MONGO_URL, query=None):
+    if url is None: url = 'mongodb://localhost:27017'
     if type(query) is dict:
         if not url.endswith('/'): url += '/'
         url += '?'
