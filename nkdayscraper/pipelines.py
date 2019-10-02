@@ -51,8 +51,13 @@ class NkdayscraperPipeline():
             session.close()
 
         if not self.mongoerr:
+            posttimeorig = item['posttime']
+            timeorig = item['time']
             item['posttime'] = str(item['posttime'])
             item['time'] = str(item['time'])
             self.collection.insert_one(dict(item))
+            item['posttime'] = posttimeorig
+            item['time'] = timeorig
+
 
         return item
