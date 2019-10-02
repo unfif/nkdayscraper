@@ -10,10 +10,10 @@ twistd web --wsgi nkcflask01.app.app --listen=tcp:5000
 web: wistd web --wsgi nkcflask01.app.app --listen=tcp:$PORT
 
 ________________________________________________________________________________
-sudo date -s "09/19 20:06 2019"
+sudo date -s "09/29 18:01 2019"
 
 # results01.json for scrapy
-del results01.json; scrapy crawl nkday -a date=c0928 -o results01.json --nolog
+del results01.json; scrapy crawl nkday -a date=c0929 -o results01.json --nolog
 
 # es01.json for Elasticsearch
 cat results01.json | sed -r 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\1\/\2\/\3/g' | jq -c '.[] | {"index": {"_index": "nkdayraces"}}, .' > es01.json
