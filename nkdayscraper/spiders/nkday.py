@@ -21,12 +21,12 @@ except:
 
 class NkdaySpider(CrawlSpider):
     name = 'nkday'
-    allowed_domains = ['race.netkeiba.com']
+    allowed_domains = ['race.netkeiba.com', '127.0.0.1']
     # start_urls = ['http://race.netkeiba.com/']
 
     rules = (
         Rule(LinkExtractor(
-            allow = ['race.netkeiba.com/?pid=race&id=', '&mode=top'],#'race.netkeiba.com/?pid=race_list_sub&id=',
+            allow = ['race.netkeiba.com/?pid=race&id=', '&mode=top', 'p201906040901&mode=top.php'],#'race.netkeiba.com/?pid=race_list_sub&id=',
             deny = ['db.netkeiba.com/race/movie'],
             restrict_css = ['.race_top_hold_list']
         ),
@@ -36,7 +36,7 @@ class NkdaySpider(CrawlSpider):
 
     def __init__(self, date='c'+targetday, *args, **kwargs):
         super(NkdaySpider, self).__init__(*args, **kwargs)
-        self.start_urls = [baseurl + date]
+        self.start_urls = [baseurl + date]#'http://127.0.0.1:5555']
 
     # def start_requests(self):
     #     url = 'http://race.netkeiba.com/?pid=race_list_sub&id=c' + cdate
