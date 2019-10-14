@@ -110,8 +110,13 @@ class NkdaySpider(CrawlSpider):
             positionlisttext = tr.css('td')[12].css('::text').get()
             item['positionlist'] = [int(x) for x in positionlisttext.split('-')] if positionlisttext is not None else None
             item['trainer'] = tr.css('td')[13].css('a::text').get()
-            item['horseweight'] = tr.css('td')[14].css('::text').get().split('(')[0]
-            item['horseweightdiff'] = tr.css('td')[14].css('::text').get().split('(')[1][:-1].replace('+', '')
+            if margin != '取消':
+                item['horseweight'] = tr.css('td')[14].css('::text').get().split('(')[0]
+                item['horseweightdiff'] = tr.css('td')[14].css('::text').get().split('(')[1][:-1].replace('+', '')
+            else:
+                item['horseweight'] = None
+                item['horseweightdiff'] = None
+
             item['requrl'] = response.request.url
 
             intkeys = []
