@@ -11,7 +11,7 @@ today = dt.date.today()
 targetdate = today - dt.timedelta((today.weekday() + 1) % 7)
 targetday = "{0:%m%d}".format(targetdate)
 
-baseurl = 'http://race.netkeiba.com/?pid=race_list_sub&id='
+baseurl = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id='
 starturl = baseurl + 'p' + targetday
 try:
     req = requests.get(starturl)
@@ -21,12 +21,12 @@ except:
 
 class NkdaySpider(CrawlSpider):
     name = 'nkday'
-    allowed_domains = ['race.netkeiba.com', '127.0.0.1']
-    # start_urls = ['http://race.netkeiba.com/']
+    allowed_domains = ['oldrace.netkeiba.com', '127.0.0.1']
+    # start_urls = ['http://oldrace.netkeiba.com/']
 
     rules = (
         Rule(LinkExtractor(
-            allow = ['race.netkeiba.com/?pid=race&id=', '&mode=top', 'p201906040901&mode=top.php'],#'race.netkeiba.com/?pid=race_list_sub&id=',
+            allow = ['oldrace.netkeiba.com/?pid=race&id=', '&mode=top', 'p201906040901&mode=top.php'],#'oldrace.netkeiba.com/?pid=race_list_sub&id=',
             deny = ['db.netkeiba.com/race/movie'],
             restrict_css = ['.race_top_hold_list']
         ),
@@ -39,7 +39,7 @@ class NkdaySpider(CrawlSpider):
         self.start_urls = [baseurl + date]#'http://127.0.0.1:5555']
 
     # def start_requests(self):
-    #     url = 'http://race.netkeiba.com/?pid=race_list_sub&id=c' + cdate
+    #     url = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id=c' + cdate
     #     yield scrapy.Request(url, callback=self.parse_races)
 
     def parse_races(self, response):
