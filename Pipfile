@@ -12,6 +12,7 @@ psycopg2 = "*"
 requests = "*"
 python-dotenv = "*"
 uvicorn = "*"
+pymongo = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
