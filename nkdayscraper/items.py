@@ -9,6 +9,7 @@ import scrapy
 
 
 class NkdayscraperItem(scrapy.Item):
+    datekey = scrapy.Field()
     raceid = scrapy.Field()
     year = scrapy.Field()
     place = scrapy.Field()

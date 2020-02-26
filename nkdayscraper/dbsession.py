@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 from models import nkdayraces, db_connect#, create_table
 
-engine = db_connect(True)
+engine = db_connect(echo=True)
 # drop_table(engine, nkdayraces)
 # create_table(engine)
 Session = sessionmaker(bind=engine)

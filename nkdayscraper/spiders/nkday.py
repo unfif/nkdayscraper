@@ -5,46 +5,54 @@ from scrapy.spiders import CrawlSpider, Rule
 from nkdayscraper.items import NkdayscraperItem
 import datetime as dt
 
-# now = dt.datetime.now()
-# cYmd = "{0:%Y%m%d}".format(now)
 today = dt.date.today()
 targetdate = today - dt.timedelta((today.weekday() + 1) % 7)
-targetday = "{0:%m%d}".format(targetdate)
+targetdate = '{0:%m%d}'.format(targetdate)
+# targetdate = '{0:%Y%m%d}'.format(targetdate)
 
+# REM datekey is 'c0215' OR 'p0215'
 baseurl = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id='
-starturl = baseurl + 'p' + targetday
+# baseurl = 'https://race.netkeiba.com/top/race_list_sub.html?kaisai_date='
+datekey = 'p' + targetdate
+starturl = baseurl + datekey
+
 try:
     req = requests.get(starturl)
-    if len(req.text) < 50: starturl = baseurl + 'c' + targetday
+    if len(req.text) < 50:
+        datekey = 'c' + targetdate
+        starturl = baseurl + datekey
 except:
-    starturl = baseurl + 'c' + targetday
+    datekey = 'c' + targetdate
+    starturl = baseurl + datekey
 
+# starturl = baseurl + targetdate
 class NkdaySpider(CrawlSpider):
     name = 'nkday'
-    allowed_domains = ['oldrace.netkeiba.com', '127.0.0.1']
-    # start_urls = ['http://oldrace.netkeiba.com/']
+    allowed_domains = ['oldrace.netkeiba.com', '127.0.0.1']# 'race.netkeiba.com'
+    # start_urls = ['http://oldrace.netkeiba.com/']# 'http://race.netkeiba.com/'
 
     rules = (
         Rule(LinkExtractor(
-            allow = ['oldrace.netkeiba.com/?pid=race&id=', '&mode=top', 'p201906040901&mode=top.php'],#'oldrace.netkeiba.com/?pid=race_list_sub&id=',
-            deny = ['db.netkeiba.com/race/movie'],
-            restrict_css = ['.race_top_hold_list']
+            allow = ['oldrace.netkeiba.com/?pid=race&id=', '&mode=top'],# 'race.netkeiba.com/?pid=race&id='
+            deny = ['db.netkeiba.com/race/movie'],# race.netkeiba.com/race/movie.html
+            restrict_css = ['.race_top_hold_list']# RaceList_Data
         ),
             callback = 'parse_races', follow = True
         ),
     )
 
-    def __init__(self, date='c'+targetday, *args, **kwargs):
+    def __init__(self, datekey=datekey, *args, **kwargs):
         super(NkdaySpider, self).__init__(*args, **kwargs)
-        self.start_urls = [baseurl + date]#'http://127.0.0.1:5555']
+        self.start_urls = [baseurl + datekey]#'http://127.0.0.1:5555']
 
     # def start_requests(self):
     #     url = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id=c' + cdate
     #     yield scrapy.Request(url, callback=self.parse_races)
 
-    def parse_races(self, response):
+    def parse_races(self, response, datekey=datekey):
         item = NkdayscraperItem()
 
+        item['datekey'] = datekey
         raceinfo = response.css('.race_head_inner')
         raceplaceurl = raceinfo.css('ul.race_place a.active::attr(href)').get()
         raceplaceurl = response.request.url
@@ -65,7 +73,7 @@ class NkdaySpider(CrawlSpider):
         courcetype = re.split('(\d+)|m', racetype)
         item['courcetype'] = courcetype[0]
         item['distance'] = courcetype[1]
-        item['direction'] = re.split('[()]', racetype)[1]#racetype.split('(')[1][0]
+        item['direction'] = re.split('[()]', racetype)[1]# racetype.split('(')[1][0]
         racecondition = racedata.css('dd p')[1].css('::text').get().split('\xa0/\xa0')
         item['weather'] = racecondition[0].split('：')[1]
         item['condition'] = racecondition[1].split('：')[1]
