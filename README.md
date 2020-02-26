@@ -1,5 +1,5 @@
-del results01.json; scrapy crawl nkday -a date=p0811 -o results01.json --nolog
-rm results01.json & scrapy crawl nkday -a date=p0811 -o results01.json --nolog
+del results01.json; scrapy crawl nkday -a datemode=p0811 -o results01.json --nolog
+rm results01.json & scrapy crawl nkday -a datemode=p0811 -o results01.json --nolog
 
 flask run --debugger --reload
 web: flask run --host=0.0.0.0 --port=$PORT
@@ -13,7 +13,7 @@ ________________________________________________________________________________
 sudo date -s "09/29 18:01 2019"
 
 # results01.json for scrapy
-```del results01.json; scrapy crawl nkday -a date=c0119 -o results01.json --nolog```
+```del results01.json; scrapy crawl nkday -a datemode=c0119 -o results01.json --nolog```
 
 # es01.json for Elasticsearch
 ```cat results01.json | sed -r 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\1\/\2\/\3/g' | jq -c '.[] | {"index": {"_index": "nkdayraces"}}, .' > es01.json```

@@ -6,6 +6,7 @@ from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
+SQLITE_URL = get_project_settings().get('SQLITE_URL')
 MONGO_URL = get_project_settings().get('MONGO_URL')
 basename = DATABASE_URL.split(':')[0].split('+')[0]
 
@@ -41,6 +42,7 @@ class Nkdayraces(Base):
     __tablename__ = 'nkdayraces'
 
     # _id = None
+    datekey = Column(Text, primary_key=True, comment='datekey')
     raceid = Column(Text, primary_key=True, comment='レースID')
     year = Column(Integer, comment='年')
     place = Column(Text, comment='場所')
