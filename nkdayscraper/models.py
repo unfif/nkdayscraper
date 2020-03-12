@@ -42,7 +42,7 @@ class Nkdayraces(Base):
     __tablename__ = 'nkdayraces'
 
     # _id = None
-    datekey = Column(Text, primary_key=True, comment='datekey')
+    # datekey = Column(Text, primary_key=True, comment='datekey')
     raceid = Column(Text, primary_key=True, comment='レースID')
     year = Column(Integer, comment='年')
     place = Column(Text, comment='場所')
@@ -53,7 +53,7 @@ class Nkdayraces(Base):
     direction = Column(Text, comment='情報')
     weather = Column(Text, comment='天候')
     condition = Column(Text, comment='状態')
-    date = Column(DateTime(timezone=True), comment='日時')
+    datetime = Column(DateTime(timezone=True), comment='日時')
     day = Column(Date, comment='日程')
     posttime = Column(Time(timezone=True), comment='時刻')
     racegrade = Column(Text, comment='グレード')
@@ -62,22 +62,23 @@ class Nkdayraces(Base):
     else: addedmoneylist = Column(Text, comment='賞金')
 
     requrl = Column(Text, comment='raceurl')
-    placenum = Column(Integer, comment='順位')
+    ranking = Column(Integer, comment='順位')
     postnum = Column(Integer, comment='枠番')
     horsenum = Column(Integer, primary_key=True, comment='馬番')
     horsename = Column(Text, comment='馬名')
     sex = Column(Text, comment='性')
     age = Column(Integer, comment='齢')
-    weight = Column(Float, comment='斤量')
+    jockeyweight = Column(Float, comment='斤量')
     jockey = Column(Text, comment='騎手')
     time = Column(Time(timezone=False), comment='タイム')
     margin = Column(Text, comment='着差')
-    if basename in ['postgresql', 'mongodb']: positionlist = Column(pg.ARRAY(Integer), comment='通過')
-    else: positionlist = Column(Text, comment='通過')
-
-    last3f = Column(Float, comment='上り')
-    odds = Column(Float, comment='オッズ')
+    
     fav = Column(Integer, comment='人気')
+    odds = Column(Float, comment='オッズ')
+    last3f = Column(Float, comment='上り')
+    if basename in ['postgresql', 'mongodb']: passageratelist = Column(pg.ARRAY(Integer), comment='通過')
+    else: passageratelist = Column(Text, comment='通過')
+    affiliate = Column(Text, comment='所属')
     trainer = Column(Text, comment='調教師')
     horseweight = Column(Float, comment='馬体重')
     horseweightdiff = Column(Integer, comment='増減')

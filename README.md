@@ -13,7 +13,7 @@ ________________________________________________________________________________
 sudo date -s "09/29 18:01 2019"
 
 # results01.json for scrapy
-```del results01.json; scrapy crawl nkday -a datemode=c0119 -o results01.json --nolog```
+```rm results01.json & scrapy crawl nkday -o results01.json```
 
 # es01.json for Elasticsearch
 ```cat results01.json | sed -r 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\1\/\2\/\3/g' | jq -c '.[] | {"index": {"_index": "nkdayraces"}}, .' > es01.json```
