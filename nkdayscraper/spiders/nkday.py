@@ -6,7 +6,11 @@ from nkdayscraper.items import NkdayscraperItem
 import datetime as dt
 
 today = dt.date.today()
-targetdate = today - dt.timedelta((today.weekday() + 1) % 7)
+if today.weekday() in [5, 6]:
+    targetdate = today
+else:
+    targetdate = today - dt.timedelta((today.weekday() + 1) % 7)
+
 date = '{0:%Y%m%d}'.format(targetdate)
 
 baseurl = 'https://race.netkeiba.com/top/race_list_sub.html?kaisai_date='
