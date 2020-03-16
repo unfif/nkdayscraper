@@ -103,3 +103,4 @@ FEED_EXPORT_ENCODING='utf-8'
 # print(os.environ)
 DATABASE_URL = os.environ.get('DATABASE_URL')
 MONGO_URL = os.environ.get('MONGO_URL')
+# TELNETCONSOLE_PORT = os.environ.get('TELNETCONSOLE_PORT')
