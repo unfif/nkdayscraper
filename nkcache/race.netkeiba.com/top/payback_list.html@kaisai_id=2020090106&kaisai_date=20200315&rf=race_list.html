@@ -1,0 +1,4330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-JP">
+<!-- metaエリア -->
+
+<!-- block=common__meta_tag_common_race (d) -->
+<meta http-equiv="content-language" content="ja">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=1000">
+<meta name="format-detection" content="telephone=no" />
+<meta name="description" content="結果・払戻一覧です。JRA開催レースの出馬表や最新オッズ、レース結果速報、払戻情報をはじめ、競馬予想やデータ分析など予想に役立つ情報も満載です。" />
+<meta name="keywords" content="競馬,keiba,出馬表,オッズ,予想,レース結果,払戻し,結果速報,競馬予想,ネット競馬,netkeiba" />
+<meta name="thumbnail" content="https://www.netkeiba.com/style/netkeiba.ja/image/netkeiba.png" />
+<!-- ogp用 -->
+<meta property="og:site_name" content="netkeiba.com" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="結果・払戻一覧 | レース情報(JRA) - netkeiba.com" />
+<meta property="og:url" content="https://race.netkeiba.com/top/payback_list.html?kaisai_id=2020090106&kaisai_date=20200315" />
+<meta property="og:description" content="結果・払戻一覧です。JRA開催レースの出馬表や最新オッズ、レース結果速報、払戻情報をはじめ、競馬予想やデータ分析など予想に役立つ情報も満載です。" />
+<meta property="og:image" content="https://www.netkeiba.com/style/netkeiba.ja/image/netkeiba.png" />
+<!-- Twitter用 -->
+<meta property="twitter:card" content="summary">
+<meta property="twitter:site" content="@netkeiba">
+<!-- Facebook用 -->
+<meta property="fb:admins" content="30367" />
+<link rel="canonical" href="https://race.netkeiba.com/top/payback_list.html?kaisai_id=2020090106&kaisai_date=20200315" />
+<link rel="alternate" media="only screen and (max-width: 640px)" href="https://race.sp.netkeiba.com/?pid=payback_list&kaisai_id=2020090106&kaisai_date=20200315" />
+<link rel="alternate" type="application/rss+xml" href="https://rss.netkeiba.com?pid=rss_netkeiba&site=netkeiba" />
+<!-- アノテーション -->
+<title>結果・払戻一覧 | レース情報(JRA) - netkeiba.com</title>
+<!-- 共通css include -->
+<!-- block=common__css (d) -->
+<link rel='stylesheet' href="https://cdn.netkeiba.com/img.racev3/common/css/race_pc_new.css?2020031601" type='text/css'>
+<!-- 共通js include -->
+<!-- block=common__js (d) -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.netkeiba.com/img.racev3/common/js/slick.min.js?2019080501"></script>
+<script type="text/javascript" src="https://cdn.netkeiba.com/img.racev3/common/js/raceapi.action.js?2019073001"></script>
+<script type="text/javascript" src="https://cdn.netkeiba.com/img.racev3/common/js/YosoJranar.js?2019073001" type="text/javascript"></script>
+<script type="text/javascript" src="https://cdn.netkeiba.com/img.racev3/common/js/sweetalert.min.js?2019073001" type="text/javascript"></script>
+<script type="text/javascript" src="https://cdn.netkeiba.com/img.racev3/common/js/jquery.colorbox.js?2019073001"></script>
+<script type="text/javascript" src="https://cdn.netkeiba.com/img.regist.sp/common/js/monthly_goods_link.js?2019101001"></script>
+<script type="text/javascript" src="https://cdn.netkeiba.com/img.racev3/common/js/common_pc_new.js?2019073001" type="text/javascript"></script>
+<script type="text/javascript">
+// $Id: race_common_js.html 20040 2019-02-28 07:05:48Z m-ashizawa $
+//window.console = {};
+//window.console.log = function(i){return;};
+</script>
+<!-- GoogleAdsense -->
+<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+<script>
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+</script>
+<script type="text/javascript">
+googletag.cmd.push(function() {
+var nkAdCategory = "race";
+var href_value = location.href.split("://")[1];
+var url_value = href_value.split("?")[0].substr(0, 40);
+var parameter_value = "null";
+if (location.search) {
+parameter_value = href_value.split("?")[1].substr(0, 40);
+}
+var ref_value = "null";
+if (document.referrer) {
+var ref_array=[];
+ref_array=document.referrer.split("/");
+ref_value = ref_array[2];
+}
+googletag.pubads().setTargeting("url", url_value).setTargeting("url_parameter", parameter_value).setTargeting("ref", ref_value).setTargeting("category", nkAdCategory);
+});
+</script>
+<script src="https://cdn.netkeiba.com/img.racev3/common/js/jquery.nd.lib_tab.js?2019073001" type="application/x-javascript" charset="utf-8"></script>
+<script type="text/javascript">
+$(function() {
+var tData = {
+tabGroupName  :['PaybackRaceNum'],
+tabColorOn    :['Active'],
+tabColorOff   :['Tab_Normal'],
+tabNow        :[1],
+tabEffect     :['fade'],
+};
+$(document).tab(tData);
+});
+</script>
+</head>
+<body class="race" id="Netkeiba_RaceTop">
+<div data-role="page" class="Wrap fc">
+<!-- block=common__race_header (d) -->
+<link rel="stylesheet" href="https://cdn.netkeiba.com/img.www/style/netkeiba.ja/css/common_header.css?201901113" type="text/css">
+
+<header class="Header_Area fc">
+<div class="Header_Inner">
+<h1>
+<a href="https://www.netkeiba.com/?rf=logo" title="netkeiba.com">
+<img src="https://cdn.netkeiba.com/img.www/style/netkeiba.ja/image/common/netkeiba_logo01.png" alt="netkeiba.com">
+</a>
+</h1>
+<div class="DB_Search_Input">
+<form class="Search_Box" action="https://www.netkeiba.com/" method="POST">
+<input type="hidden" name="pid" value="search">
+<input type="hidden" name="type" value="db">
+<div class="InputTxt_Form_Box">
+<input class="Txt_Form" placeholder="馬名で検索" value="" type="text" name="word" id="keywords">
+</div><!-- / .InputTxt_Form -->
+<div class="Submit_Btn_Box">
+<input class="Submit_Btn" type="submit" name="submit" value="検 索">
+</div><!-- / .Submit_Btn_Box -->
+</form>
+</div><!-- / .DB_Search_Input -->
+<ul class="UserMyMenu fc">
+
+<li>
+<a href="https://www.netkeiba.com/?pid=start_mypage&rf=navi">
+<span>マイページのご紹介</span>
+</a>
+</li>
+<li>
+<a href="https://race.netkeiba.com/bookmark/bookmark.html?rf=navi" class="Icon_Header Icon_MyfavHorse">
+<span>お気に入り馬</span>
+</a>
+</li>
+<li>
+<a href="https://regist.netkeiba.com/account/?pid=login" class="Icon_Header Icon_Login">
+<span>ログイン/会員登録</span>
+</a>
+</li>
+<li class="disp_none header_stage_area no_login_show">
+<a href="https://regist.netkeiba.com?pid=stage_login&action=login&return_url=https://regist.netkeiba.com">
+<span>(s)ログイン</span>
+</a>
+</li>
+<li class="disp_none header_stage_area no_login_show">
+<a href="https://regist.netkeiba.com?pid=user_add_form&payment=nk_user&goods_cd=310409&opt=init">
+<span>(s)無料会員登録</span>
+</a>
+<li class="disp_none header_stage_area login_show">
+<a href="https://regist.netkeiba.com?pid=stage_login&action=logout&return_url=https://regist.netkeiba.com">
+<span>(s)ログアウト</span>
+</a>
+</li>
+</ul>
+</div><!-- /.Header_Inner -->
+</header>
+<!--<div class="MenuNew01">
+<span class="MenuNewIcon">NEW</span>
+</div>--><!-- /.MenuNew01 -->
+<nav class="ContentNavi01">
+<ul class="fc">
+<li class="Top">
+<a href="https://www.netkeiba.com/?rf=navi" title="トップ">トップ</a>
+</li>
+<li class="News">
+<a href="https://news.netkeiba.com?rf=navi" title="ニュース">ニュース</a>
+</li>
+<li class="Race">
+<a href="https://race.netkeiba.com/top/" title="レース">レース</a>
+</li>
+<li class="Yoso">
+<a href="https://yoso.netkeiba.com?access=init&rf=navi" title="ウマい馬券">ウマい馬券</a>
+</li>
+<li class="Column">
+<a href="https://news.netkeiba.com?pid=column_top&rf=navi" title="コラム">コラム</a>
+</li>
+<li class="Tv">
+<a href="https://tv.netkeiba.com/?rf=navi" title="netkeibaTV">netkeibaTV</a>
+</li>
+<li class="Local">
+<a href="https://nar.netkeiba.com?rf=navi" title="地方競馬">地方競馬</a>
+</li>
+<li class="Db">
+<a href="https://db.netkeiba.com?rf=navi" title="データベース">データベース</a>
+</li>
+<li class="YosoCS">
+<a href="https://orepro.netkeiba.com?rf=navi" title="俺プロ">俺プロ</a>
+</li>
+<li class="Owner">
+<a href="https://owner.netkeiba.com?rf=navi" title="一口馬主">一口馬主</a>
+</li>
+<li class="Pog">
+<a href="https://pog.netkeiba.com?rf=navi" title="POG">POG</a>
+</li>
+<li class="Community">
+<a href="https://bbs.pc.keiba.findfriends.jp?rf=navi" title="競馬広場">競馬広場</a>
+</li>
+<li class="Matome">
+<a href="https://dir.netkeiba.com//keibamatome/index.html?rf=navi" title="まとめ">まとめ</a>
+</li>
+</ul>
+</nav><!-- /.ContentNavi01 -->
+<!-- 広告配信用 -->
+<script>
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+</script>
+<!-- /広告配信用 -->
+<script type="text/javascript">
+$(document).ready(function() {
+show_user();
+});
+function show_user(){
+var is_stage = '';
+var is_user  = '';
+var is_alert = '';
+var is_sp    = '';
+var nickname = '';
+var user_img = '';
+if(is_sp) {
+$('.sp_nk_btn').show();
+}
+if(! is_stage) {
+$('.header_stage_area').remove();
+}
+if(is_user){
+//ログイン中
+$('.login_show').show();
+if(is_alert) {
+$('.Alert_New').show();
+}
+} else {
+//未ログイン
+$('.no_login_show').show();
+$('.login_show').remove();
+}
+}
+</script>
+<div class="Contents">
+<div class="Main_Column PaybackPage">
+<div class="RaceList_Area">
+<!-- block=common__date_list (cp) -->
+<a id="racelist_top_a" name="racelist_top_a"></a>
+<div class="RaceList_Header">
+<h3 class="TitleHeading TitleIcon">
+<span>結果・払戻</span>
+<a href="https://race.netkeiba.com/top/schedule.html?rf=race_list" class="LinkMore Heading_Win" title="重賞スケジュール" style="margin-left: 20px">重賞スケジュール</a>
+<a href="https://race.netkeiba.com/top/race_list.html" class="LinkMore Heading_Win" title="今週のレース一覧へ" >今週のレース一覧へ</a>
+</h3>
+</div><!-- /.RaceList_Header -->
+<div class="RaceList_Date clearfix">
+<div class="RaceDayPrev">
+<a href="https://race.netkeiba.com/top/payback_list.html?kaisai_date=20200308#racelist_top_a" class="Active">前</a>
+</div>
+
+<dl class="Tab4 fc">
+
+<dd><a href="https://race.netkeiba.com/top/payback_list.html?kaisai_date=20200307&amp;current_group=1020200314#racelist_top_a" title="3月7日(土)">3月7日<span class="Sat">(土)</span></a></dd>
+<dd><a href="https://race.netkeiba.com/top/payback_list.html?kaisai_date=20200308&amp;current_group=1020200314#racelist_top_a" title="3月8日(日)">3月8日<span class="Sun">(日)</span></a></dd>
+<dd><a href="https://race.netkeiba.com/top/payback_list.html?kaisai_date=20200314&amp;current_group=1020200314#racelist_top_a" title="3月14日(土)">3月14日<span class="Sat">(土)</span></a></dd><dd  class="Active"><a href="https://race.netkeiba.com/top/payback_list.html?kaisai_date=20200315&amp;current_group=1020200314#racelist_top_a" title="3月15日(日)">3月15日<span class="Sun">(日)</span></a></dd>
+
+</dl><!-- /.Tab_RaceDaySelect -->
+<div class="RaceDayNext">
+<a href="https://race.netkeiba.com/top/payback_list.html?kaisai_date=20200320#racelist_top_a" class="Active">次</a>
+</div>
+
+</div><!-- /.RaceDayWrap_Inner -->
+<!-- レース一覧 -->
+<!-- block=payback_list__content (cp) -->
+<!-- 払戻タブ_場 -->
+<div class="RaceKaisaiWrap mt20">
+<ul class="Col">
+
+<li>
+<a href="https://race.netkeiba.com/top/payback_list.html?kaisai_id=2020060206&amp;kaisai_date=20200315" title="中山"><div>中山</div></a>
+</li><li class="Active">
+<a href="https://race.netkeiba.com/top/payback_list.html?kaisai_id=2020090106&amp;kaisai_date=20200315" title="阪神"><div>阪神</div></a>
+</li>
+
+<li>
+<a href="https://race.netkeiba.com/top/payback_list.html?kaisai_id=2020070106&amp;kaisai_date=20200315" title="中京"><div>中京</div></a>
+</li>
+</ul>
+</div><!-- /.RaceKaisaiWrap -->
+
+<div class="Contents_Box Top_RaceDigest" id="JraDigest"></div>
+<script type="text/javascript">
+var _api_news_netkeiba_url = 'https://news.netkeiba.com';
+$(function(){
+console.log('api_get_jra_digest');
+var _data = {
+pid : 'api_get_jra_digest',
+input : 'UTF-8',
+output : 'jsonp',
+rf: 'payback_list'
+};
+$.ajax({
+type : 'GET',
+url : _api_news_netkeiba_url,
+data : _data,
+dataType : _data.output,
+success : function(data){
+$('#JraDigest').html(data);
+},
+error : function(XMLHttpRequest,textStatus,errorThrown){
+console.log('XMLHttpRequest:'+XMLHttpRequest.status);
+console.log('textStatus:'+textStatus);
+console.log('errorThrown:'+errorThrown.message);
+}
+});
+});
+</script>
+<div class="RacePaybackListBody ">
+<p class="kaisai_date" style="margin-top:10px;">2020年3月15日 阪神 6日目</p>
+<div class="RacePaylistSummary">
+<ul class="RacePaylistSummaryList">
+<li class="RacePaylistSummaryItem">
+<div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 1R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#1R_result">3歳未勝利</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 2R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#2R_result">3歳未勝利</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 3R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#3R_result">3歳未勝利</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 4R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#4R_result">3歳未勝利</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 5R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#5R_result">3歳未勝利</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 6R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#6R_result">3歳1勝クラス</a></span>
+</div>
+</li>
+<li class="RacePaylistSummaryItem">
+<div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 7R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#7R_result">3歳1勝クラス</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 8R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#8R_result">4歳以上1勝クラス</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 9R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#9R_result">淡路特別</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 10R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#10R_result">甲南S</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 11R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#11R_result">フィリーズR</a></span>
+</div><div class="RaceSummaryITem clearfix">
+<span class="RaceName"> 12R</span>
+<span class="LinkRaceSummary"><a href="payback_list.html@kaisai_id=2020090106&amp;kaisai_date=20200315&amp;rf=race_list.html#12R_result">4歳以上2勝クラス</a></span>
+</div>
+</li>
+</ul>
+</div>
+<div id="tab_PaybackRaceNum_1_con" >
+<p id="1R_result" class="AllResultRaceTitle"><span class="RacePaybackType">1R 3歳未勝利</span></p>
+<p class="AllResultRaceTitle">
+サラ系３歳牝[指]( 馬齢 ) ダ1800m(右)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010601">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku4">
+<div>4</div>
+</td>
+<td class="Num Txt_C">
+<div>4</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017105120" target="_blank" title="アルディフルール">アルディフルール</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/00732/" target="_blank">幸 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01155/" target="_blank" title="渡辺">渡辺</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:57.2</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">474<span>(0)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">2.0</span>
+</td>
+<td class="Odds cellcolor_1 Txt_C">
+<span  class="OddsPeople">1</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku3">
+<div>3</div>
+</td>
+<td class="Num Txt_C">
+<div>3</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017106254" target="_blank" title="メイショウトラヒメ">メイショウトラヒメ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01019/" target="_blank">秋山真 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01049/" target="_blank" title="南井">南井</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:57.3</span>
+<span>1/2</span>
+<span></span>
+</td>
+<td class="Weight">458<span>(-2)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">3.0</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku6">
+<div>6</div>
+</td>
+<td class="Num Txt_C">
+<div>6</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017101727" target="_blank" title="タガノグリュック">タガノグリュック</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01018/" target="_blank">和田 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01111/" target="_blank" title="鈴木孝">鈴木孝</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:57.8</span>
+<span>3</span>
+<span></span>
+</td>
+<td class="Weight">500<span>(+12)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">17.6</span>
+</td>
+<td class="Odds cellcolor_4 Txt_C">
+<span  class="OddsPeople">4</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010601&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>4</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>200円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>4</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>3</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>6</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>110円<br />110円<br />230円</span></td>
+<td class="Ninki">
+<span>1人気</span><span>2人気</span><span>4人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>4</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>370円</span></td>
+<td class="Ninki">
+<span>2人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>4</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>320円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>4</span></li>
+<li></li>
+</ul><ul>
+<li><span>4</span></li>
+<li><span>6</span></li>
+<li></li>
+</ul><ul>
+<li><span>3</span></li>
+<li><span>6</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>170円<br />440円<br />570円</td>
+<td class="Ninki">
+<span>1人気</span><span>5人気</span><span>8人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>3</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>570円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>4</span></li>
+<li><span>6</span></li>
+</ul>
+</td>
+<td class="Payout"><span>1,170円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>3</span></li>
+<li><span>6</span></li>
+</ul>
+</td>
+<td class="Payout"><span>3,500円</span></td>
+<td class="Ninki"><span>7人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_2_con" >
+<p id="2R_result" class="AllResultRaceTitle"><span class="RacePaybackType">2R 3歳未勝利</span></p>
+<p class="AllResultRaceTitle">
+サラ系３歳[指]( 馬齢 ) ダ1200m(右)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010602">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku7">
+<div>7</div>
+</td>
+<td class="Num Txt_C">
+<div>14</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017101726" target="_blank" title="オカリナ">オカリナ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01015/" target="_blank">古川 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01018/" target="_blank" title="宮">宮</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:13.5</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">524<span>(-4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">7.1</span>
+</td>
+<td class="Odds cellcolor_3 Txt_C">
+<span  class="OddsPeople">3</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku8">
+<div>8</div>
+</td>
+<td class="Num Txt_C">
+<div>15</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017106408" target="_blank" title="ヴィータブリランテ">ヴィータブリランテ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01128/" target="_blank">川須 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01158/" target="_blank" title="寺島">寺島</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:13.6</span>
+<span>3/4</span>
+<span></span>
+</td>
+<td class="Weight">466<span>(-4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">6.8</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku3">
+<div>3</div>
+</td>
+<td class="Num Txt_C">
+<div>5</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017101724" target="_blank" title="タガノオボロ">タガノオボロ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01157/" target="_blank">鮫島駿 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/00438/" target="_blank" title="安田隆">安田隆</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:14.0</span>
+<span>2.1/2</span>
+<span></span>
+</td>
+<td class="Weight">432<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">25.3</span>
+</td>
+<td class="Odds cellcolor_7 Txt_C">
+<span  class="OddsPeople">7</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010602&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>14</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>710円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>14</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>15</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>5</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>350円<br />260円<br />850円</span></td>
+<td class="Ninki">
+<span>4人気</span><span>2人気</span><span>7人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>7</span></li>
+<li><span>8</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>940円</span></td>
+<td class="Ninki">
+<span>5人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>14</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,930円</span></td>
+<td class="Ninki">
+<span>6人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>14</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul><ul>
+<li><span>5</span></li>
+<li><span>14</span></li>
+<li></li>
+</ul><ul>
+<li><span>5</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>680円<br />2,420円<br />1,860円</td>
+<td class="Ninki">
+<span>5人気</span><span>23人気</span><span>16人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>14</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>4,030円</span></td>
+<td class="Ninki">
+<span>11人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>14</span></li>
+<li><span>15</span></li>
+</ul>
+</td>
+<td class="Payout"><span>14,420円</span></td>
+<td class="Ninki">
+<span>40人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>14</span></li>
+<li><span>15</span></li>
+<li><span>5</span></li>
+</ul>
+</td>
+<td class="Payout"><span>66,070円</span></td>
+<td class="Ninki"><span>174人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_3_con" >
+<p id="3R_result" class="AllResultRaceTitle"><span class="RacePaybackType">3R 3歳未勝利</span></p>
+<p class="AllResultRaceTitle">
+サラ系３歳[指]( 馬齢 ) ダ1800m(右)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010603">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku5">
+<div>5</div>
+</td>
+<td class="Num Txt_C">
+<div>7</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017104698" target="_blank" title="ジロー">ジロー</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/00666/" target="_blank">武豊 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01066/" target="_blank" title="岡田">岡田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:54.6</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">458<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">1.4</span>
+</td>
+<td class="Odds cellcolor_1 Txt_C">
+<span  class="OddsPeople">1</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku4">
+<div>4</div>
+</td>
+<td class="Num Txt_C">
+<div>5</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017106442" target="_blank" title="ハイパーステージ">ハイパーステージ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/05268/" target="_blank">佐藤友 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01101/" target="_blank" title="吉田">吉田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:54.9</span>
+<span>2</span>
+<span></span>
+</td>
+<td class="Weight">430<span>(0)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">17.3</span>
+</td>
+<td class="Odds cellcolor_5 Txt_C">
+<span  class="OddsPeople">5</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku8">
+<div>8</div>
+</td>
+<td class="Num Txt_C">
+<div>13</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017102309" target="_blank" title="エムテイフラッシュ">エムテイフラッシュ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/00732/" target="_blank">幸 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/00431/" target="_blank" title="谷">谷</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:55.7</span>
+<span>5</span>
+<span></span>
+</td>
+<td class="Weight">478<span>(-12)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">6.5</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010603&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>7</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>140円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>7</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>5</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>13</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>110円<br />210円<br />120円</span></td>
+<td class="Ninki">
+<span>1人気</span><span>5人気</span><span>2人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>5</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>810円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>620円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul><ul>
+<li><span>7</span></li>
+<li><span>13</span></li>
+<li></li>
+</ul><ul>
+<li><span>5</span></li>
+<li><span>13</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>360円<br />170円<br />890円</td>
+<td class="Ninki">
+<span>4人気</span><span>1人気</span><span>12人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>7</span></li>
+<li><span>5</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,230円</span></td>
+<td class="Ninki">
+<span>4人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>7</span></li>
+<li><span>13</span></li>
+</ul>
+</td>
+<td class="Payout"><span>1,130円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>7</span></li>
+<li><span>5</span></li>
+<li><span>13</span></li>
+</ul>
+</td>
+<td class="Payout"><span>4,070円</span></td>
+<td class="Ninki"><span>10人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_4_con" >
+<p id="4R_result" class="AllResultRaceTitle"><span class="RacePaybackType">4R 3歳未勝利</span></p>
+<p class="AllResultRaceTitle">
+サラ系３歳(混)[指]( 馬齢 ) 芝1800m(右 外)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010604">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku1">
+<div>1</div>
+</td>
+<td class="Num Txt_C">
+<div>2</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017104637" target="_blank" title="デゼル">デゼル</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/00666/" target="_blank">武豊 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01061/" target="_blank" title="友道">友道</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:48.7</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">472<span>(0)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">2.1</span>
+</td>
+<td class="Odds cellcolor_1 Txt_C">
+<span  class="OddsPeople">1</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku2">
+<div>2</div>
+</td>
+<td class="Num Txt_C">
+<div>4</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017104985" target="_blank" title="ナリタザクラ">ナリタザクラ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/05203/" target="_blank">岩田康 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01136/" target="_blank" title="高橋亮">高橋亮</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:48.8</span>
+<span>1/2</span>
+<span></span>
+</td>
+<td class="Weight">494<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">4.1</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku6">
+<div>6</div>
+</td>
+<td class="Num Txt_C">
+<div>11</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017106366" target="_blank" title="メイショウサンガ">メイショウサンガ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01122/" target="_blank">三浦 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01120/" target="_blank" title="千田">千田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:49.0</span>
+<span>1.1/4</span>
+<span></span>
+</td>
+<td class="Weight">500<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">12.3</span>
+</td>
+<td class="Odds cellcolor_5 Txt_C">
+<span  class="OddsPeople">5</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010604&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>2</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>210円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>2</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>4</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>11</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>140円<br />140円<br />200円</span></td>
+<td class="Ninki">
+<span>3人気</span><span>1人気</span><span>5人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>2</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>510円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>2</span></li>
+<li><span>4</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>530円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>2</span></li>
+<li><span>4</span></li>
+<li></li>
+</ul><ul>
+<li><span>2</span></li>
+<li><span>11</span></li>
+<li></li>
+</ul><ul>
+<li><span>4</span></li>
+<li><span>11</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>270円<br />620円<br />550円</td>
+<td class="Ninki">
+<span>2人気</span><span>9人気</span><span>6人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>2</span></li>
+<li><span>4</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>710円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>2</span></li>
+<li><span>4</span></li>
+<li><span>11</span></li>
+</ul>
+</td>
+<td class="Payout"><span>1,800円</span></td>
+<td class="Ninki">
+<span>4人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>2</span></li>
+<li><span>4</span></li>
+<li><span>11</span></li>
+</ul>
+</td>
+<td class="Payout"><span>5,320円</span></td>
+<td class="Ninki"><span>10人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_5_con" >
+<p id="5R_result" class="AllResultRaceTitle"><span class="RacePaybackType">5R 3歳未勝利</span></p>
+<p class="AllResultRaceTitle">
+サラ系３歳[指]( 馬齢 ) 芝2400m(右 外)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010605">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku8">
+<div>8</div>
+</td>
+<td class="Num Txt_C">
+<div>10</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017104829" target="_blank" title="ダンシングリッチー">ダンシングリッチー</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01126/" target="_blank">松山 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01173/" target="_blank" title="長谷川">長谷川</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:28.0</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">454<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">3.9</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku1">
+<div>1</div>
+</td>
+<td class="Num Txt_C">
+<div>1</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017105616" target="_blank" title="タイミングハート">タイミングハート</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/00666/" target="_blank">武豊 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01160/" target="_blank" title="武幸">武幸</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:28.0</span>
+<span>アタマ</span>
+<span></span>
+</td>
+<td class="Weight">440<span>(-4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">5.8</span>
+</td>
+<td class="Odds cellcolor_4 Txt_C">
+<span  class="OddsPeople">4</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku6">
+<div>6</div>
+</td>
+<td class="Num Txt_C">
+<div>6</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017106114" target="_blank" title="エイシンパッション">エイシンパッション</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/00732/" target="_blank">幸 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01146/" target="_blank" title="奥村豊">奥村豊</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:29.2</span>
+<span>7</span>
+<span></span>
+</td>
+<td class="Weight">448<span>(-10)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">63.8</span>
+</td>
+<td class="Odds cellcolor_9 Txt_C">
+<span  class="OddsPeople">9</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010605&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>10</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>390円</span></td>
+<td class="Ninki">
+<span>2人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>10</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>1</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>6</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>150円<br />200円<br />1,020円</span></td>
+<td class="Ninki">
+<span>1人気</span><span>3人気</span><span>9人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>8</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,100円</span></td>
+<td class="Ninki">
+<span>4人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>10</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,040円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>10</span></li>
+<li></li>
+</ul><ul>
+<li><span>6</span></li>
+<li><span>10</span></li>
+<li></li>
+</ul><ul>
+<li><span>1</span></li>
+<li><span>6</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>410円<br />2,760円<br />3,680円</td>
+<td class="Ninki">
+<span>2人気</span><span>27人気</span><span>31人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>10</span></li>
+<li><span>1</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>2,000円</span></td>
+<td class="Ninki">
+<span>5人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>6</span></li>
+<li><span>10</span></li>
+</ul>
+</td>
+<td class="Payout"><span>17,370円</span></td>
+<td class="Ninki">
+<span>51人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>10</span></li>
+<li><span>1</span></li>
+<li><span>6</span></li>
+</ul>
+</td>
+<td class="Payout"><span>72,230円</span></td>
+<td class="Ninki"><span>226人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_6_con" >
+<p id="6R_result" class="AllResultRaceTitle"><span class="RacePaybackType">6R 3歳1勝クラス</span></p>
+<p class="AllResultRaceTitle">
+サラ系３歳(混)[指]( 馬齢 ) ダ1400m(右)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010606">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku1">
+<div>1</div>
+</td>
+<td class="Num Txt_C">
+<div>1</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017104775" target="_blank" title="サトノラファール">サトノラファール</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01122/" target="_blank">三浦 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01039/" target="_blank" title="中竹">中竹</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:24.6</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">538<span>(-4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">27.0</span>
+</td>
+<td class="Odds cellcolor_9 Txt_C">
+<span  class="OddsPeople">9</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku8">
+<div>8</div>
+</td>
+<td class="Num Txt_C">
+<div>15</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017103276" target="_blank" title="タケルラスティ">タケルラスティ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01163/" target="_blank">坂井 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01075/" target="_blank" title="矢作">矢作</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:25.4</span>
+<span>5</span>
+<span></span>
+</td>
+<td class="Weight">492<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">7.5</span>
+</td>
+<td class="Odds cellcolor_3 Txt_C">
+<span  class="OddsPeople">3</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku3">
+<div>3</div>
+</td>
+<td class="Num Txt_C">
+<div>5</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017102543" target="_blank" title="アフィラトゥーラ">アフィラトゥーラ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/05203/" target="_blank">岩田康 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01142/" target="_blank" title="森田">森田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:25.6</span>
+<span>1</span>
+<span></span>
+</td>
+<td class="Weight">498<span>(+8)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">50.1</span>
+</td>
+<td class="Odds cellcolor_12 Txt_C">
+<span  class="OddsPeople">12</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010606&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>1</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>2,700円</span></td>
+<td class="Ninki">
+<span>9人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>1</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>15</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>5</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>1,080円<br />320円<br />1,370円</span></td>
+<td class="Ninki">
+<span>11人気</span><span>3人気</span><span>12人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>8</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>3,530円</span></td>
+<td class="Ninki">
+<span>13人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>8,180円</span></td>
+<td class="Ninki">
+<span>27人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul><ul>
+<li><span>1</span></li>
+<li><span>5</span></li>
+<li></li>
+</ul><ul>
+<li><span>5</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>2,530円<br />10,470円<br />4,610円</td>
+<td class="Ninki">
+<span>28人気</span><span>74人気</span><span>43人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>25,350円</span></td>
+<td class="Ninki">
+<span>78人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>5</span></li>
+<li><span>15</span></li>
+</ul>
+</td>
+<td class="Payout"><span>72,260円</span></td>
+<td class="Ninki">
+<span>179人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>1</span></li>
+<li><span>15</span></li>
+<li><span>5</span></li>
+</ul>
+</td>
+<td class="Payout"><span>471,260円</span></td>
+<td class="Ninki"><span>1,047人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_7_con" >
+<p id="7R_result" class="AllResultRaceTitle"><span class="RacePaybackType">7R 3歳1勝クラス</span></p>
+<p class="AllResultRaceTitle">
+サラ系３歳(混)(特指)( 馬齢 ) 芝1600m(右 外)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010607">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku7">
+<div>7</div>
+</td>
+<td class="Num Txt_C">
+<div>10</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017105207" target="_blank" title="パドゥヴァルス">パドゥヴァルス</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">53.0</span>
+</div>
+</td>
+<td class="Jockey"> ☆<a href="https://db.netkeiba.com/jockey/01171/" target="_blank">西村淳 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01101/" target="_blank" title="吉田">吉田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:35.7</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">436<span>(-2)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">11.3</span>
+</td>
+<td class="Odds cellcolor_4 Txt_C">
+<span  class="OddsPeople">4</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku6">
+<div>6</div>
+</td>
+<td class="Num Txt_C">
+<div>8</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017105451" target="_blank" title="ドゥーベ">ドゥーベ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01126/" target="_blank">松山 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01002/" target="_blank" title="音無">音無</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:36.2</span>
+<span>3</span>
+<span></span>
+</td>
+<td class="Weight">500<span>(+10)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">2.4</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku5">
+<div>5</div>
+</td>
+<td class="Num Txt_C">
+<div>5</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017104988" target="_blank" title="ナリタブレード">ナリタブレード</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/05203/" target="_blank">岩田康 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01069/" target="_blank" title="中尾">中尾</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:36.2</span>
+<span>クビ</span>
+<span></span>
+</td>
+<td class="Weight">502<span>(-4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">2.4</span>
+</td>
+<td class="Odds cellcolor_1 Txt_C">
+<span  class="OddsPeople">1</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010607&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>10</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>1,130円</span></td>
+<td class="Ninki">
+<span>4人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>10</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>8</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>5</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>180円<br />110円<br />110円</span></td>
+<td class="Ninki">
+<span>4人気</span><span>1人気</span><span>2人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>6</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,240円</span></td>
+<td class="Ninki">
+<span>4人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>8</span></li>
+<li><span>10</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,280円</span></td>
+<td class="Ninki">
+<span>4人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>8</span></li>
+<li><span>10</span></li>
+<li></li>
+</ul><ul>
+<li><span>5</span></li>
+<li><span>10</span></li>
+<li></li>
+</ul><ul>
+<li><span>5</span></li>
+<li><span>8</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>400円<br />340円<br />160円</td>
+<td class="Ninki">
+<span>5人気</span><span>4人気</span><span>1人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>10</span></li>
+<li><span>8</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>4,570円</span></td>
+<td class="Ninki">
+<span>14人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>8</span></li>
+<li><span>10</span></li>
+</ul>
+</td>
+<td class="Payout"><span>1,080円</span></td>
+<td class="Ninki">
+<span>2人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>10</span></li>
+<li><span>8</span></li>
+<li><span>5</span></li>
+</ul>
+</td>
+<td class="Payout"><span>11,620円</span></td>
+<td class="Ninki"><span>37人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_8_con" >
+<p id="8R_result" class="AllResultRaceTitle"><span class="RacePaybackType">8R 4歳以上1勝クラス</span></p>
+<p class="AllResultRaceTitle">
+サラ系４歳以上[指]( 定量 ) ダ1800m(右)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010608">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku4">
+<div>4</div>
+</td>
+<td class="Num Txt_C">
+<div>4</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2016106585" target="_blank" title="テーオーポシブル">テーオーポシブル</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡4
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">57.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01112/" target="_blank">荻野琢 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01084/" target="_blank" title="梅田">梅田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:54.2</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">482<span>(+4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">5.3</span>
+</td>
+<td class="Odds cellcolor_3 Txt_C">
+<span  class="OddsPeople">3</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku7">
+<div>7</div>
+</td>
+<td class="Num Txt_C">
+<div>7</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2015104673" target="_blank" title="ナイルデルタ">ナイルデルタ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡5
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">57.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01163/" target="_blank">坂井 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01149/" target="_blank" title="松下">松下</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:54.2</span>
+<span>クビ</span>
+<span></span>
+</td>
+<td class="Weight">492<span>(+10)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">2.0</span>
+</td>
+<td class="Odds cellcolor_1 Txt_C">
+<span  class="OddsPeople">1</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku8">
+<div>8</div>
+</td>
+<td class="Num Txt_C">
+<div>10</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2015104862" target="_blank" title="ノストラダムス">ノストラダムス</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡5
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">57.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01019/" target="_blank">秋山真 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01111/" target="_blank" title="鈴木孝">鈴木孝</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:54.3</span>
+<span>クビ</span>
+<span></span>
+</td>
+<td class="Weight">488<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">6.5</span>
+</td>
+<td class="Odds cellcolor_4 Txt_C">
+<span  class="OddsPeople">4</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010608&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>4</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>530円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>4</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>7</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>10</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>160円<br />110円<br />160円</span></td>
+<td class="Ninki">
+<span>3人気</span><span>1人気</span><span>4人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>480円</span></td>
+<td class="Ninki">
+<span>1人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>490円</span></td>
+<td class="Ninki">
+<span>2人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul><ul>
+<li><span>4</span></li>
+<li><span>10</span></li>
+<li></li>
+</ul><ul>
+<li><span>7</span></li>
+<li><span>10</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>240円<br />730円<br />310円</td>
+<td class="Ninki">
+<span>2人気</span><span>10人気</span><span>3人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,230円</span></td>
+<td class="Ninki">
+<span>4人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>7</span></li>
+<li><span>10</span></li>
+</ul>
+</td>
+<td class="Payout"><span>1,160円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>7</span></li>
+<li><span>10</span></li>
+</ul>
+</td>
+<td class="Payout"><span>7,540円</span></td>
+<td class="Ninki"><span>19人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_9_con" >
+<p id="9R_result" class="AllResultRaceTitle"><span class="RacePaybackType">9R 淡路特別</span></p>
+<p class="AllResultRaceTitle">
+サラ系４歳以上(混)[指]( ハンデ ) 芝2600m(右 外)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010609">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku3">
+<div>3</div>
+</td>
+<td class="Num Txt_C">
+<div>3</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"><span class="Icon_HorseMark Icon_MaruChi"></span><a href="https://db.netkeiba.com/horse/2016102045" target="_blank" title="ツーエムアロンソ">ツーエムアロンソ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡4
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01182/" target="_blank">泉谷 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01099/" target="_blank" title="本田">本田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:39.3</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">530<span>(+2)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">45.9</span>
+</td>
+<td class="Odds cellcolor_9 Txt_C">
+<span  class="OddsPeople">9</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku5">
+<div>5</div>
+</td>
+<td class="Num Txt_C">
+<div>5</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2015103079" target="_blank" title="ウォーターパルフェ">ウォーターパルフェ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡5
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">55.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/00666/" target="_blank">武豊 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01009/" target="_blank" title="田所">田所</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:39.7</span>
+<span>2.1/2</span>
+<span></span>
+</td>
+<td class="Weight">480<span>(-4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">3.3</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku7">
+<div>7</div>
+</td>
+<td class="Num Txt_C">
+<div>8</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2016105210" target="_blank" title="ノーチカルチャート">ノーチカルチャート</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡4
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01157/" target="_blank">鮫島駿 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01146/" target="_blank" title="奥村豊">奥村豊</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:40.2</span>
+<span>3</span>
+<span></span>
+</td>
+<td class="Weight">482<span>(+4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">13.4</span>
+</td>
+<td class="Odds cellcolor_5 Txt_C">
+<span  class="OddsPeople">5</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010609&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>3</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>4,590円</span></td>
+<td class="Ninki">
+<span>9人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>3</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>5</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>8</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>1,120円<br />180円<br />450円</span></td>
+<td class="Ninki">
+<span>10人気</span><span>2人気</span><span>7人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>5</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>10,270円</span></td>
+<td class="Ninki">
+<span>25人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>5</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>9,990円</span></td>
+<td class="Ninki">
+<span>29人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>5</span></li>
+<li></li>
+</ul><ul>
+<li><span>3</span></li>
+<li><span>8</span></li>
+<li></li>
+</ul><ul>
+<li><span>5</span></li>
+<li><span>8</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>3,170円<br />8,330円<br />1,030円</td>
+<td class="Ninki">
+<span>30人気</span><span>42人気</span><span>13人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>5</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>19,630円</span></td>
+<td class="Ninki">
+<span>55人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>5</span></li>
+<li><span>8</span></li>
+</ul>
+</td>
+<td class="Payout"><span>36,930円</span></td>
+<td class="Ninki">
+<span>79人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>5</span></li>
+<li><span>8</span></li>
+</ul>
+</td>
+<td class="Payout"><span>283,430円</span></td>
+<td class="Ninki"><span>478人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_10_con" >
+<p id="10R_result" class="AllResultRaceTitle"><span class="RacePaybackType">10R 甲南S</span></p>
+<p class="AllResultRaceTitle">
+サラ系４歳以上(混)[指]( ハンデ ) ダ2000m(右)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010610">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku7">
+<div>7</div>
+</td>
+<td class="Num Txt_C">
+<div>11</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2016102258" target="_blank" title="リワードアンヴァル">リワードアンヴァル</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡4
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">56.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01122/" target="_blank">三浦 </a> </td>
+<td class="Trainer"><span class="Label1">美浦</span><a href="https://db.netkeiba.com/trainer/00435/" target="_blank" title="藤原辰">藤原辰</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:05.1</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">510<span>(-2)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">6.0</span>
+</td>
+<td class="Odds cellcolor_3 Txt_C">
+<span  class="OddsPeople">3</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku4">
+<div>4</div>
+</td>
+<td class="Num Txt_C">
+<div>4</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"><span class="Icon_HorseMark Icon_MaruChi"></span><a href="https://db.netkeiba.com/horse/2016105682" target="_blank" title="アイアムレジェンド">アイアムレジェンド</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡4
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">55.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/05203/" target="_blank">岩田康 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/00362/" target="_blank" title="橋田">橋田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:06.1</span>
+<span>6</span>
+<span></span>
+</td>
+<td class="Weight">484<span>(+2)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">14.8</span>
+</td>
+<td class="Odds cellcolor_7 Txt_C">
+<span  class="OddsPeople">7</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku8">
+<div>8</div>
+</td>
+<td class="Num Txt_C">
+<div>12</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2016102524" target="_blank" title="スマートフルーレ">スマートフルーレ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝4
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">53.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/00666/" target="_blank">武豊 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01049/" target="_blank" title="南井">南井</a>
+</td>
+<td class="Time">
+<span class="RaceTime">2:06.4</span>
+<span>1.3/4</span>
+<span></span>
+</td>
+<td class="Weight">508<span>(+2)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">2.8</span>
+</td>
+<td class="Odds cellcolor_1 Txt_C">
+<span  class="OddsPeople">1</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010610&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>11</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>600円</span></td>
+<td class="Ninki">
+<span>3人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>11</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>4</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>12</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>210円<br />280円<br />150円</span></td>
+<td class="Ninki">
+<span>3人気</span><span>5人気</span><span>1人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,500円</span></td>
+<td class="Ninki">
+<span>8人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>11</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>3,960円</span></td>
+<td class="Ninki">
+<span>16人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>11</span></li>
+<li></li>
+</ul><ul>
+<li><span>11</span></li>
+<li><span>12</span></li>
+<li></li>
+</ul><ul>
+<li><span>4</span></li>
+<li><span>12</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,200円<br />490円<br />1,150円</td>
+<td class="Ninki">
+<span>15人気</span><span>3人気</span><span>14人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>11</span></li>
+<li><span>4</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>6,240円</span></td>
+<td class="Ninki">
+<span>26人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>4</span></li>
+<li><span>11</span></li>
+<li><span>12</span></li>
+</ul>
+</td>
+<td class="Payout"><span>5,890円</span></td>
+<td class="Ninki">
+<span>18人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>11</span></li>
+<li><span>4</span></li>
+<li><span>12</span></li>
+</ul>
+</td>
+<td class="Payout"><span>36,290円</span></td>
+<td class="Ninki"><span>114人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_11_con" >
+<p id="11R_result" class="AllResultRaceTitle"><span class="RacePaybackType">11R フィリーズR</span></p>
+<p class="AllResultRaceTitle">
+サラ系３歳(国際) 牝(指)( 馬齢 ) 芝1400m(右)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010611">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku3">
+<div>3</div>
+</td>
+<td class="Num Txt_C">
+<div>5</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017104058" target="_blank" title="エーポス">エーポス</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/05203/" target="_blank">岩田康 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01078/" target="_blank" title="北出">北出</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:21.0</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">446<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">13.8</span>
+</td>
+<td class="Odds cellcolor_5 Txt_C">
+<span  class="OddsPeople">5</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku4">
+<div>4</div>
+</td>
+<td class="Num Txt_C">
+<div>7</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017103385" target="_blank" title="ヤマカツマーメイド">ヤマカツマーメイド</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01032/" target="_blank">池添 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01021/" target="_blank" title="池添兼">池添兼</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:21.2</span>
+<span>1.1/4</span>
+<span></span>
+</td>
+<td class="Weight">472<span>(+2)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">3.8</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku3">
+<div>3</div>
+</td>
+<td class="Num Txt_C">
+<div>6</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2017105537" target="_blank" title="ナイントゥファイブ">ナイントゥファイブ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牝3
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">54.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01030/" target="_blank">松田 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01028/" target="_blank" title="西園">西園</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:21.3</span>
+<span>1/2</span>
+<span></span>
+</td>
+<td class="Weight">464<span>(+4)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">45.9</span>
+</td>
+<td class="Odds cellcolor_12 Txt_C">
+<span  class="OddsPeople">12</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010611&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>5</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>1,380円</span></td>
+<td class="Ninki">
+<span>5人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>5</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>7</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>6</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>440円<br />170円<br />920円</span></td>
+<td class="Ninki">
+<span>6人気</span><span>1人気</span><span>11人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>3</span></li>
+<li><span>4</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>2,190円</span></td>
+<td class="Ninki">
+<span>11人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>3,020円</span></td>
+<td class="Ninki">
+<span>12人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul><ul>
+<li><span>5</span></li>
+<li><span>6</span></li>
+<li></li>
+</ul><ul>
+<li><span>6</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>760円<br />4,270円<br />2,480円</td>
+<td class="Ninki">
+<span>6人気</span><span>44人気</span><span>29人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>7</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>7,510円</span></td>
+<td class="Ninki">
+<span>29人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>6</span></li>
+<li><span>7</span></li>
+</ul>
+</td>
+<td class="Payout"><span>22,190円</span></td>
+<td class="Ninki">
+<span>74人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>5</span></li>
+<li><span>7</span></li>
+<li><span>6</span></li>
+</ul>
+</td>
+<td class="Payout"><span>119,820円</span></td>
+<td class="Ninki"><span>383人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" --><div id="tab_PaybackRaceNum_12_con" >
+<p id="12R_result" class="AllResultRaceTitle"><span class="RacePaybackType">12R 4歳以上2勝クラス</span></p>
+<p class="AllResultRaceTitle">
+サラ系４歳以上(混)[指]( 定量 ) ダ1200m(右)<span class="linkVideo">( <img src="https://cdn.netkeiba.com/img.racev3/common/img/icon/icon_movie_01.gif?2019073001"><a href="https://race.netkeiba.com/race/movie.html?race_id=202009010612">レース映像</a> )</span>
+</p>
+<div class="PaybackTableList">
+<div class="ResultTableWrap">
+<table summary="全着順" class="RaceTable01 RaceCommon_Table ResultRefund Table_Show_All TablePaybackResult">
+<tbody>
+<tr class="Header">
+<th class="Result_Num">着
+<br>順</th>
+<th class="Num">枠</th>
+<th class="Num">馬
+<br>番</th>
+<th class="Horse_Info">
+<div class="Horse_Name">馬名</div>
+</th>
+<th>性齢</th>
+<th class="TrainerWeight">斤量</th>
+<th>騎手</th>
+<th>厩舎</th>
+<th class="Time">タイム<br>着差</th>
+<th>馬体重<small>(増減)</small></th>
+<th class="Odds">単勝<br>オッズ</th>
+<th class="OddsPeople"> 人<br>気</th>
+</tr>
+<tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">1</div>
+</td>
+<td class="Num Waku8">
+<div>8</div>
+</td>
+<td class="Num Txt_C">
+<div>15</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2016102370" target="_blank" title="ヘリオス">ヘリオス</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+セ4
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">57.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01128/" target="_blank">川須 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01158/" target="_blank" title="寺島">寺島</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:10.7</span>
+<span></span>
+<span></span>
+</td>
+<td class="Weight">460<span>(-6)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">4.9</span>
+</td>
+<td class="Odds cellcolor_2 Txt_C">
+<span  class="OddsPeople">2</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">2</div>
+</td>
+<td class="Num Waku7">
+<div>7</div>
+</td>
+<td class="Num Txt_C">
+<div>14</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"><span class="Icon_HorseMark Icon_MaruChi"></span><a href="https://db.netkeiba.com/horse/2015102168" target="_blank" title="メイプルグレイト">メイプルグレイト</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡5
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">57.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01126/" target="_blank">松山 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01110/" target="_blank" title="清水久">清水久</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:11.6</span>
+<span>5</span>
+<span></span>
+</td>
+<td class="Weight">512<span>(-14)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">7.2</span>
+</td>
+<td class="Odds cellcolor_3 Txt_C">
+<span  class="OddsPeople">3</span>
+</td>
+</tr><tr class="FirstDisplay HorseList">
+<td class="Result_Num">
+<div class="Rank">3</div>
+</td>
+<td class="Num Waku8">
+<div>8</div>
+</td>
+<td class="Num Txt_C">
+<div>16</div>
+</td>
+<td class="Horse_Info">
+<div class="Horse_Name"> <a href="https://db.netkeiba.com/horse/2014104716" target="_blank" title="アッティーヴォ">アッティーヴォ</a></div>
+</td>
+<td class="Horse_Info Txt_C">
+<div class="Horse_Info_Detail">
+<span class="">
+牡6
+</span>
+</div>
+</td>
+<td class="Jockey_Info">
+<div class="Jockey_Info_Details">
+<span class="JockeyWeight">57.0</span>
+</div>
+</td>
+<td class="Jockey">  <a href="https://db.netkeiba.com/jockey/01019/" target="_blank">秋山真 </a> </td>
+<td class="Trainer"><span class="Label2">栗東</span><a href="https://db.netkeiba.com/trainer/01032/" target="_blank" title="大根田">大根田</a>
+</td>
+<td class="Time">
+<span class="RaceTime">1:11.7</span>
+<span>1/2</span>
+<span></span>
+</td>
+<td class="Weight">466<span>(+2)</span></td>
+<td class="Odds Popular">
+<span class="OddsPeople">16.6</span>
+</td>
+<td class="Odds cellcolor_7 Txt_C">
+<span  class="OddsPeople">7</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="OreproLink">
+<a class="LinkMore " href="https://race.netkeiba.com/race/result.html?race_id=202009010612&amp;mode=result">
+<span>レース結果詳細</span>
+</a>
+</div>
+</div><!-- /.ResultTableWrap -->
+<div class="Result_Pay_Back mb5">
+<div class="ResultPayBackWrapper">
+<div class="FullWrap">
+<table summary="払戻し" class="Payout_Detail_Table">
+<tbody>
+<tr class="Tansho">
+<th>単勝</th>
+<td class="Result">
+<div><span>15</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>490円</span></td>
+<td class="Ninki">
+<span>2人気</span>
+</td>
+</tr>
+<tr class="Fukusho">
+<th>複勝</th>
+<td class="Result">
+<div><span>15</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>14</span></div>
+<div><span></span></div>
+<div><span></span></div><div><span>16</span></div>
+<div><span></span></div>
+<div><span></span></div>
+</td>
+<td class="Payout"><span>190円<br />290円<br />410円</span></td>
+<td class="Ninki">
+<span>2人気</span><span>5人気</span><span>7人気</span>
+</td>
+</tr>
+<tr class="Wakuren">
+<th>枠連</th>
+<td class="Result">
+<ul>
+<li><span>7</span></li>
+<li><span>8</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,330円</span></td>
+<td class="Ninki">
+<span>4人気</span>
+</td>
+</tr>
+<tr class="Umaren">
+<th>馬連</th>
+<td class="Result">
+<ul>
+<li><span>14</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>1,710円</span></td>
+<td class="Ninki">
+<span>5人気</span>
+</td>
+</tr>
+</tbody>
+</table>
+<table summary="ワイド" class="Payout_Detail_Table">
+<tbody>
+<tr class="Wide">
+<th>ワイド</th>
+<td class="Result">
+<ul>
+<li><span>14</span></li>
+<li><span>15</span></li>
+<li></li>
+</ul><ul>
+<li><span>15</span></li>
+<li><span>16</span></li>
+<li></li>
+</ul><ul>
+<li><span>14</span></li>
+<li><span>16</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>640円<br />1,090円<br />1,890円</td>
+<td class="Ninki">
+<span>6人気</span><span>10人気</span><span>19人気</span>
+</td>
+</tr>
+<tr class="Umatan">
+<th>馬単</th>
+<td class="Result">
+<ul>
+<li><span>15</span></li>
+<li><span>14</span></li>
+<li></li>
+</ul>
+</td>
+<td class="Payout"><span>3,430円</span></td>
+<td class="Ninki">
+<span>11人気</span>
+</td>
+</tr>
+<tr class="Fuku3">
+<th>3連複</th>
+<td class="Result">
+<ul>
+<li><span>14</span></li>
+<li><span>15</span></li>
+<li><span>16</span></li>
+</ul>
+</td>
+<td class="Payout"><span>7,340円</span></td>
+<td class="Ninki">
+<span>24人気</span>
+</td>
+</tr>
+<tr class="Tan3">
+<th>3連単</th>
+<td class="Result">
+<ul>
+<li><span>15</span></li>
+<li><span>14</span></li>
+<li><span>16</span></li>
+</ul>
+</td>
+<td class="Payout"><span>35,060円</span></td>
+<td class="Ninki"><span>100人気</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="ScrollUpLinkWrap">
+<a class="ScrollUpLink " href="javascript:void(0)">
+<span>△ページTOPへ</span>
+</a>
+</div>
+</div>
+<!-- /.Result_Pay_Back -->
+</div>
+
+</div><!-- //class="tab_PaybackRaceNum__con" -->
+</div>
+
+<!-- block=common__advertisement (d) -->
+<div class="nk_AdvBox_pc pc_nk_im top_payback_list  ">
+<script language="JavaScript" type="text/javascript">
+noCacheParam=Math.random()*10000000000;document.write('<scr'+'ipt type="text/javascript" src="https://netdreamersad.durasite.net/A-affiliate2/mobile?site=23&keyword=pc_nk_im&isJS=true&encoding=EUC-JP&ord=' + noCacheParam + '"></scr'+'ipt>');
+</script>
+</div><!-- /.nk_AdvBox_sp_01 -->
+</div>
+</div><!-- /.Main_Column -->
+<div class="Side_Column">
+<!-- レース一覧メニュー -->
+
+<!-- block=common__advertisement (d) -->
+<div class="nk_AdvBox_pc new_race_rectangle top_payback_list  ">
+<script language="JavaScript" type="text/javascript">
+noCacheParam=Math.random()*10000000000;document.write('<scr'+'ipt type="text/javascript" src="https://netdreamersad.durasite.net/A-affiliate2/mobile?site=23&keyword=new_race_rectangle&isJS=true&encoding=EUC-JP&ord=' + noCacheParam + '"></scr'+'ipt>');
+</script>
+</div><!-- /.nk_AdvBox_sp_01 -->
+<!-- block=common__side_menu (cg) -->
+<div class="RaceMenu Margin-20B">
+<h3 class="RaceMenuTitle RightMenuTitle">
+レースメニュー
+</h3>
+<div class="RaceMenuPanel">
+<ul class="ListRaceMenu">
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com/top/calendar.html?rf=sidemenu" title="開催一覧">
+<span class="Icon_Nk Icon_01"></span>
+開催一覧
+</a>
+</li>
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com/top/payback_list.html?rf=sidemenu" title="結果・払戻">
+<span class="Icon_Nk Icon_02"></span>
+結果払戻
+</a>
+</li>
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com/top/schedule.html?rf=sidemenu" title="重賞日程">
+<span class="Icon_Nk Icon_03"></span>
+重賞日程
+</a>
+</li>
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com/top/win5.html?rf=sidemenu" title="WIN5対象レース">
+<span class="Icon_Nk Icon_04"></span>
+今週のWIN5
+</a>
+</li>
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com/top/tendency.html?rf=sidemenu" title="レース傾向">
+<span class="Icon_Nk Icon_05"></span>
+レース傾向
+</a>
+</li>
+<li class="RaceMenuItem">
+<a href="https://race.sp.netkeiba.com/v2/barometer/?rf=sidemenu" title="調子偏差値">
+<span class="Icon_Nk Icon_13"></span>
+<span class="Icon_Label">調子偏差値</span>
+</a>
+</li>
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com?pid=bookmark&rf=sidemenu" title="お気に入り馬">
+<span class="Icon_Nk Icon_07"></span>
+お気に入り馬
+</a>
+</li>
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com/top/out_jockey.html?rf=sidemenu" title="騎乗停止情報">
+<span class="Icon_Nk Icon_08"></span>
+騎乗停止情報
+</a>
+</li>
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com/top/information.html?rf=sidemenu" title="変更情報">
+<span class="Icon_Nk Icon_09"></span>
+変更情報
+</a>
+</li>
+
+
+<li class="RaceMenuItem">
+<a href="https://race.netkeiba.com/shushi/ipat_history.html?rf=sidemenu" title="My収支">
+<span class="Icon_Nk Icon_12"></span>
+My収支
+</a>
+</li>
+</ul>
+</div>
+</div><!-- /.Top_RaceMenu -->
+
+<div class="WeatherPanel Margin-20B">
+<h3 class="WeatherPanelTitle RightMenuTitle">今週の天気予報</h3>
+<div class="WeatherTableWrapper">
+<table class="WeatherTable">
+<thead>
+<tr><th>&nbsp;</th>
+<th>中山</th><th>阪神</th><th>中京</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>土</td>
+<td>
+<div>
+<span class="Icon_Weather Weather01"></span>
+<span>|</span>
+<span class="Icon_Weather Weather02"></span>
+
+</div>
+</td><td>
+<div>
+<span class="Icon_Weather Weather01"></span>
+<span>|</span>
+<span class="Icon_Weather Weather02"></span>
+
+</div>
+</td><td>
+<div>
+<span class="Icon_Weather Weather01"></span>
+<span>|</span>
+<span class="Icon_Weather Weather02"></span>
+
+</div>
+</td>
+</tr><tr>
+<td>日</td>
+<td>
+<div>
+<span class="Icon_Weather Weather02"></span>
+<span>|</span>
+<span class="Icon_Weather Weather01"></span>
+
+</div>
+</td><td>
+<div>
+
+<span class="Icon_Weather Weather02"></span>
+</div>
+</td><td>
+<div>
+<span class="Icon_Weather Weather02"></span>
+<span>|</span>
+<span class="Icon_Weather Weather01"></span>
+
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="txt_r">提供：アース・ウェザー</p>
+</div> <!-- /.WeatherTableWrapper -->
+</div><!-- /.WeatherPanel -->
+<div class="JockeyMenuPanel Margin-20B">
+<h3 class="PanelTitle RightMenuTitle">騎乗停止情報</h3>
+<ul class="JockeyList">
+<li class="JockeyItem clearfix">
+<a class="BoldText" href="https://db.netkeiba.com/jockey/01124" target="_blank">国分恭介騎手</a><span class="txt_r flt_r">3/7〜3/15
+</span>
+</li><li class="JockeyItem clearfix">
+<a class="BoldText" href="https://db.netkeiba.com/jockey/01009" target="_blank">柴田大知騎手</a><span class="txt_r flt_r">3/7〜3/15
+</span>
+</li><li class="JockeyItem clearfix">
+<a class="BoldText" href="https://db.netkeiba.com/jockey/01102" target="_blank">北村友一騎手</a><span class="txt_r flt_r">3/14〜3/28</span>
+</li>
+
+</ul>
+</div><!-- /.JockeyMenuPanel -->
+
+<!-- block=common__advertisement (d) -->
+<div class="nk_AdvBox_pc new_race_skyscraper top_payback_list  ">
+<script language="JavaScript" type="text/javascript">
+noCacheParam=Math.random()*10000000000;document.write('<scr'+'ipt type="text/javascript" src="https://netdreamersad.durasite.net/A-affiliate2/mobile?site=23&keyword=new_race_skyscraper&isJS=true&encoding=EUC-JP&ord=' + noCacheParam + '"></scr'+'ipt>');
+</script>
+</div><!-- /.nk_AdvBox_sp_01 -->
+<!-- レース一覧おススメアプリ -->
+</div><!-- /. Side_Column -->
+</div><!-- /. Contents -->
+</div><!-- /.Wrap -->
+<footer>
+<!-- フッター -->
+<!-- block=common__race_footer (cp) -->
+<div class="NkFooterArea">
+<div class="BtnPagetop">
+<a href="javascript:void(0)" title="ページトップへ"></a>
+</div><!-- /.BtnPagetop -->
+<script type="text/javascript">
+$(function() {
+$('.BtnPagetop a').click(function () {
+$('body,html').animate({
+scrollTop: 0
+}, 400);
+return false;
+});
+});
+</script>
+<dl class="FootSiteTitle fc">
+<dt>
+<a href="https://www.netkeiba.com/?rf=footer" title="netkeiba.com">
+<img src="https://cdn.netkeiba.com/img.www/style/netkeiba.ja/image/common/netkeiba_logo01.png?2019073001" alt="netkeiba.com" />
+</a>
+</dt>
+<dd>
+<p>利用者数<strong>1000</strong>万人突破！<strong>No.1</strong>競馬サイト</p>
+</dd>
+</dl>
+<div class="FootWrap">
+<dl class="NkFoot01 NkFootCateLink">
+<dt>カテゴリ</dt>
+<dd class="fc">
+<ul>
+<li>
+<a href="https://news.netkeiba.com?rf=footer" title="ニュース">ニュース</a>
+</li>
+<li>
+<a href="https://race.netkeiba.com/top/?rf=footer" title="レース">レース</a>
+</li>
+<li>
+<a href="https://yoso.netkeiba.com?rf=footer" title="ウマい馬券">ウマい馬券</a>
+</li>
+<li>
+<a href="https://news.netkeiba.com?pid=column_top&rf=footer" title="コラム">コラム</a>
+</li>
+<li>
+<a href="https://tv.netkeiba.com/?rf=footer" title="netkeibaTV">netkeibaTV</a>
+</li>
+<li>
+<a href="https://nar.netkeiba.com?rf=footer" title="地方競馬">地方競馬</a>
+</li>
+<li>
+<a href="https://db.netkeiba.com?rf=footer" title="データベース">データベース</a>
+</li>
+<li>
+<a href="https://books.netkeiba.com?rf=footer" title="ブックス">ブックス</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="https://orepro.netkeiba.com?rf=footer" title="俺プロ">俺プロ</a>
+</li>
+<li>
+<a href="https://owner.netkeiba.com?rf=footer" title="一口馬主">一口馬主</a>
+</li>
+<li>
+<a href="https://pog.netkeiba.com?rf=footer" title="POG">POG</a>
+</li>
+<li>
+<a href="https://bbs.pc.keiba.findfriends.jp?rf=footer" title="競馬広場">競馬広場</a>
+</li>
+<li>
+<a href="https://dir.netkeiba.com//keibamatome/index.html?rf=footer" title="まとめ">まとめ</a>
+</li>
+<li>
+<a href="https://www.netkeiba.com/paper/?rf=footer" title="競馬新聞">競馬新聞</a>
+</li>
+<li>
+<a href="https://race.netkeiba.com/bookmark/bookmark.html?rf=footer" title="お気に入り馬">お気に入り馬</a>
+</li>
+<li>
+<a href="https://regist.netkeiba.com?rf=footer" title="アカウント">アカウント</a>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="NkFoot01">
+<dt>ヘルプ＆ガイド</dt>
+<dd>
+<ul>
+<li>
+<a href="https://info.netkeiba.com//?rf=footer" title="お知らせ">お知らせ</a>
+</li>
+<li>
+<a href="https://regist.netkeiba.com?pid=premium&rf=footer" title="プレミアムサービスのご案内">プレミアムサービスのご案内</a>
+</li>
+<li>
+<a href="https://regist.netkeiba.com?pid=help&rf=footer" title="よくある質問・お問い合わせ">よくある質問・お問い合わせ</a>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="NkFoot01">
+<dt>netkeiba.comについて</dt>
+<dd>
+<ul>
+<li>
+<a href="https://www.netkeiba.com/recruit/?rf=footer" title="採用情報">採用情報</a>
+</li>
+<li>
+<a href="https://www.netkeiba.com/info/ad/?rf=footer" title="広告掲載について">広告掲載について</a>
+</li>
+<li>
+<a href="https://www.netkeiba.com/info/kiyaku.html?rf=footer" title="利用規約">利用規約</a>
+</li>
+<li>
+<a href="https://www.netdreamers.co.jp/company/about/privacy.html?rf=footer" title="プライバシーポリシー">プライバシーポリシー</a>
+</li>
+<li>
+<a href="https://www.netkeiba.com/info/guide.html?rf=footer" title="投稿ガイドライン">投稿ガイドライン</a>
+</li>
+<li>
+<a href="https://www.netkeiba.com/info/tokusyo.html?rf=footer" title="特定商取引法に基づく表記">特定商取引法に基づく表記</a>
+</li>
+<li>
+<a href="https://www.netdreamers.co.jp/?rf=footer" title="運営会社">運営会社</a>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="NkFoot01">
+<dt>スマホでnetkeiba</dt>
+<dd class="SpNkInfoImg">
+<img src="https://cdn.netkeiba.com/img.www/style/netkeiba.ja/image/common/img_nk_searchimg01.png?2019073001" alt="検索" class="SearchImg01" />
+<img src="https://cdn.netkeiba.com/img.www/style/netkeiba.ja/image/common/img_nk_qr01.png?2019073001" alt="バーコード" class="QrImg01" />
+</dd>
+<dt>アプリでサクサクnetkeiba</dt>
+<dd>
+<ul class="AprStoreList fc">
+<li>
+<a href="https://itunes.apple.com/jp/app/id464562684/" title="Appstore"><img src="https://cdn.netkeiba.com/img.www/style/netkeiba.ja/image/common/bnr_appstore_01.png?2019073001" alt="Appstore" class="" /></a>
+</li>
+<li>
+<a href="https://play.google.com/store/apps/details?id=jp.co.netdreamers.netkeiba" title="googleplay"><img src="https://cdn.netkeiba.com/img.www/style/netkeiba.ja/image/common/bnr_googleplay_01.png?2019073001" alt="googleplay" class="" /></a>
+</li>
+</ul>
+</dd>
+<dd class="Nk_Sns">
+<ul class="fc">
+<li>
+<a href="https://twitter.com/netkeiba" title="公式 Twitter" class="Tw"></a>
+</li>
+<li>
+<a href="https://ja-jp.facebook.com/netkeiba" title="公式 Facebook" class="Fb"></a>
+</li>
+<li>
+<a href="https://line.me/R/ti/p/%40oa-netkeiba" title="LINE" class="Line"></a>
+</li>
+<li>
+<a href="http://www.youtube.com/user/netkeibaTV" title="netkeibaチャンネル" class="Yt"></a>
+</li>
+<li>
+<a href="https://www.instagram.com/netkeiba/" title="Instagram" class="Ig"></a>
+</li>
+<li>
+<a href="https://www.netkeiba.com/?pid=rss" title="RSS" class="Rss"></a>
+</li>
+</ul>
+</dd>
+</dl>
+</div><!-- /.FootWrap -->
+</div><!-- /.NkFooterArea -->
+<div class="GlobalFooterArea">
+<div class="FootWrap">
+<dl class="NkFoot02">
+<dt class="GfootIcon01 IconGame01">netkeiba.com 公式競馬ゲーム</dt>
+<dd>
+<ul>
+<li>
+<a href="https://chiki.netkeiba.com/?rf=footer" target='_blank' title="チキチキダービー">目指せ最強オーナー！ <strong>チキチキダービー</strong></a>
+</li>
+<li>
+<a href="https://derby.pzga.jp/?rf=footer" target='_blank' title="パズルダービー">爽快！競馬パズルゲーム <strong>パズルダービー</strong></a>
+</li>
+<li>
+<a href="https://www.netkeiba.com/game/umasta.html?rf=footer" target='_blank' title="うまいるスタジアム">みんなの愛馬とバトル！ <strong>うまいるスタジアム</strong></a>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="NkFoot02">
+<dt class="GfootIcon01 IconMedia01">関連メディア</dt>
+<dd>
+<ul>
+<li>
+<a href="http://sp.baseball.findfriends.jp/?rf=footer" target='_blank' title="週刊ベースボールONLINE">徹底取材！野球情報は <strong>週刊ベースボールONLINE</strong></a>
+</li>
+<li>
+<a href="http://sp.golf.findfriends.jp/?rf=footer" target='_blank' title="ワッグルオンライン">ゴルフレッスン情報サイト <strong>ワッグルオンライン</strong></a>
+</li>
+<li>
+<a href="https://race.netkeiba.com/top/__RECIPE_FIND__/?rf=footer" target='_blank' title="KATSUYOレシピ">小林カツ代直伝！ <strong>KATSUYOレシピ</strong></a>
+</li>
+<li>
+<a href="https://race.netkeiba.com/top/__SP_FIND__/?rf=footer" target='_blank' title="Find">趣味でつながる総合掲示板コミュニティ <strong>Find</strong></a>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="NkFoot02">
+<dt class="GfootIcon01 IconSoftware01">ソフトウェア・プロダクト</dt>
+<dd>
+<ul>
+<li>
+<a href="https://smart.lets-ktai.jp/?rf=footer" target='_blank' title="SMART会員証">もっともセキュアな店舗売上向上アプリ <strong>SMART会員証</strong></a>
+</li>
+<li>
+<a href="https://lets-ktai.jp/?rf=footer" target='_blank' title="Let'sケータイ！">スマホサイト制作ASP <strong>Let'sケータイ！</strong></a>
+</li>
+<li>
+<a href="https://webspiral.jp/?rf=footer" target='_blank' title="WEB SPIRAL">サイト運営を劇的に効率化するCMS <strong>WEB SPIRAL</strong></a>
+</li>
+</ul>
+</dd>
+</dl>
+</div><!-- /.FootWrap -->
+<p class="CopyRight">
+<small>&copy; Net Dreamers Co., Ltd.</small>
+</p>
+</div><!-- /.GlobalFooterArea -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K6PJT6"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-K6PJT6');</script>
+<!-- End Google Tag Manager -->
+
+<!-- block=common__advertisement (d) -->
+<div class="nk_AdvBox_pc pc_nk_race_overlay top_payback_list  ">
+<script language="JavaScript" type="text/javascript">
+noCacheParam=Math.random()*10000000000;document.write('<scr'+'ipt type="text/javascript" src="https://netdreamersad.durasite.net/A-affiliate2/mobile?site=23&keyword=pc_nk_race_overlay&isJS=true&encoding=EUC-JP&ord=' + noCacheParam + '"></scr'+'ipt>');
+</script>
+</div><!-- /.nk_AdvBox_sp_01 -->
+</footer>
+</footer>
+</body>
+</html>
