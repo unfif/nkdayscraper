@@ -7,9 +7,14 @@ from pymongo import MongoClient
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
 SQLITE_URL = get_project_settings().get('SQLITE_URL')
-# DATABASE_URL = SQLITE_URL
 MONGO_URL = get_project_settings().get('MONGO_URL')
-basename = DATABASE_URL.split(':')[0].split('+')[0]
+if DATABASE_URL is None:
+    if SQLITE_URL is None:
+        DATABASE_URL = "sqlite:///nkdayraces.sqlite3"
+    else:
+        DATABASE_URL = SQLITE_URL
+
+enginename = DATABASE_URL.split(':')[0].split('+')[0]
 
 class RBase():
     def __repr__(self):
@@ -59,7 +64,7 @@ class Nkdayraces(Base):
     posttime = Column(Time(timezone=True), comment='時刻')
     racegrade = Column(Text, comment='グレード')
     starters = Column(Integer, comment='頭数')
-    if basename in ['postgresql', 'mongodb']: addedmoneylist = Column(pg.ARRAY(Integer), comment='賞金')
+    if enginename in ['postgresql', 'mongodb']: addedmoneylist = Column(pg.ARRAY(Integer), comment='賞金')
     else: addedmoneylist = Column(Text, comment='賞金')
 
     requrl = Column(Text, comment='raceurl')
@@ -77,7 +82,7 @@ class Nkdayraces(Base):
     fav = Column(Integer, comment='人気')
     odds = Column(Float, comment='オッズ')
     last3f = Column(Float, comment='上り')
-    if basename in ['postgresql', 'mongodb']: passageratelist = Column(pg.ARRAY(Integer), comment='通過')
+    if enginename in ['postgresql', 'mongodb']: passageratelist = Column(pg.ARRAY(Integer), comment='通過')
     else: passageratelist = Column(Text, comment='通過')
     affiliate = Column(Text, comment='所属')
     trainer = Column(Text, comment='調教師')
