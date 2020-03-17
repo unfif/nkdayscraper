@@ -7,6 +7,7 @@ from pymongo import MongoClient
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
 SQLITE_URL = get_project_settings().get('SQLITE_URL')
+# DATABASE_URL = SQLITE_URL
 MONGO_URL = get_project_settings().get('MONGO_URL')
 basename = DATABASE_URL.split(':')[0].split('+')[0]
 

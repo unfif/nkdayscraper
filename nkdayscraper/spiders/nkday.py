@@ -22,7 +22,7 @@ class NkdaySpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(
-            allow = ['race.netkeiba.com'],
+            allow = ['race.netkeiba.com', '127.0.0.1'],
             deny = ['race.netkeiba.com/race/movie.html'],
             restrict_css = ['.RaceList_Data']
         ),

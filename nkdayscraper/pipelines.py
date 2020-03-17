@@ -40,7 +40,7 @@ class NkdayscraperPipeline():
         session = self.Session()
         if self.engine.name not in ['postgresql', 'mongodb']:
             item['addedmoneylist'] = str(item['addedmoneylist'])
-            item['positionlist'] = str(item['positionlist'])
+            item['passageratelist'] = str(item['passageratelist'])
         nkdbraces = Nkdayraces(**item)
         try:
             session.add(nkdbraces)
