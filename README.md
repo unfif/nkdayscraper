@@ -31,3 +31,6 @@ sudo date -s "09/29 18:01 2019"
 ```mongoimport --db netkeiba --collection nkdayraces --file results02.json --jsonArray --drop```
 
 ```mongoimport --uri "mongodb+srv://undo5:marehito@mongui-t1cam.gcp.mongodb.net/netkeiba?retryWrites=true&w=majority" --collection nkdayraces --file results02.json --jsonArray --drop```
+
+# wget for race.netkeiba.com
+```wget -r -l 1 -k -nc -E restrict-file-names=windows –random-wait "https://race.netkeiba.com/top/race_list_sub.html?kaisai_date=20200315"```
