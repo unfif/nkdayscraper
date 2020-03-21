@@ -58,6 +58,7 @@ class NkdaySpider(CrawlSpider):
         item['condition'] = raceinfo.css('.RaceData01 [class^="Item"]::text').get().split('馬場:')[1]
         raceyear = item['year'] + '年'
         racedate = raceinfo.css('.RaceList_Date dd.Active a::text').get()
+        if not racedate.endswith('日'): racedate = racedate.replace('/', '月') + '日'
         racetime = RaceList_NameBox.css('.RaceData01::text').get().strip().split('発走')[0]
         item['datetime'] = dt.datetime.strptime(raceyear + racedate + ' ' + racetime + ':00+09:00', '%Y年%m月%d日 %H:%M:%S%z')
         item['day'] = dt.datetime.strptime(raceyear + racedate + '+09:00', '%Y年%m月%d日%z')
@@ -86,7 +87,8 @@ class NkdaySpider(CrawlSpider):
                 item['margin'] = (margin if margin is not None else '0') if item['ranking'] != '中止' else item['ranking']
                 item['fav'] = tr.css('td')[9].css('span::text').get()
                 item['odds'] = tr.css('td')[10].css('span::text').get()
-                item['last3f'] = tr.css('td')[11].css('::text').get().strip() if item['ranking'] != '中止' else None
+                last3f = tr.css('td')[11].css('::text').get().strip()
+                item['last3f'] = last3f if last3f and item['ranking'] != '中止' else None
                 passageratetext = tr.css('td')[12].css('::text').get().strip()
                 item['passageratelist'] = [int(x) for x in passageratetext.split('-')] if passageratetext != '' else None
                 item['horseweight'] = tr.css('td')[14].css('::text').get().strip()
