@@ -11,7 +11,7 @@ if today.weekday() in [5, 6]:
 else:
     targetdate = today - dt.timedelta((today.weekday() + 1) % 7)
 
-date = '{0:%Y%m%d}'.format(targetdate)
+date = f'{targetdate:%Y%m%d}'
 
 baseurl = 'https://race.netkeiba.com/top/race_list_sub.html?kaisai_date='
 

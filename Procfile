@@ -1,1 +1,1 @@
-nkrun: rm results01.json & scrapy crawl nkday -a date=p0202 -o results01.json
+nkrun: rm data/results01.json & scrapy crawl nkday -o data/results01.json
