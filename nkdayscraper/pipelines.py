@@ -11,7 +11,7 @@ import datetime as dt
 import copy as cp
 
 class NkdayscraperPipeline():
-    cnt = 0;
+    cnt = 0
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.engine = db_connect(echo=False)
@@ -19,13 +19,13 @@ class NkdayscraperPipeline():
         create_table(self.engine)
         self.Session = sessionmaker(bind=self.engine)
 
-        self.mongoerr = False
+        self.is_mongoerr = False
         self.mongo = mongo_connect(query={'serverSelectionTimeoutMS': 3000})
         self.mongodb = self.mongo.netkeiba
         self.collection = self.mongodb.nkdayraces
 
         try: self.collection.drop()
-        except: self.mongoerr = True
+        except: self.is_mongoerr = True
 
     def open_spider(self, spider):
         # DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
@@ -51,7 +51,7 @@ class NkdayscraperPipeline():
         finally:
             session.close()
 
-        if not self.mongoerr:
+        if not self.is_mongoerr:
             mongoitem = cp.deepcopy(item)
             mongoitem['posttime'] = str(mongoitem['posttime'])
             mongoitem['time'] = str(mongoitem['time'])

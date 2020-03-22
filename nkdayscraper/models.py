@@ -19,10 +19,10 @@ enginename = DATABASE_URL.split(':')[0].split('+')[0]
 class RBase():
     def __repr__(self):
         columns = ', '.join([
-            '{0}={1}'.format(key, repr(self.__dict__[key]))
+            f'{key}={repr(self.__dict__[key])}'
             for key in self.__dict__.keys() if not key.startswith('_')
         ])
-        return '<{0}({1})>'.format(self.__class__.__name__, columns)
+        return f'<{self.__class__.__name__}({columns})>'
 
 Base = declarative_base(cls=RBase)
 
