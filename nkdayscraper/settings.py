@@ -5,15 +5,17 @@
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
 #
-#     https://doc.scrapy.org/en/latest/topics/settings.html
-#     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+#     https://docs.scrapy.org/en/latest/topics/settings.html
+#     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
+#     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 import os
 import pathlib as pl
 from dotenv import load_dotenv
 
-load_dotenv(pl.Path(__file__).parent.parent/'.env')
+envpath = pl.Path(__file__).parent.parent/'.env'
+load_dotenv(envpath)
+env = os.environ
 
 BOT_NAME = 'nkdayscraper'
 
@@ -25,13 +27,13 @@ NEWSPIDER_MODULE = 'nkdayscraper.spiders'
 #USER_AGENT = 'nkdayscraper (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
-# See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
+# See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 #DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
@@ -51,31 +53,32 @@ ROBOTSTXT_OBEY = True
 #}
 
 # Enable or disable spider middlewares
-# See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+# See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
 #    'nkdayscraper.middlewares.NkdayscraperSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
-# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
+# See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
 #    'nkdayscraper.middlewares.NkdayscraperDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
-# See https://doc.scrapy.org/en/latest/topics/extensions.html
+# See https://docs.scrapy.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 #}
 
 # Configure item pipelines
-# See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+# See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'nkdayscraper.pipelines.NkdayscraperPipeline': 300,
+    'nkdayscraper.pipelines.NkdayscraperPipeline': 300,
+    # 'nkdayscraper.pipelines.JrarecordscraperPipeline': 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
-# See https://doc.scrapy.org/en/latest/topics/autothrottle.html
+# See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
 # The initial download delay
 #AUTOTHROTTLE_START_DELAY = 5
@@ -88,20 +91,26 @@ ITEM_PIPELINES = {
 #AUTOTHROTTLE_DEBUG = False
 
 # Enable and configure HTTP caching (disabled by default)
-# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-# HTTPCACHE_ENABLED = True
-# HTTPCACHE_EXPIRATION_SECS = 0
-# HTTPCACHE_DIR = 'httpcache'
-# HTTPCACHE_IGNORE_HTTP_CODES = []
-# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+# See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
+#HTTPCACHE_ENABLED = True
+#HTTPCACHE_EXPIRATION_SECS = 0
+#HTTPCACHE_DIR = 'httpcache'
+#HTTPCACHE_IGNORE_HTTP_CODES = []
+#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 DEPTH_LIMIT = 0
 
-FEED_EXPORT_ENCODING='utf-8'
+FEED_EXPORT_ENCODING = 'utf-8'
 
 # USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
-# print(os.environ)
-DATABASE_URL = os.environ.get('DATABASE_URL')
-SQLITE_URL = os.environ.get('SQLITE_URL')
-MONGO_URL = os.environ.get('MONGO_URL')
-# TELNETCONSOLE_PORT = os.environ.get('TELNETCONSOLE_PORT')
+
+DATABASE_URL = env.get('DATABASE_URL')
+SQLITE_URL = env.get('SQLITE_URL')
+MONGO_URL = env.get('MONGO_URL')
+if DATABASE_URL is None:
+    if SQLITE_URL is None:
+        DATABASE_URL = "sqlite:///data/raceresults.sqlite3"
+    else:
+        DATABASE_URL = SQLITE_URL
+
+# TELNETCONSOLE_PORT = env.get('TELNETCONSOLE_PORT')

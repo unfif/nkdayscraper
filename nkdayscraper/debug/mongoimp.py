@@ -12,7 +12,7 @@ def f2j(f): return loads(json.dumps(json.load(f)))
 
 for mongo in mongos:
     db = mongo.netkeiba
-    clct = db.nkdayraces
+    clct = db.horseresults
 
     clct.drop()#delete_many({})
     with open('results02.json', encoding='UTF8') as f:
