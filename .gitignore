@@ -1,8 +1,7 @@
 .scrapy
 .env
 
-/nkdayscraper/__pycache__/
-/nkdayscraper/spiders/__pycache__/
+__pycache__/
 
 *.bak
 *.log
@@ -11,3 +10,4 @@
 *~
 
 data/tmp
+nkdayviewer/

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import scrapy, re, requests
+import scrapy, re, requests, datetime as dt
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from nkdayscraper.items import NkdayscraperItem
-import datetime as dt
+from ..items import HorseResultItem, PaybackItem, RaceItem#, JrarecordItem
 
 today = dt.date.today()
 if today.weekday() in [5, 6]:
@@ -12,7 +11,6 @@ else:
     targetdate = today - dt.timedelta((today.weekday() + 1) % 7)
 
 date = f'{targetdate:%Y%m%d}'
-
 baseurl = 'https://race.netkeiba.com/top/race_list_sub.html?kaisai_date='
 
 class NkdaySpider(CrawlSpider):
@@ -21,14 +19,19 @@ class NkdaySpider(CrawlSpider):
     # start_urls = ['http://race.netkeiba.com/']
 
     rules = (
-        Rule(LinkExtractor(
-            allow = ['race.netkeiba.com', '127.0.0.1'],
-            deny = ['race.netkeiba.com/race/movie.html'],
-            restrict_css = ['.RaceList_Data']
-        ),
+        Rule(
+            LinkExtractor(
+                allow = ['race.netkeiba.com', '127.0.0.1'],
+                deny = ['race.netkeiba.com/race/movie.html'],
+                restrict_css = ['.RaceList_Data']
+            ),
             callback = 'parse_races', follow = True
         ),
     )
+
+    custom_settings = {
+        'ITEM_PIPELINES': {'nkdayscraper.pipelines.NkdayscraperPipeline': 300}
+    }
 
     def __init__(self, date=date, *args, **kwargs):
         super(NkdaySpider, self).__init__(*args, **kwargs)
@@ -39,45 +42,66 @@ class NkdaySpider(CrawlSpider):
     #     yield scrapy.Request(url, callback=self.parse_races)
 
     def parse_races(self, response):
-        item = NkdayscraperItem()
-
         raceinfo = response.css('#page')
         raceplaceurl = response.request.url
-        item['raceid'] = raceplaceurl.split('race_id=')[1].split('&rf=')[0]
+        raceid = raceplaceurl.split('race_id=')[1].split('&rf=')[0]
+
+        item = RaceItem()
+        item['raceid'] = raceid
         item['year'] = item['raceid'][0:4]
         item['place'] = raceinfo.css('.RaceKaisaiWrap li.Active a::text').get()
         RaceList_NameBox = raceinfo.css('.RaceList_NameBox')
         item['racenum'] = RaceList_NameBox.css('.RaceList_Item01 .RaceNum::text').get().split('R')[0]
         item['title'] = RaceList_NameBox.css('.RaceName::text').get().strip()
         courcetype = re.split('(\d+)|m', RaceList_NameBox.css('.RaceData01 span::text').get().strip())
-        item['courcetype'] = courcetype[0]
+        item['courcetype'] = {'芝': '芝', 'ダ': 'ダート', '障': '障害'}.get(courcetype[0])
         item['distance'] = courcetype[1]
-        racecondition = RaceList_NameBox.css('.RaceData01::text')[1].get().strip()
-        item['direction'] = re.split('[()]', racecondition)[1]
-        item['weather'] = re.split('[()]', racecondition)[2].split('天候:')[1]
+        racedetail = RaceList_NameBox.css('.RaceData01::text')[1].get().strip()
+        courceinfo = re.split('[()]', racedetail)
+        item['courceinfo1'] = courceinfo[1][0]
+        item['courceinfo2'] = courceinfo[1][1:].strip() or ''
+        item['weather'] = courceinfo[2].split('天候:')[1]
         item['condition'] = raceinfo.css('.RaceData01 [class^="Item"]::text').get().split('馬場:')[1]
         raceyear = item['year'] + '年'
         racedate = raceinfo.css('.RaceList_Date dd.Active a::text').get()
         if not racedate.endswith('日'): racedate = racedate.replace('/', '月') + '日'
         racetime = RaceList_NameBox.css('.RaceData01::text').get().strip().split('発走')[0]
         item['datetime'] = dt.datetime.strptime(raceyear + racedate + ' ' + racetime + ':00+09:00', '%Y年%m月%d日 %H:%M:%S%z')
-        item['day'] = dt.datetime.strptime(raceyear + racedate + '+09:00', '%Y年%m月%d日%z')
+        item['date'] = dt.datetime.strptime(raceyear + racedate + '+09:00', '%Y年%m月%d日%z')
         item['posttime'] = dt.datetime.strptime(racetime + '+09:00', '%H:%M%z').timetz()
         RaceData02 = RaceList_NameBox.css('.RaceData02 span::text').getall()
+        item['generation'] = '2歳' if int(RaceData02[3].split('歳')[0][-1]) == 2 else '3歳以上'
         item['racegrade'] = ','.join(RaceData02[3:7])
         item['starters'] = RaceData02[7].split('頭')[0]
         item['addedmoneylist'] = [int(x) * 1000 for x in RaceData02[8].split('本賞金:')[1].split('万円')[0].split(',')]
+        item['requrl'] = response.request.url
+
+        yield item
+
+        item = PaybackItem()
+        result_pay_back = response.css('.Result_Pay_Back')
+        paybacktbldiv = result_pay_back.css('.ResultPaybackLeftWrap .FullWrap')
+        item['raceid'] = raceid
+        for pooltype in ['tansho', 'fukusho', 'wakuren', 'umaren', 'wide', 'umatan', 'fuku3', 'tan3']:
+            pooltr = paybacktbldiv.css('table tbody tr.' + pooltype.capitalize())
+            item[pooltype] = [int(text) for text in pooltr.css('.Result ::text').getall() if text != '\n']
+            item[pooltype + 'pay'] = [int(text.rstrip('円').replace(',', '')) for text in pooltr.css('.Payout ::text').getall() if text != '\n']
+            item[pooltype + 'fav'] = [int(text.rstrip('人気').replace(',', '')) for text in pooltr.css('.Ninki ::text').getall() if text != '\n']
+
+        yield item
 
         for tr in raceinfo.css('#All_Result_Table tbody tr'):
+            item = HorseResultItem()
+            item['raceid'] = raceid
             item['ranking'] = tr.css('td')[0].css('div::text').get().strip()
             item['postnum'] = tr.css('td')[1].css('div::text').get()
             item['horsenum'] = tr.css('td')[2].css('div::text').get()
             item['horsename'] = tr.css('td')[3].css('.Horse_Name a::text').get()
             Horse_Info_Detail = tr.css('td')[4].css('.Horse_Info_Detail .Detail_Left::text').get().strip()
-            item['sex'] = Horse_Info_Detail[0]
-            item['age'] = Horse_Info_Detail[1:]
+            item['sex'] = {'牡':'牡','牝':'牝','騙':'騙','せ':'騙','セ':'騙','せん':'騙','セン':'騙'}.get(Horse_Info_Detail[0])
+            item['age'] = int(Horse_Info_Detail[1:])
             item['jockeyweight'] = tr.css('td')[5].css('.JockeyWeight::text').get()
-            item['jockey'] = tr.css('td')[6].css('a::text').get().strip().lstrip('▲ △ ★ ☆ ◇')
+            item['jockey'] = ''.join(tr.css('td')[6].css('a ::text').getall()).strip().lstrip('▲ △ ★ ☆ ◇')
             item['affiliate'] = tr.css('td')[13].css('span::text').get()
             item['trainer'] = tr.css('td')[13].css('a::text').get()
 
@@ -105,17 +129,15 @@ class NkdaySpider(CrawlSpider):
 
             if item['ranking'] in ['中止', '取消', '除外']: item['ranking'] = None
 
-            item['requrl'] = response.request.url
+            # intkeys = []
+            # itemkeys = list(item.keys())
+            # for itemkey in itemkeys:
+            #     if itemkey.endswith('num'): intkeys.append(itemkey)
 
-            intkeys = []
-            itemkeys = list(item.keys())
-            for itemkey in itemkeys:
-                if itemkey.endswith('num'): intkeys.append(itemkey)
-
-            intkeys.extend(['distance', 'starters', 'age', 'fav', 'horseweight', 'horseweightdiff'])
-            for intkey in intkeys:
-                if item[intkey] is not None: item[intkey] = int(item[intkey])
-            for floatkey in ['jockeyweight', 'odds', 'last3f']:
-                if item[floatkey] is not None: item[floatkey] = float(item[floatkey])
+            # intkeys.extend(['distance', 'starters', 'age', 'fav', 'horseweight', 'horseweightdiff'])
+            # for intkey in intkeys:
+            #     if item[intkey] is not None: item[intkey] = int(item[intkey])
+            # for floatkey in ['jockeyweight', 'odds', 'last3f']:
+            #     if item[floatkey] is not None: item[floatkey] = float(item[floatkey])
 
             yield item

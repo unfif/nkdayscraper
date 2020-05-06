@@ -3,30 +3,62 @@
 # Define here the models for your scraped items
 #
 # See documentation in:
-# https://doc.scrapy.org/en/latest/topics/items.html
+# https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
 
-
-class NkdayscraperItem(scrapy.Item):
-    # datekey = scrapy.Field()
+class RaceItem(scrapy.Item):
     raceid = scrapy.Field()
+
     year = scrapy.Field()
     place = scrapy.Field()
     racenum = scrapy.Field()
     title = scrapy.Field()
     courcetype = scrapy.Field()
     distance = scrapy.Field()
-    direction = scrapy.Field()
+    courceinfo1 = scrapy.Field()
+    courceinfo2 = scrapy.Field()
     weather = scrapy.Field()
     condition = scrapy.Field()
     datetime = scrapy.Field()
-    day = scrapy.Field()
+    date = scrapy.Field()
     posttime = scrapy.Field()
+    generation = scrapy.Field()
     racegrade = scrapy.Field()
     starters = scrapy.Field()
     addedmoneylist = scrapy.Field()
     requrl = scrapy.Field()
+
+class PaybackItem(scrapy.Item):
+    raceid = scrapy.Field()
+
+    tansho = scrapy.Field()
+    tanshopay = scrapy.Field()
+    tanshofav = scrapy.Field()
+    fukusho = scrapy.Field()
+    fukushopay = scrapy.Field()
+    fukushofav = scrapy.Field()
+    wakuren = scrapy.Field()
+    wakurenpay = scrapy.Field()
+    wakurenfav = scrapy.Field()
+    umaren = scrapy.Field()
+    umarenpay = scrapy.Field()
+    umarenfav = scrapy.Field()
+    wide = scrapy.Field()
+    widepay = scrapy.Field()
+    widefav = scrapy.Field()
+    umatan = scrapy.Field()
+    umatanpay = scrapy.Field()
+    umatanfav = scrapy.Field()
+    fuku3 = scrapy.Field()
+    fuku3pay = scrapy.Field()
+    fuku3fav = scrapy.Field()
+    tan3 = scrapy.Field()
+    tan3pay = scrapy.Field()
+    tan3fav = scrapy.Field()
+
+class HorseResultItem(scrapy.Item):
+    raceid = scrapy.Field()
 
     ranking = scrapy.Field()
     postnum = scrapy.Field()
@@ -46,3 +78,24 @@ class NkdayscraperItem(scrapy.Item):
     trainer = scrapy.Field()
     horseweight = scrapy.Field()
     horseweightdiff = scrapy.Field()
+
+class JrarecordItem(scrapy.Item):
+    place = scrapy.Field()
+    courcetype = scrapy.Field()
+    generation = scrapy.Field()
+    distance = scrapy.Field()
+    courceinfo1 = scrapy.Field()
+    courceinfo2 = scrapy.Field()
+    time = scrapy.Field()
+    horsename = scrapy.Field()
+    sire = scrapy.Field()
+    dam = scrapy.Field()
+    sex = scrapy.Field()
+    age = scrapy.Field()
+    jockeyweight = scrapy.Field()
+    jockey = scrapy.Field()
+    jockeyfullname = scrapy.Field()
+    date = scrapy.Field()
+    weather = scrapy.Field()
+    condition = scrapy.Field()
+    reference = scrapy.Field()

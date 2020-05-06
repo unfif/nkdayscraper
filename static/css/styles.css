@@ -1,0 +1,218 @@
+h1, h2, h3, h4, h5, h6{
+  margin: 0;
+  padding: 0;
+}
+body{
+  padding: 0px;
+  background: #666;
+  font-size: 12px;
+}
+header{
+  display: flex;
+  margin: 0;
+  padding: 8px;
+  background: #343a40;
+  color: #fff;
+}
+h2, h3{
+  margin: 0 8px;
+}
+.contents{
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  width: 95%;
+  margin: 0 auto;
+  padding: 4px 10px;
+  background: #EEE;
+}
+.flex{
+  display: flex;
+}
+.scrollable{
+  overflow: auto;
+  /* overflow-x: scroll; */
+  white-space: nowrap;
+}
+table.sticky thead th:nth-child(1),
+table.sticky tbody th:nth-child(1){
+  position: sticky;
+  left: 0;
+}
+div.dispplacerace{
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+div.dispplacerace > div{
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+div.dispplacerace > div > h5{
+  /* width: 60px; */
+  margin: 0 8px;
+  /* text-align: end; */
+}
+div.dispplacerace > div > h5 > span.badge{
+  width: 60px;
+  /* margin: 0 8px; */
+  /* text-align: end; */
+}
+.dispplacerace button{
+  width: 4.4em;
+  margin-left: 5px;
+}
+th, td{
+  white-space: nowrap;
+}
+.col_年, .col_レースID, .col_日時, .col_日程, .col_グレード, .col_頭数, .col_賞金, .col_raceurl, .col_世代, .col_last3frank{
+  display: none;
+}
+th.col_R{
+  width: 2em;
+}
+th.col_タイトル, th.col_馬名{
+  width: 11em;
+}
+th.col_形式{
+  width: 4em;
+}
+th.col_着差{
+  width: 4em;
+}
+th.col_通過{
+  width: 8em;
+}
+td.col_R,
+td.col_天候,
+td.col_状態,
+td.col_順位,
+td.col_枠番,
+td.col_馬番,
+td.col_人気,
+td.col_所属{
+  text-align: center;
+}
+td.col_形式,
+td.col_情報1,
+td.col_姓,
+td.col_オッズ,
+td.col_馬体重,
+td.col_増減,
+td.col_騎乗数,
+td.col_1着,
+td.col_2着,
+td.col_3着,
+td.col_単勝率,
+td.col_連対率,
+td.col_複勝率{
+  text-align: right;
+}
+.rankinfo_initnone_mid,
+.rankinfo_initnone_end{
+  display: none;
+}
+.col_racerank,
+.col_nextracerank,
+.col_prevracerank,
+.col_rankinfo{
+  display: none;
+}
+.rankinfo_initdisp_end{
+  border-bottom: 3px double #999;
+}
+.rankinfo_initnone_end{
+  border-bottom: 3px solid #999;
+}
+div.jockeysrank > table{
+  margin: 4px 4px 24px;
+}
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_場所,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_R,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_タイトル,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_形式,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_距離,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_情報1,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_情報2,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_レコード,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_天候,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_状態,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_時刻{
+  text-indent: 125%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+table.raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
+  display: none;
+}
+table.racejockeys th,
+table.racejockeys td{
+  width: 0;
+}
+table.racejockeys tr.hiddentr{
+  display: none;
+}
+div.placeinfo{
+  font-size: 11px;
+}
+.postnum_1{
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+.postnum_2{
+  background: #444444 !important;
+  color: #ffffff !important;
+}
+.postnum_3{
+  background: #e95556 !important;
+  color: #ffffff !important;
+}
+.postnum_4{
+  background: #416cba !important;
+  color: #ffffff !important;
+}
+.postnum_5{
+  background: #e7c52c !important;
+  color: #ffffff !important;
+}
+.postnum_6{
+  background: #45af4c !important;
+  color: #ffffff !important;
+}
+.postnum_7{
+  background: #ee9738 !important;
+  color: #ffffff !important;
+}
+.postnum_8{
+  background: #ef8fa0 !important;
+  color: #ffffff !important;
+}
+.BgYellow,
+.rank_1{
+  background: #fff080 !important;
+}
+.BgBlue02,
+.rank_2{
+  background: #ccdfff !important;
+}
+.BgOrange,
+.rank_3{
+  background: #f0c8a0 !important;
+}
+tr.rankinfo_initdisp_top td.courcetype_芝{
+  /* background: linear-gradient(transparent 80%, #45af4c 20%); */
+  /* color: #45af4c; */
+  /* border-right: 1px solid #45af4c !important; */
+  /* border-bottom: 1px solid #45af4c !important; */
+  background: #45af4c !important;
+  color: #ffffff;
+}
+tr.rankinfo_initdisp_top td.courcetype_ダート{
+  /* background: linear-gradient(transparent 80%, #ee9738 20%); */
+  /* color: #ee9738; */
+  /* border-right: 1px solid #ee9738 !important; */
+  /* border-bottom: 1px solid #ee9738 !important; */
+  background: #ee9738 !important;
+  color: #ffffff;
+}
