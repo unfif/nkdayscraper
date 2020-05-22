@@ -20,7 +20,7 @@
             }
           }
         },
-        "courcetype": {
+        "coursetype": {
           "type": "text",
           "fields": {
             "keyword": {

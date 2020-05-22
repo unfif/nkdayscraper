@@ -32,7 +32,7 @@ class JrarecordSpider(CrawlSpider):
     )
 
     custom_settings = {
-        'ITEM_PIPELINES': {'nkdayscraper.pipelines.JrarecordscraperPipeline': 300}
+        'ITEM_PIPELINES': {'nkdayscraper.pipelines.JrarecordsscraperPipeline': 300}
     }
 
     def parse_records(self, response):
@@ -43,23 +43,28 @@ class JrarecordSpider(CrawlSpider):
         headings = [[x for x in h3.css('span::text').getall() if x not in ['\n', 'コース']] for h3 in h3list]
         tbodys = contentsBody.css('table.place tbody')
         for racetype in zip(headings, tbodys):
-            item['courcetype'] = racetype[0][0]
-            if not racetype[0][1].startswith('障害'):
-                item['generation'] = racetype[0][1]
-            else:
-                item['courcetype'] = '障害'
-                item['generation'] = racetype[0][1].split('障害')[1]
+            item['coursetype'] = racetype[0][0]
+            # if not racetype[0][1].startswith('障害'):
+            #     item['generation'] = racetype[0][1]
+            # else:
+            #     item['coursetype'] = '障害'
+            #     item['generation'] = racetype[0][1].split('障害')[1]
 
+            item['generation'] = racetype[0][1]
             for racerow in racetype[1].css('tr'):
                 texts = [x for x in racerow.css('::text').getall() if x not in ['\n', '基準']]
                 item['distance'] = texts[0].replace(',', '')
-                courceinfo = texts[1].split('・')
-                if not (item['courcetype'] == '障害' and courceinfo[0] == 'ダート'):
-                    item['courceinfo1'] = courceinfo[0]
-                    item['courceinfo2'] = courceinfo[1] if len(courceinfo) > 1 else ''
-                else:
-                    item['courceinfo1'] = '芝'
-                    item['courceinfo2'] = 'ダート'
+                courseinfo = texts[1].split('・')
+                # if not (item['coursetype'] == '障害' and courseinfo[0] == 'ダート'):
+                # if not (item['generation'].startswith('障害') and courseinfo[0] == 'ダート'):
+                #     item['courseinfo1'] = courseinfo[0]
+                #     item['courseinfo2'] = courseinfo[1] if len(courseinfo) > 1 else ''
+                # else:
+                #     item['courseinfo1'] = '芝'
+                #     item['courseinfo2'] = 'ダート'
+
+                item['courseinfo1'] = courseinfo[0]
+                item['courseinfo2'] = courseinfo[1] if len(courseinfo) > 1 else ''
 
                 item['time'] = ('00:0' if ':' in texts[2] else '00:00:') + texts[2]
                 item['horsename'] = texts[3]

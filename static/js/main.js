@@ -38,7 +38,7 @@ $(function(){
     if(thisplace.text() === lastplace) thisplace.text('');
     else lastplace = thisplace.text();
   })
-  $('button.dispallplaces, button.dispallcourcetypes, button.dispallraces').click(function(){
+  $('button.dispallplaces, button.dispallcoursetypes, button.dispallraces').click(function(){
     $('tr.rankinfo_initdisp_end').css('border-bottom', '3px double #999');
     $('.raceresults tbody tr:not(.rankinfo_initnone_mid, .rankinfo_initnone_end)').show();
     $('.rankinfo_initnone_mid, .rankinfo_initnone_end').hide();
@@ -49,7 +49,7 @@ $(function(){
     $('.raceresults tbody tr:not(.場所_' + this.innerText + ')').hide();
     $('.rankinfo_initnone_mid, .rankinfo_initnone_end').hide();
   })
-  $('button.dispcourcetype').click(function(){
+  $('button.dispcoursetype').click(function(){
     $('tr.rankinfo_initdisp_end').css('border-bottom', '3px double #999');
     $('.raceresults tbody tr.形式_' + this.innerText).show();
     $('.raceresults tbody tr:not(.形式_' + this.innerText + ')').hide();

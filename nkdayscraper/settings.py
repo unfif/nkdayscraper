@@ -74,7 +74,7 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'nkdayscraper.pipelines.NkdayscraperPipeline': 300,
-    # 'nkdayscraper.pipelines.JrarecordscraperPipeline': 300
+    # 'nkdayscraper.pipelines.JrarecordsscraperPipeline': 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

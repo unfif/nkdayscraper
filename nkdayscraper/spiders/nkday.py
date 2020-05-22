@@ -50,31 +50,44 @@ class NkdaySpider(CrawlSpider):
         item['raceid'] = raceid
         item['year'] = item['raceid'][0:4]
         item['place'] = raceinfo.css('.RaceKaisaiWrap li.Active a::text').get()
-        RaceList_NameBox = raceinfo.css('.RaceList_NameBox')
-        item['racenum'] = RaceList_NameBox.css('.RaceList_Item01 .RaceNum::text').get().split('R')[0]
-        item['title'] = RaceList_NameBox.css('.RaceName::text').get().strip()
-        courcetype = re.split('(\d+)|m', RaceList_NameBox.css('.RaceData01 span::text').get().strip())
-        item['courcetype'] = {'芝': '芝', 'ダ': 'ダート', '障': '障害'}.get(courcetype[0])
-        item['distance'] = courcetype[1]
-        racedetail = RaceList_NameBox.css('.RaceData01::text')[1].get().strip()
-        courceinfo = re.split('[()]', racedetail)
-        item['courceinfo1'] = courceinfo[1][0]
-        item['courceinfo2'] = courceinfo[1][1:].strip() or ''
-        item['weather'] = courceinfo[2].split('天候:')[1]
+        racelist_namebox = raceinfo.css('.RaceList_NameBox')
+        item['racenum'] = racelist_namebox.css('.RaceList_Item01 .RaceNum::text').get().split('R')[0]
+        item['title'] = racelist_namebox.css('.RaceName::text').get().strip()
+        coursetype = re.split('(\d+)|m', racelist_namebox.css('.RaceData01 span::text').get().strip())
+        item['coursetype'] = {'芝': '芝', 'ダ': 'ダート', '障': '障害'}.get(coursetype[0])
+        item['distance'] = coursetype[1]
+        racedetail = racelist_namebox.css('.RaceData01::text')[1].get().strip()
+        courseinfo = re.split('[()]', racedetail)
+        item['courseinfo1'] = courseinfo[1][0]
+        item['courseinfo2'] = (courseinfo[1][1:].strip().replace('-', '') or '') if item['courseinfo1'] != '直' else ''
+
+        item['weather'] = courseinfo[2].split('天候:')[1]
         item['condition'] = raceinfo.css('.RaceData01 [class^="Item"]::text').get().split('馬場:')[1]
         raceyear = item['year'] + '年'
         racedate = raceinfo.css('.RaceList_Date dd.Active a::text').get()
         if not racedate.endswith('日'): racedate = racedate.replace('/', '月') + '日'
-        racetime = RaceList_NameBox.css('.RaceData01::text').get().strip().split('発走')[0]
+        racetime = racelist_namebox.css('.RaceData01::text').get().strip().split('発走')[0]
         item['datetime'] = dt.datetime.strptime(raceyear + racedate + ' ' + racetime + ':00+09:00', '%Y年%m月%d日 %H:%M:%S%z')
         item['date'] = dt.datetime.strptime(raceyear + racedate + '+09:00', '%Y年%m月%d日%z')
         item['posttime'] = dt.datetime.strptime(racetime + '+09:00', '%H:%M%z').timetz()
-        RaceData02 = RaceList_NameBox.css('.RaceData02 span::text').getall()
-        item['generation'] = '2歳' if int(RaceData02[3].split('歳')[0][-1]) == 2 else '3歳以上'
-        item['racegrade'] = ','.join(RaceData02[3:7])
-        item['starters'] = RaceData02[7].split('頭')[0]
-        item['addedmoneylist'] = [int(x) * 1000 for x in RaceData02[8].split('本賞金:')[1].split('万円')[0].split(',')]
+        racedata02 = racelist_namebox.css('.RaceData02 span::text').getall()
+        item['generation'] = '2歳' if int(racedata02[3].split('歳')[0][-1]) == 2 else '3歳以上'
+        item['racegrade'] = racedata02[3:7]
+        item['starters'] = racedata02[7].split('頭')[0]
+        item['addedmoneylist'] = [int(x) * 1000 for x in racedata02[8].split('本賞金:')[1].split('万円')[0].split(',')]
         item['requrl'] = response.request.url
+
+        if item['coursetype'] == '障害':
+            if item['courseinfo2'] == 'ダート':
+                item['coursetype'] = 'ダート'
+                item['courseinfo1'] = 'ダート'
+            else:
+                item['coursetype'] = item['courseinfo1']
+                if item['courseinfo1'] == '芝':
+                    item['courseinfo1'] = item['courseinfo2']
+
+            item['courseinfo2'] = ''
+            item['generation'] = '障害' + item['generation']
 
         yield item
 
@@ -97,9 +110,9 @@ class NkdaySpider(CrawlSpider):
             item['postnum'] = tr.css('td')[1].css('div::text').get()
             item['horsenum'] = tr.css('td')[2].css('div::text').get()
             item['horsename'] = tr.css('td')[3].css('.Horse_Name a::text').get()
-            Horse_Info_Detail = tr.css('td')[4].css('.Horse_Info_Detail .Detail_Left::text').get().strip()
-            item['sex'] = {'牡':'牡','牝':'牝','騙':'騙','せ':'騙','セ':'騙','せん':'騙','セン':'騙'}.get(Horse_Info_Detail[0])
-            item['age'] = int(Horse_Info_Detail[1:])
+            horse_info_detail = tr.css('td')[4].css('.Horse_Info_Detail .Detail_Left::text').get().strip()
+            item['sex'] = {'牡':'牡','牝':'牝','騙':'騙','せ':'騙','セ':'騙','せん':'騙','セン':'騙'}.get(horse_info_detail[0])
+            item['age'] = int(horse_info_detail[1:])
             item['jockeyweight'] = tr.css('td')[5].css('.JockeyWeight::text').get()
             item['jockey'] = ''.join(tr.css('td')[6].css('a ::text').getall()).strip().lstrip('▲ △ ★ ☆ ◇')
             item['affiliate'] = tr.css('td')[13].css('span::text').get()
