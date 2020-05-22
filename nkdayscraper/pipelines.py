@@ -70,13 +70,13 @@ class NkdayscraperPipeline():
 
         if not self.is_mongoerr:
             mongoitem = cp.deepcopy(item)
-            if isinstance(item, RaceItem): mongoitem['posttime'] = str(mongoitem['posttime'])
-            if isinstance(item, HorseResultItem): mongoitem['time'] = str(mongoitem['time'])
+            if isinstance(mongoitem, RaceItem): mongoitem['posttime'] = str(mongoitem['posttime'])
+            if isinstance(mongoitem, HorseResultItem): mongoitem['time'] = str(mongoitem['time'])
             self.collection.insert_one(dict(mongoitem))
 
         return item
 
-class JrarecordscraperPipeline():
+class JrarecordsscraperPipeline():
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.engine = engine

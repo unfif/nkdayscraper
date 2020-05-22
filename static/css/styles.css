@@ -109,14 +109,14 @@ td.col_連対率,
 td.col_複勝率{
   text-align: right;
 }
-.rankinfo_initnone_mid,
-.rankinfo_initnone_end{
-  display: none;
-}
 .col_racerank,
 .col_nextracerank,
 .col_prevracerank,
 .col_rankinfo{
+  display: none;
+}
+.rankinfo_initnone_mid,
+.rankinfo_initnone_end{
   display: none;
 }
 .rankinfo_initdisp_end{
@@ -200,7 +200,7 @@ div.placeinfo{
 .rank_3{
   background: #f0c8a0 !important;
 }
-tr.rankinfo_initdisp_top td.courcetype_芝{
+tr.rankinfo_initdisp_top td.coursetype_芝{
   /* background: linear-gradient(transparent 80%, #45af4c 20%); */
   /* color: #45af4c; */
   /* border-right: 1px solid #45af4c !important; */
@@ -208,7 +208,7 @@ tr.rankinfo_initdisp_top td.courcetype_芝{
   background: #45af4c !important;
   color: #ffffff;
 }
-tr.rankinfo_initdisp_top td.courcetype_ダート{
+tr.rankinfo_initdisp_top td.coursetype_ダート{
   /* background: linear-gradient(transparent 80%, #ee9738 20%); */
   /* color: #ee9738; */
   /* border-right: 1px solid #ee9738 !important; */

@@ -1,5 +1,5 @@
 # %%
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Float, String, Text, Date, DateTime, Time, Boolean, ForeignKey, ForeignKeyConstraint, UniqueConstraint, outerjoin, and_#, LargeBinary, SmallInteger
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Float, String, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint#, ForeignKey, UniqueConstraint, outerjoin, and_, LargeBinary, SmallInteger
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, aliased
@@ -10,8 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import copy as cp
 
-from pprint import pprint
-from sqlalchemy.sql import Select
+# from sqlalchemy.sql import Select
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
 # SQLITE_URL = get_project_settings().get('SQLITE_URL')
@@ -27,8 +26,8 @@ meta.reflect(bind=engine)
 # jrr = Table('jrarecords', meta, autoload=True)
 # sql = outerjoin(hrs, jrr).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
 # sql = hrs.select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
-# sql = outerjoin(hrs, jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.courcetype == hrs.c.courcetype, jrr.c.courceinfo1 == hrs.c.courceinfo1, jrr.c.courceinfo2 == hrs.c.courceinfo2)).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
-# sql = Select([hrs, jrr]).outerjoin(jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.courcetype == hrs.c.courcetype, jrr.c.courceinfo1 == hrs.c.courceinfo1, jrr.c.courceinfo2 == hrs.c.courceinfo2))#.order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
+# sql = outerjoin(hrs, jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2)).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
+# sql = Select([hrs, jrr]).outerjoin(jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2))#.order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
 # con = engine.connect()
 # racesdf = pd.read_sql(sql, con)
 # print(sql, racesdf.columns, '\n', racesdf.time.iloc[:,0], type(racesdf.time.iloc[:,0]))
@@ -61,8 +60,8 @@ def create_tables(engine):
 class Race(Base):
     __tablename__ = 'races'
     __table_args__ = (ForeignKeyConstraint(
-        ['place', 'courcetype', 'generation', 'distance', 'courceinfo1', 'courceinfo2'],
-        ['jrarecords.place', 'jrarecords.courcetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courceinfo1', 'jrarecords.courceinfo2']),
+        ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
+        ['jrarecords.place', 'jrarecords.coursetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courseinfo1', 'jrarecords.courseinfo2']),
         {}
     )
     raceid = Column(Text, primary_key=True, comment='レースID')
@@ -70,17 +69,18 @@ class Race(Base):
     place = Column(Text, comment='場所')
     racenum = Column(Integer, comment='R')
     title = Column(Text, comment='タイトル')
-    courcetype = Column(Text, comment='形式')
+    coursetype = Column(Text, comment='形式')
     distance = Column(Integer, comment='距離')
-    courceinfo1 = Column(Text, comment='情報1')
-    courceinfo2 = Column(Text, comment='情報2')
+    courseinfo1 = Column(Text, comment='情報1')
+    courseinfo2 = Column(Text, comment='情報2')
     weather = Column(Text, comment='天候')
     condition = Column(Text, comment='状態')
     datetime = Column(DateTime(timezone=True), comment='日時')
     date = Column(Date, comment='日程')
     posttime = Column(Time(timezone=True), comment='時刻')
     generation = Column(Text, comment='世代')
-    racegrade = Column(Text, comment='グレード')
+    if engine.name in ['postgresql', 'mongodb']: racegrade = Column(pg.ARRAY(Text), comment='グレード')
+    else: racegrade = Column(Text, comment='グレード')
     starters = Column(Integer, comment='頭数')
     if engine.name in ['postgresql', 'mongodb']: addedmoneylist = Column(pg.ARRAY(Integer), comment='賞金')
     else: addedmoneylist = Column(Text, comment='賞金')
@@ -124,35 +124,11 @@ class Payback(Base):
 
 class HorseResult(Base):
     __tablename__ = 'horseresults'
-    # __table_args__ = (ForeignKeyConstraint(
-    #     ['place', 'courcetype', 'generation', 'distance', 'courceinfo1', 'courceinfo2'],
-    #     ['jrarecords.place', 'jrarecords.courcetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courceinfo1', 'jrarecords.courceinfo2']),
-    #     ForeignKeyConstraint(['raceid'], ['races.raceid']),
-    #     {}
-    # )
     __table_args__ = (
         ForeignKeyConstraint(['raceid'], ['races.raceid']),
         {}
     )
     raceid = Column(Text, primary_key=True, comment='レースID')
-    # year = Column(Integer, comment='年')
-    # place = Column(Text, comment='場所')
-    # racenum = Column(Integer, comment='R')
-    # title = Column(Text, comment='タイトル')
-    # courcetype = Column(Text, comment='形式')
-    # distance = Column(Integer, comment='距離')
-    # courceinfo1 = Column(Text, comment='情報1')
-    # courceinfo2 = Column(Text, comment='情報2')
-    # weather = Column(Text, comment='天候')
-    # condition = Column(Text, comment='状態')
-    # datetime = Column(DateTime(timezone=True), comment='日時')
-    # date = Column(Date, comment='日程')
-    # posttime = Column(Time(timezone=True), comment='時刻')
-    # racegrade = Column(Text, comment='グレード')
-    # starters = Column(Integer, comment='頭数')
-    # if engine.name in ['postgresql', 'mongodb']: addedmoneylist = Column(pg.ARRAY(Integer), comment='賞金')
-    # else: addedmoneylist = Column(Text, comment='賞金')
-    # requrl = Column(Text, comment='raceurl')
 
     ranking = Column(Integer, comment='順位')
     postnum = Column(Integer, comment='枠番')
@@ -160,7 +136,6 @@ class HorseResult(Base):
     horsename = Column(Text, comment='馬名')
     sex = Column(Text, comment='性')
     age = Column(Integer, comment='齢')
-    # generation = Column(Text, comment='世代')
     jockeyweight = Column(Float, comment='斤量')
     jockey = Column(Text, comment='騎手')
     time = Column(Time(timezone=False), comment='タイム')
@@ -176,12 +151,7 @@ class HorseResult(Base):
     horseweight = Column(Float, comment='馬体重')
     horseweightdiff = Column(Integer, comment='増減')
 
-    # jrarecord = relationship('Jrarecord', foreign_keys=[place, courcetype, distance, courceinfo1, courceinfo2])
-    # jrarecord = relationship('Jrarecord')
     race = relationship('Race')
-
-    # def __repr__(self):
-    #     return  "<horseresults(raceid='{}',place='{}',racenum='{}',title='{}',courcetype='{}',distance='{}',courceinfo1='{}',courceinfo2='{}',weather='{}',condition='{},date='{}',date='{}',posttime='{}',racegrade='{}',starters='{}',addedmoneylist='{}',requrl='{}',placenum='{}',postnum='{}',horsenum='{}',horsename='{}',sex='{}',age='{}',generation='{}',weight='{}',jockey='{}',time='{}',margin='{}',positionlist='{}',last3f='{}',odds='{}',fav='{}',trainer='{}',horseweight='{}',horseweightdiff='{}')>".format(self.raceid,self.place,self.racenum,self.title,self.courcetype,self.distance,self.courceinfo1,self.courceinfo2,self.weather,self.condition,self.date,self.date,self.posttime,self.racegrade,self.starters,self.addedmoneylist,self.requrl,self.placenum,self.postnum,self.horsenum,self.horsename,self.sex,self.age,self.generation,self.weight,self.jockey,self.time,self.margin,self.positionlist,self.last3f,self.odds,self.fav,self.trainer,self.horseweight,self.horseweightdiff)
 
     def getRaceResults(session):
         data = {}
@@ -191,8 +161,8 @@ class HorseResult(Base):
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         sql = session\
-            .query(Race.raceid, Race.place, Race.racenum, Race.title, Race.courcetype, Race.distance, Race.courceinfo1, Race.courceinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff)\
-            .outerjoin(hrs).outerjoin(jrr).order_by(Race.place, Race.racenum, hrs.ranking).statement
+            .query(Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff)\
+            .join(hrs).outerjoin(jrr).order_by(Race.place, Race.racenum, hrs.ranking).statement
         racesdf = pd.read_sql(sql, con)
 
         racesdf.title = racesdf.title.apply(lambda x: x.rstrip('タイトル'))
@@ -209,9 +179,9 @@ class HorseResult(Base):
 
         racesdf['nextracerank'] = pd.concat([racesdf.ranking[1:], racesdf.ranking[0:1]]).reset_index(drop=True)
         racesdf['prevracerank'] = pd.concat([racesdf.ranking[-1:], racesdf.ranking[:-1]]).reset_index(drop=True)
-        racesdf.loc[racesdf.ranking < 4, 'rankinfo'] = 'initdisp_mid'
-        racesdf.loc[(racesdf.ranking < 4) & (racesdf.nextracerank >= 4), 'rankinfo'] = 'initdisp_end'
-        racesdf.loc[racesdf.ranking >= 4, 'rankinfo'] = 'initnone_mid'
+        racesdf.loc[racesdf.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
+        racesdf.loc[(racesdf.ranking <= 3) & (racesdf.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
+        racesdf.loc[racesdf.ranking > 3, 'rankinfo'] = 'initnone_mid'
         racesdf.loc[racesdf.ranking - racesdf.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
         racesdf.loc[racesdf.nextracerank - racesdf.ranking < 0, 'rankinfo'] = 'initnone_end'
 
@@ -269,7 +239,7 @@ class HorseResult(Base):
 
         racesgp = cp.deepcopy(data['racesdf'])
         racesgp['R2'] = racesgp.R
-        racesgp[['賞金', '通過']] = racesgp[['賞金', '通過']].applymap(str)
+        racesgp[['グレード', '賞金', '通過']] = racesgp[['グレード', '賞金', '通過']].applymap(str)
         racesgp = racesgp.query('順位 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
         racesgp2 = racesgp.agg(list)
         racesgp2.R2 = racesgp2.R2.apply(set)
@@ -284,16 +254,16 @@ class HorseResult(Base):
 class Jrarecord(Base):
     __tablename__ = 'jrarecords'
     # __table_args__ = (UniqueConstraint(
-    #     'place', 'courcetype', 'generation', 'distance', 'courceinfo1', 'courceinfo2'),
+    #     'place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'),
     #     {}
     # )
     # __mapper_args__ = {'column_prefix': 'jrarecords_'}
     place = Column(Text, primary_key=True, comment='場所')
-    courcetype = Column(Text, primary_key=True, comment='形式')
+    coursetype = Column(Text, primary_key=True, comment='形式')
     generation = Column(Text, primary_key=True, comment='世代')
     distance = Column(Integer, primary_key=True, comment='距離')
-    courceinfo1 = Column(Text, primary_key=True, comment='情報1')
-    courceinfo2 = Column(Text, primary_key=True, comment='情報2')
+    courseinfo1 = Column(Text, primary_key=True, comment='情報1')
+    courseinfo2 = Column(Text, primary_key=True, comment='情報2')
     time = Column(Time(timezone=False), comment='タイム')
     horsename = Column(Text, comment='馬名')
     sire = Column(Text, comment='父馬')
