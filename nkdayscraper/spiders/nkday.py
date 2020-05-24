@@ -129,7 +129,7 @@ class NkdaySpider(CrawlSpider):
                 passageratetext = tr.css('td')[12].css('::text').get().strip()
                 item['passageratelist'] = [int(x) for x in passageratetext.split('-')] if passageratetext != '' else None
                 item['horseweight'] = tr.css('td')[14].css('::text').get().strip()
-                item['horseweightdiff'] = re.split('[()+]', tr.css('td')[14].css('small::text').get())[-2]
+                item['horseweightdiff'] = re.split('[()+]', tr.css('td')[14].css('small::text').get() or '(-0)')[-2]
             else:
                 item['time'] = None
                 item['margin'] = item['ranking']

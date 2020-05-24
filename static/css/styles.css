@@ -139,7 +139,7 @@ table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_レコード,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_天候,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_状態,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_時刻{
-  text-indent: 125%;
+  text-indent: 200%;
   white-space: nowrap;
   overflow: hidden;
 }
