@@ -87,7 +87,7 @@ th.col_通過{
 td.col_R,
 td.col_天候,
 td.col_状態,
-td.col_順位,
+td.col_着順,
 td.col_枠番,
 td.col_馬番,
 td.col_人気,
@@ -119,7 +119,8 @@ td.col_複勝率{
 .rankinfo_initnone_end{
   display: none;
 }
-.rankinfo_initdisp_end{
+.rankinfo_initdisp_end,
+.rankinfo_initdisp_topend{
   border-bottom: 3px double #999;
 }
 .rankinfo_initnone_end{
@@ -128,17 +129,17 @@ td.col_複勝率{
 div.jockeysrank > table{
   margin: 4px 4px 24px;
 }
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_場所,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_R,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_タイトル,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_形式,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_距離,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_情報1,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_情報2,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_レコード,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_天候,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_状態,
-table.raceresults tbody tr:not(.rankinfo_initdisp_top) .col_時刻{
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_場所,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_R,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_タイトル,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_形式,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_距離,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_情報1,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_情報2,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_レコード,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_天候,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_状態,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_時刻{
   text-indent: 200%;
   white-space: nowrap;
   overflow: hidden;

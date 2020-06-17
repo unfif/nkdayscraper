@@ -54,7 +54,8 @@ session = flask_scoped_session(Session, app)
 data = HorseResult.getRaceResults(session)
 # for key, df in data.items(): df.to_pickle('data/pickle/' + key + '.pkl')
 # data = {key: pd.read_pickle('data/pickle/' + key + '.pkl') for key in data.keys()}
-data['racesjson'] = data['racesdf'].to_json('data/json/raceresults.json', orient='table')
+# for key, df in data.items(): df.to_pickle('data/pickle/' + key + '.pkl')
+data['racesjson'] = data['racesdf'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
 data['racesdf'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 
 pass

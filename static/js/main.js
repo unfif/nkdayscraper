@@ -9,16 +9,18 @@ $(function(){
     var $tbody = $this.closest('tbody')
     var sameracetr = 'tr[data-place="' + place + '"][data-racenum="' + racenum + '"]'
     var $sameracetr = $tbody.find(sameracetr);
-    var is_disp_allsameracetr = true;
+    if($sameracetr.length === 1) return;
+    var is_visible_allsameracetr = true;
     $sameracetr.each(function(){
-      if($(this).css('display') === 'none') is_disp_allsameracetr = false;
+      if($(this).css('display') === 'none') is_visible_allsameracetr = false;
     })
-    if(is_disp_allsameracetr){
+    console.log(is_visible_allsameracetr, $sameracetr);
+    if(is_visible_allsameracetr){
       $('tr.rankinfo_initdisp_end').css('border-bottom', '3px double #999');
       $tbody.find('tr').hide();
       $tbody.find('tr.rankinfo_initdisp_top' + selplace + ', tr.rankinfo_initdisp_mid' + selplace + ', tr.rankinfo_initdisp_end' + selplace + '').show();
     }else{
-      $('tr.rankinfo_initdisp_end').css('border-bottom', 'none');
+      $('tr.rankinfo_initdisp_end').css({'border-color': 'inherit', 'border-width': 0});
       $tbody.find('tr').not(sameracetr).hide();
       $sameracetr.show();
       $('.raceresults tr').find('td:visible:odd').css('background', '#ddd');

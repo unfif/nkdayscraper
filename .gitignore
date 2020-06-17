@@ -2,6 +2,7 @@
 .env
 
 __pycache__/
+.DS_Store
 
 *.bak
 *.log
@@ -10,4 +11,6 @@ __pycache__/
 *~
 
 data/tmp
+data/pickle/tmp
 nkdayviewer/
+.vscode/
