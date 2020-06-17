@@ -130,7 +130,7 @@ class HorseResult(Base):
     )
     raceid = Column(Text, primary_key=True, comment='レースID')
 
-    ranking = Column(Integer, comment='順位')
+    ranking = Column(Integer, comment='着順')
     postnum = Column(Integer, comment='枠番')
     horsenum = Column(Integer, primary_key=True, comment='馬番')
     horsename = Column(Text, comment='馬名')
@@ -182,7 +182,8 @@ class HorseResult(Base):
         racesdf.loc[racesdf.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
         racesdf.loc[(racesdf.ranking <= 3) & (racesdf.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
         racesdf.loc[racesdf.ranking > 3, 'rankinfo'] = 'initnone_mid'
-        racesdf.loc[racesdf.ranking - racesdf.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
+        racesdf.loc[racesdf.ranking - racesdf.prevracerank <= 0, 'rankinfo'] = 'initdisp_top'
+        racesdf.loc[(racesdf.rankinfo == 'initdisp_top') & (racesdf.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
         racesdf.loc[racesdf.nextracerank - racesdf.ranking < 0, 'rankinfo'] = 'initnone_end'
 
         sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
@@ -240,7 +241,7 @@ class HorseResult(Base):
         racesgp = cp.deepcopy(data['racesdf'])
         racesgp['R2'] = racesgp.R
         racesgp[['グレード', '賞金', '通過']] = racesgp[['グレード', '賞金', '通過']].applymap(str)
-        racesgp = racesgp.query('順位 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
+        racesgp = racesgp.query('着順 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
         racesgp2 = racesgp.agg(list)
         racesgp2.R2 = racesgp2.R2.apply(set)
         racesgp2 = racesgp2.applymap(lambda x: '(' + ', '.join(map(str, x)) + ')')
