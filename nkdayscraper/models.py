@@ -164,6 +164,7 @@ class HorseResult(Base):
             .query(Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff)\
             .join(hrs).outerjoin(jrr).order_by(Race.place, Race.racenum, hrs.ranking).statement
         racesdf = pd.read_sql(sql, con)
+        # if len(racesdf) == 0: return {'racesdf': pd.DataFrame(),'jockeys': pd.DataFrame(), 'racesgp2': pd.DataFrame()}
 
         racesdf.title = racesdf.title.apply(lambda x: x.rstrip('タイトル'))
         racesdf.posttime = racesdf.posttime.apply(lambda x: x.strftime('%H:%M'))
@@ -182,7 +183,7 @@ class HorseResult(Base):
         racesdf.loc[racesdf.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
         racesdf.loc[(racesdf.ranking <= 3) & (racesdf.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
         racesdf.loc[racesdf.ranking > 3, 'rankinfo'] = 'initnone_mid'
-        racesdf.loc[racesdf.ranking - racesdf.prevracerank <= 0, 'rankinfo'] = 'initdisp_top'
+        racesdf.loc[racesdf.ranking - racesdf.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
         racesdf.loc[(racesdf.rankinfo == 'initdisp_top') & (racesdf.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
         racesdf.loc[racesdf.nextracerank - racesdf.ranking < 0, 'rankinfo'] = 'initnone_end'
 

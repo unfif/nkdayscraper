@@ -14,7 +14,6 @@ $(function(){
     $sameracetr.each(function(){
       if($(this).css('display') === 'none') is_visible_allsameracetr = false;
     })
-    console.log(is_visible_allsameracetr, $sameracetr);
     if(is_visible_allsameracetr){
       $('tr.rankinfo_initdisp_end').css('border-bottom', '3px double #999');
       $tbody.find('tr').hide();
