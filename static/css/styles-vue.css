@@ -1,0 +1,325 @@
+/* body {
+  font-family: Helvetica Neue, Arial, sans-serif;
+  font-size: 14px;
+  color: #444;
+}
+
+table {
+  border: 2px solid #42b983;
+  border-radius: 3px;
+  background-color: #fff;
+}
+
+th {
+  background-color: #42b983;
+  color: rgba(255, 255, 255, 0.66);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+th,
+td {
+  min-width: 120px;
+  padding: 10px 20px;
+} */
+h1, h2, h3, h4, h5, h6{
+  margin: 0;
+  padding: 0;
+}
+body{
+  padding: 0px;
+  background: #666;
+  font-size: 12px;
+}
+header{
+  display: flex;
+  margin: 0;
+  padding: 8px;
+  background: #343a40;
+  color: #fff;
+}
+h2, h3{
+  margin: 0 8px;
+}
+.contents{
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  width: 95%;
+  margin: 0 auto;
+  padding: 4px 10px;
+  background: #EEE;
+}
+.flex{
+  display: flex;
+}
+.scrollable{
+  overflow: auto;
+  /* overflow-x: scroll; */
+  white-space: nowrap;
+}
+table.sticky thead th:nth-child(1),
+table.sticky tbody th:nth-child(1){
+  position: sticky;
+  left: 0;
+}
+div.dispplacerace{
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+div.dispplacerace > div{
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+div.dispplacerace > div > h5{
+  /* width: 60px; */
+  margin: 0 8px;
+  /* text-align: end; */
+}
+div.dispplacerace > div > h5 > span.badge{
+  width: 60px;
+  /* margin: 0 8px; */
+  /* text-align: end; */
+}
+.dispplacerace button{
+  width: 4.4em;
+  margin-left: 5px;
+}
+th.active {
+  color: #fff;
+}
+
+th.active .arrow {
+  opacity: 1;
+}
+
+.arrow {
+  display: inline-block;
+  /* display: none; */
+  vertical-align: middle;
+  width: 0;
+  height: 0;
+  margin-left: 1px;
+  opacity: 0.66;
+}
+
+.arrow.asc {
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid #fff;
+}
+
+.arrow.dsc {
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 3px solid #fff;
+}
+/* .rankinfo_initnone_mid,
+.rankinfo_initnone_end{
+  display: none;
+}
+.rankinfo_initdisp_end{
+  border-bottom: 3px double #999;
+}
+.rankinfo_initnone_end{
+  border-bottom: 3px solid #999;
+} */
+table.raceresults{
+  width: auto;
+  margin: 0 auto;
+}
+.table-sm th, .table-sm td{
+  /* padding: 0.25em; */
+  white-space: nowrap;
+}
+th.col_R{
+  width: 2.25em;
+}
+th.col_場所,
+th.col_着順,
+th.col_馬番,
+th.col_枠番,
+th.col_人気{
+  width: 2.25em;
+}
+th.col_タイトル{
+  width: 10em;
+}
+th.col_形式{
+  width: 4em;
+}
+th.col_距離,
+th.col_天候,
+th.col_状態{
+  width: 2.5em;
+}
+th.col_時刻{
+  width: 3.25em;
+}
+th.col_情報1,
+th.col_情報2{
+  width: 2.75em;
+}
+th.col_レコード{
+  width: 4.5em;
+}
+th.col_馬名{
+  width: 11em;
+}
+th.col_性,
+th.col_齢{
+  width: 1.25em;
+}
+th.col_斤量,
+th.col_上り{
+  width: 2.5em;
+}
+th.col_騎手,
+th.col_調教師{
+  width: 3.8em;
+}
+th.col_タイム{
+  width: 3.5em;
+}
+th.col_着差{
+  width: 4em;
+}
+th.col_オッズ{
+  width: 3.5em;
+}
+th.col_通過{
+  width: 6.25em;
+}
+th.col_所属{
+  width: 2.25em;
+}
+th.col_馬体重{
+  width: 3.25em;
+}
+th.col_増減{
+  width: 2.25em;
+}
+.raceresults tbody td.x-even{
+  background: #ddd;
+}
+td.col_場所,
+td.col_R,
+td.col_天候,
+td.col_状態,
+td.col_着順,
+td.col_枠番,
+td.col_馬番,
+td.col_人気,
+td.col_所属{
+  text-align: center;
+}
+td.col_形式,
+td.col_情報1,
+td.col_姓,
+td.col_オッズ,
+td.col_馬体重,
+td.col_増減,
+td.col_騎乗数,
+td.col_1着,
+td.col_2着,
+td.col_3着,
+td.col_単勝率,
+td.col_連対率,
+td.col_複勝率{
+  text-align: right;
+}
+/* .rankinfo_initnone_mid,
+.rankinfo_initnone_end{
+  display: none;
+} */
+.rankinfo_initdisp_end,
+.rankinfo_initdisp_topend{
+  border-bottom: 3px double #999;
+}
+.rankinfo_initnone_end{
+  border-bottom: 3px solid #999;
+}
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_場所,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_R,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_タイトル,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_形式,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_距離,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_情報1,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_情報2,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_レコード,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_天候,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_状態,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_時刻{
+  text-indent: 200%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.postnum_1{
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+.postnum_2{
+  background: #444444 !important;
+  color: #ffffff !important;
+}
+.postnum_3{
+  background: #e95556 !important;
+  color: #ffffff !important;
+}
+.postnum_4{
+  background: #416cba !important;
+  color: #ffffff !important;
+}
+.postnum_5{
+  background: #e7c52c !important;
+  color: #ffffff !important;
+}
+.postnum_6{
+  background: #45af4c !important;
+  color: #ffffff !important;
+}
+.postnum_7{
+  background: #ee9738 !important;
+  color: #ffffff !important;
+}
+.postnum_8{
+  background: #ef8fa0 !important;
+  color: #ffffff !important;
+}
+.BgYellow,
+.rank_1{
+  background: #fff080 !important;
+}
+.BgBlue02,
+.rank_2{
+  background: #ccdfff !important;
+}
+.BgOrange,
+.rank_3{
+  background: #f0c8a0 !important;
+}
+tr.rankinfo_initdisp_top td.coursetype_芝{
+  /* background: linear-gradient(transparent 80%, #45af4c 20%); */
+  /* color: #45af4c; */
+  /* border-right: 1px solid #45af4c !important; */
+  /* border-bottom: 1px solid #45af4c !important; */
+  background: #45af4c !important;
+  color: #ffffff;
+}
+tr.rankinfo_initdisp_top td.coursetype_ダート{
+  /* background: linear-gradient(transparent 80%, #ee9738 20%); */
+  /* color: #ee9738; */
+  /* border-right: 1px solid #ee9738 !important; */
+  /* border-bottom: 1px solid #ee9738 !important; */
+  background: #ee9738 !important;
+  color: #ffffff;
+}

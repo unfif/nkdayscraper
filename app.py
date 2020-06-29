@@ -68,6 +68,10 @@ def index():
 def raceResults():
     return render_template('index.html', **data)
 
+@app.route('/nkraces/')
+def nkraces():
+    return render_template('nkraces.vue', **data)
+
 @app.route('/app/')
 def dummy():
     return '<h2>Here is "/app/".</h2>'
