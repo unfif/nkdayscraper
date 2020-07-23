@@ -83,8 +83,8 @@ class NkdaySpider(CrawlSpider):
                 item['courseinfo1'] = 'ダート'
             else:
                 item['coursetype'] = item['courseinfo1']
-                if item['courseinfo1'] == '芝':
-                    item['courseinfo1'] = item['courseinfo2']
+                # if item['courseinfo1'] == '芝':
+                #     item['courseinfo1'] = item['courseinfo2']
 
             item['courseinfo2'] = ''
             item['generation'] = '障害' + item['generation']

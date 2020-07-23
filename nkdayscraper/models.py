@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import copy as cp
+import json
 
 # from sqlalchemy.sql import Select
 
@@ -238,6 +239,8 @@ class HorseResult(Base):
 
         jplabels.update({'record': 'レコード'})
         data['racesdf'] = racesdf.rename(columns=jplabels)
+        data['racesinfo'] = pd.DataFrame({'date': racesdf.date[0], 'places': [None]})
+        data['racesinfo'].loc[0, 'places'] = racesdf.place.unique()
 
         racesgp = cp.deepcopy(data['racesdf'])
         racesgp['R2'] = racesgp.R
@@ -251,6 +254,12 @@ class HorseResult(Base):
         racesgp2.R2 = racesgp2.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
         data['racesgp2'] = racesgp2[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
 
+        jsondict = {}
+        for key, df in data.items():
+            jsondict[key] = df.to_json(orient='table', force_ascii=False)
+
+        data['json'] = json.dumps(jsondict, ensure_ascii=False)
+        
         return data
 
 class Jrarecord(Base):
