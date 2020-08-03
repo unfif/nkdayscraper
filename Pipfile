@@ -13,6 +13,10 @@ requests = "*"
 python-dotenv = "*"
 uvicorn = "*"
 pymongo = "*"
+flask-sqlalchemy = "*"
+pandas = "*"
+flask-sqlalchemy-session = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"
