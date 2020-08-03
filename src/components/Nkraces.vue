@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import {reactive} from '@vue/composition-api'
+import { reactive } from 'vue'
 import $ from 'jquery'
 export default  {
   name: 'Nkraces',
@@ -226,8 +226,8 @@ div.dispplacerace > div > h5 > span.badge{
   /* text-align: end; */
 }
 div.dispplacerace button{
-  width: 4.4em;
-  margin-left: 5px;
+  width: 4.3em;
+  margin-left: 1px;
 }
 /* th.active {
   color: #fff;

@@ -3,15 +3,30 @@
     <table class="placeinfo sticky table table-sm table-striped table-hover">
       <thead class="table-dark">
         <tr>
-          <th v-for="column in results.schema.fields" v-show="column.name !== '形式'" :key="column.name">{{ column.name }}</th>
+          <th
+            v-for="column in results.schema.fields"
+            v-show="column.name !== '形式'"
+            :key="column.name"
+          >
+            {{ column.name }}
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="courcedetails in results.data" :key="courcedetails.場所 + courcedetails.形式">
+        <tr
+          v-for="courcedetails in results.data"
+          :key="courcedetails.場所 + courcedetails.形式"
+        >
           <th class="table-secondary">
             {{ courcedetails.場所 + courcedetails.形式 }}
           </th>
-          <td v-for="(courcedetail, key) in courcedetails" v-show="!(['場所', '形式'].includes(key))" :key="courcedetail">{{ courcedetail }}</td>
+          <td
+            v-for="(courcedetail, key) in courcedetails"
+            v-show="!(['場所', '形式'].includes(key))"
+            :key="courcedetail"
+          >
+            {{ courcedetail }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -19,13 +34,12 @@
 </template>
 
 <script>
-import {reactive} from '@vue/composition-api'
+import { reactive } from 'vue'
 export default {
   name: 'Nkresults',
   props: {
     results: {
       type: Object,
-      // 'default': ()=>{}
     }
   },
   setup(){

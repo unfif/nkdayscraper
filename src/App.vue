@@ -5,15 +5,17 @@
       <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
       <Nkraces :places="data.places" :cols="data.cols" :records="data.records"/>
       <Nkresults :results="data.results"/>
+      <Nkjockeys :jockeys="data.jockeys" :places="data.places"/>
     </div>
   </div>
 </template>
 
 <script>
-import {reactive, onMounted} from '@vue/composition-api'
+import { reactive, onMounted } from 'vue'
 import Header from './components/Header.vue'
 import Nkraces from './components/Nkraces.vue'
 import Nkresults from './components/Nkresults.vue'
+import Nkjockeys from './components/Nkjockeys.vue'
 import axios from 'axios'
 
 export default {
@@ -21,7 +23,8 @@ export default {
   components: {
     Header,
     Nkraces,
-    Nkresults
+    Nkresults,
+    Nkjockeys
   },
   setup(){
     const data = reactive({
@@ -30,6 +33,10 @@ export default {
       cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
       records: [],
       results: {
+        schema: {fields: null},
+        data: null
+      },
+      jockeys: {
         schema: {fields: null},
         data: null
       }
@@ -42,7 +49,8 @@ export default {
         data.date = racesinfo.data[0].date.split('T')[0];
         data.places = racesinfo.data[0].places;
         data.results = JSON.parse(response.data.racesgp2);
-        console.log(data.results.data);
+        data.jockeys = JSON.parse(response.data.jockeys);
+        console.log(data.jockeys);
       })
       .catch(err => console.log('err:', err))
     })
