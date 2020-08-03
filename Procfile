@@ -1,1 +1,1 @@
-nkrun: rm data/results01.json & scrapy crawl nkday -o data/results01.json
+nkrun: scrapy crawl jrarecords -o data/jrarecords.json & scrapy crawl nkday -o data/nkday.json & python3 app.py
