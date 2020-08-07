@@ -78,6 +78,7 @@ class HorseResultItem(scrapy.Item):
     trainer = scrapy.Field()
     horseweight = scrapy.Field()
     horseweightdiff = scrapy.Field()
+    horseurl = scrapy.Field()
 
 class JrarecordItem(scrapy.Item):
     place = scrapy.Field()
