@@ -53,10 +53,14 @@ class NkdayscraperPipeline():
         if self.engine.name not in ['postgresql', 'mongodb']:
             item['addedmoneylist'] = str(item['addedmoneylist'])
             item['passageratelist'] = str(item['passageratelist'])
+        
+        if isinstance(item, RaceItem):
+            record = Race(**item)
+        elif isinstance(item, PaybackItem):
+            record = Payback(**item)
+        elif isinstance(item, HorseResultItem):
+            record = HorseResult(**item)
 
-        if isinstance(item, PaybackItem): record = Payback(**item)
-        elif isinstance(item, HorseResultItem): record = HorseResult(**item)
-        elif isinstance(item, RaceItem): record = Race(**item)
         # elif isinstance(item, JrarecordItem): record = Jrarecord(**item)
 
         try:

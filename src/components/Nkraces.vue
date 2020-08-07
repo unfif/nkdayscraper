@@ -85,12 +85,6 @@
               'idx_'+record.index,
               'rankinfo_'+record.rankinfo
             ]"
-            :data-place="record.場所"
-            :data-coursetype="record.形式"
-            :data-racenum="record.R"
-            :data-rank="record.着順"
-            :data-idx="record.index"
-            :data-rankinfo="record.rankinfo"
             v-show="dispPlace(record.場所) && dispRacenum(record.R) && dispRankinfo(record.rankinfo) && dispCoursetype(record.形式)"
             @click="
               data.dispallsameraces = !data.dispallsameraces
@@ -115,8 +109,8 @@
                 col === '距離' && record['rankinfo'] === 'initdisp_top' ? {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'} : ''
               ]"
               :key="record.index + '_' + col"
+              v-html="dispColStr(record, col)"
             >
-              {{ String(record[col]) }}
             </td>
           </tr>
         </tbody>
@@ -151,6 +145,11 @@ export default  {
       racenum: 11,
       dispallsameraces: false
     })
+    const dispColStr = (record, col)=>{
+      let colstr = String(record[col]);
+      if(col === '馬名') colstr = '<a href="' + record.馬URL + '">' + colstr + '</a>';
+      return colstr;
+    }
     const dispCoursetype = (coursetype)=>{
       if(data.coursetype === 'all'){
         return true;
@@ -193,6 +192,7 @@ export default  {
 
     return {
       data,
+      dispColStr,
       dispCoursetype,
       dispPlace,
       dispRacenum,

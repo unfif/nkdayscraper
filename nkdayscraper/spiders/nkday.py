@@ -117,6 +117,7 @@ class NkdaySpider(CrawlSpider):
             item['jockey'] = ''.join(tr.css('td')[6].css('a ::text').getall()).strip().lstrip('▲ △ ★ ☆ ◇')
             item['affiliate'] = tr.css('td')[13].css('span::text').get()
             item['trainer'] = tr.css('td')[13].css('a::text').get()
+            item['horseurl'] = tr.css('.Horse_Info .Horse_Name a::attr(href)').get()
 
             if item['ranking'] not in ['取消', '除外']:
                 item['time'] = dt.datetime.strptime(tr.css('td')[7].css('.RaceTime::text').get(), '%M:%S.%f').time() if item['ranking'] != '中止' else None
