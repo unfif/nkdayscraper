@@ -40,7 +40,7 @@ class JrarecordSpider(CrawlSpider):
         contentsBody = response.css('#contentsBody')
         item['place'] = response.css('#contents .content li.current a::text').get().split('競馬場')[0]
         h3list = contentsBody.css('h3')
-        headings = [[x for x in h3.css('span::text').getall() if x not in ['\n', 'コース']] for h3 in h3list]
+        headings = [[x for x in h3.css('span::text').getall() if x not in ['\n', '\r\n', 'コース']] for h3 in h3list]
         tbodys = contentsBody.css('table.place tbody')
         for racetype in zip(headings, tbodys):
             item['coursetype'] = racetype[0][0]
@@ -52,7 +52,7 @@ class JrarecordSpider(CrawlSpider):
 
             item['generation'] = racetype[0][1]
             for racerow in racetype[1].css('tr'):
-                texts = [x for x in racerow.css('::text').getall() if x not in ['\n', '基準']]
+                texts = [x for x in racerow.css('::text').getall() if x not in ['\n', '\r\n', '基準']]
                 item['distance'] = texts[0].replace(',', '')
                 courseinfo = texts[1].split('・')
                 # if not (item['coursetype'] == '障害' and courseinfo[0] == 'ダート'):
