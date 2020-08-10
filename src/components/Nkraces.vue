@@ -3,59 +3,38 @@
     <div class="dispplacerace">
       <div class="dispplace">
         <h5><span class="badge bg-secondary">場所</span></h5>
-        <button
-          class="dispallplace btn btn-outline-primary btn-sm"
-          @click="data.place = 'all'; data.coursetype = 'all'; data.racenum = 'all'; data.dispallsameraces = false; flipDispPlace($event);"
-        >
-          ALL
-        </button>
-        <button
+        <button class="dispallplace btn btn-outline-primary btn-sm"
+          @click="dispCategory($event, 'all', 'all', 'all')"
+        >ALL</button>
+        <button class="dispplace btn btn-outline-primary btn-sm"
           v-for="place in places"
-          class="dispplace btn btn-outline-primary btn-sm"
-          @click="data.place = place; data.coursetype = 'all'; data.racenum = 'all'; data.dispallsameraces = false; flipDispPlace($event);"
+          @click="dispCategory($event, place, 'all', 'all')"
           :key="place"
-        >
-          {{ place }}
-        </button>
+        >{{ place }}</button>
       </div>
       <div class="dispcoursetype">
         <h5><span class="badge bg-secondary">コース</span></h5>
-        <button
-          class="dispallcoursetypes btn btn-outline-secondary btn-sm"
-          @click="data.place = 'all'; data.coursetype = 'all'; data.racenum = 'all'; data.dispallsameraces = false; flipDispPlace($event);"
-        >
-          ALL
-        </button>
-        <button
-          class="dispcoursetype btn btn-outline-secondary btn-sm"
-          @click="data.place = 'all'; data.coursetype = '芝'; data.racenum = 'all'; data.dispallsameraces = false; flipDispPlace($event);"
-        >
-          芝
-        </button>
-        <button
-          class="dispcoursetype btn btn-outline-secondary btn-sm"
-          @click="data.place = 'all'; data.coursetype = 'ダート'; data.racenum = 'all'; data.dispallsameraces = false; flipDispPlace($event);"
-        >
-          ダート
-        </button>
+        <button class="dispallcoursetypes btn btn-outline-secondary btn-sm"
+          @click="dispCategory($event, 'all', 'all', 'all')"
+        >ALL</button>
+        <button class="dispcoursetype btn btn-outline-secondary btn-sm"
+          @click="dispCategory($event, 'all', '芝', 'all')"
+        >芝</button>
+        <button class="dispcoursetype btn btn-outline-secondary btn-sm"
+          @click="dispCategory($event, 'all', 'ダート', 'all')"
+        >ダート</button>
       </div>
       <div class="disprace btn-group-dummy">
         <h5><span class="badge bg-secondary">レース</span></h5>
-        <button
-          class="dispallraces btn btn-outline-secondary btn-sm"
-          @click="place = 'all'; data.coursetype = 'all'; data.racenum = 'all'; data.dispallsameraces = false; flipDispPlace($event);"
-        >
-          ALL
-        </button>
+        <button class="dispallraces btn btn-outline-secondary btn-sm"
+          @click="dispCategory($event, 'all', 'all', 'all')"
+        >ALL</button>
       <!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
-        <button
+        <button class="dispracenum btn btn-outline-secondary btn-sm"
           v-for="idx in 12"
-          class="dispracenum btn btn-outline-secondary btn-sm"
-          @click="data.place = 'all'; data.coursetype = 'all'; data.racenum = idx; data.dispallsameraces = false; flipDispPlace($event);"
+          @click="dispCategory($event, 'all', 'all', idx)"
           :key="idx"
-        >
-          {{ idx }}
-        </button>
+        >{{ idx }}</button>
       </div>
       <!-- <div>
         <button class="crawl btn btn-outline-primary btn-sm" style="display: auto; width: auto;">api</button>
@@ -69,9 +48,7 @@
               v-for="col in cols"
               :class="['col_' + col]"
               :key="col"
-            >
-              {{ col }}
-            </th>
+            >{{ col }}</th>
           </tr>
         </thead>
         <tbody>
@@ -86,12 +63,12 @@
               'rankinfo_'+record.rankinfo
             ]"
             v-show="dispPlace(record.場所) && dispRacenum(record.R) && dispRankinfo(record.rankinfo) && dispCoursetype(record.形式)"
-            @click="
+            @click="if($event.target.tagName !== 'A'){
               data.dispallsameraces = !data.dispallsameraces
               data.place = record.場所;
               data.racenum = record.R;
               flipDispPlace($event);
-            "
+            }"
             :key="record.index"
           >
             <td
@@ -102,7 +79,7 @@
                 makeClass(col === '枠番', 'postnum_' + record[col]),
                 makeClass(col === '人気', 'rank_' + record[col]),
                 makeClass(col === '上り', 'rank_' + record['last3frank']),
-                makeClass(col === '所属' && record[col] === '栗東', 'text-primary'),
+                makeClass(col === '所属' && record[col] === '栗東', 'text-success'),
                 !Boolean(index % 2) ? 'x-odd' : 'x-even'
               ]"
               :style="[
@@ -110,8 +87,7 @@
               ]"
               :key="record.index + '_' + col"
               v-html="dispColStr(record, col)"
-            >
-            </td>
+            ></td>
           </tr>
         </tbody>
       </table>
@@ -147,8 +123,16 @@ export default  {
     })
     const dispColStr = (record, col)=>{
       let colstr = String(record[col]);
-      if(col === '馬名') colstr = '<a href="' + record.馬URL + '">' + colstr + '</a>';
+      if(col === 'タイトル') colstr = '<a href="' + record.結果URL + '" target="_blank" rel="noopener noreferrer">' + colstr + '</a>';
+      else if(col === '馬名') colstr = '<a href="' + record.馬URL + '" target="_blank" rel="noopener noreferrer">' + colstr + '</a>';
       return colstr;
+    }
+    const dispCategory = (event, place, coursetype, racenum)=>{
+      data.place = place;
+      data.coursetype = coursetype;
+      data.racenum = racenum;
+      data.dispallsameraces = false;
+      flipDispPlace(event);
     }
     const dispCoursetype = (coursetype)=>{
       if(data.coursetype === 'all'){
@@ -189,16 +173,21 @@ export default  {
     const makeClass = (condition, cls)=>{
       return condition ? cls : ''
     }
+    const wlog = (target)=>{
+      console.log(target);
+    }
 
     return {
       data,
       dispColStr,
+      dispCategory,
       dispCoursetype,
       dispPlace,
       dispRacenum,
       dispRankinfo,
       flipDispPlace,
-      makeClass
+      makeClass,
+      wlog
     }
   }
 };

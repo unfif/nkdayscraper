@@ -1,8 +1,7 @@
 <template>
   <div class="jockeysrank flex scrollable">
-    <table
+    <table class="racejockeys table table-sm table-striped table-hover"
       v-for="place in places"
-      class="racejockeys table table-sm table-striped table-hover"
       :key="place"
     >
       <thead class="table-dark">
@@ -13,9 +12,7 @@
             v-for="field in jockeys.schema.fields"
             v-show="!(['place', 'jockey', 'dispmode'].includes(field.name)) && !field.name.endsWith('順')"
             :key="field"
-          >
-            {{ field.name }}
-          </th>
+          >{{ field.name }}</th>
         </tr>
       </thead>
       <tbody>
@@ -32,9 +29,7 @@
             :class="hasRank(key, record)"
             v-show="!(['place', 'jockey', 'dispmode'].includes(key)) && !key.endsWith('順')"
             :key="record.jockey + '_' + key"
-          >
-            {{ dispExists(td) }}
-          </td>
+          >{{ dispExists(td) }}</td>
         </tr>
       </tbody>
     </table>

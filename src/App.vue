@@ -30,7 +30,7 @@ export default {
     const data = reactive({
       date: '',
       places: [],
-      cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"/*, "馬URL"*/],
+      cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
       records: [],
       results: {
         schema: {fields: null},
@@ -50,7 +50,6 @@ export default {
         data.places = racesinfo.data[0].places;
         data.results = JSON.parse(response.data.racesgp2);
         data.jockeys = JSON.parse(response.data.jockeys);
-        console.log(data.jockeys);
       })
       .catch(err => console.log('err:', err))
     })

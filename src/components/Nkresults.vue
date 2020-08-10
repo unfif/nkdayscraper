@@ -7,9 +7,7 @@
             v-for="column in results.schema.fields"
             v-show="column.name !== '形式'"
             :key="column.name"
-          >
-            {{ column.name }}
-          </th>
+          >{{ column.name }}</th>
         </tr>
       </thead>
       <tbody>
@@ -24,9 +22,7 @@
             v-for="(courcedetail, key) in courcedetails"
             v-show="!(['場所', '形式'].includes(key))"
             :key="courcedetail"
-          >
-            {{ courcedetail }}
-          </td>
+          >{{ courcedetail }}</td>
         </tr>
       </tbody>
     </table>
