@@ -12,16 +12,17 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "bootstrap-vue": "^2.16.0",
+    "bootstrap": "^5.0.0-alpha1",
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
+    "popper.js": "^1.16.1",
     "typescript": "^3.9.7",
     "vue": "^3.0.0-rc.5"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0-rc.5",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
