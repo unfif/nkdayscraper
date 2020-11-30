@@ -14,8 +14,8 @@
     <h2>{@ place @}</h2>
     {%- endfor %}
   </header>
-  <div class="contents">
-    <div class="dispplacerace">
+  <main>
+    <nav class="dispplacerace navbar">
       <div class="dispplace">
         <h5><span class="badge bg-secondary">場所</span></h5>
         <button class="dispallplaces btn btn-outline-primary btn-sm">ALL</button>
@@ -40,7 +40,7 @@
       <div>
         <button class="crawl btn btn-outline-primary btn-sm" style="display: auto; width: auto;">api</button>
       </div>
-    </div>
+    </nav>
     <div class="scrollable">
       <table class="raceresults table table-sm table-hover">
         <thead class="table-dark">
@@ -117,7 +117,7 @@
       {%- endif %}
       {%- endfor %}
     </div>
-  </div>
+  </main>
   <script src="{@url_for('static', filename='js/jquery-3.5.1.min.js')@}"></script>
   <script src="{@url_for('static', filename='js/bootstrap.bundle.min.js')@}"></script>
   <script src="{@url_for('static', filename='js/main.js')@}"></script>

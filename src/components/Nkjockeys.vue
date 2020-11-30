@@ -71,7 +71,7 @@ export default {
       return response;
     }
     const hiddentext = {
-      'text-indent': '200%',
+      'text-indent': '500%',
       'white-space': 'nowrap',
       'overflow': 'hidden'
     }
@@ -91,7 +91,9 @@ export default {
   /* padding: 0.25em; */
   white-space: nowrap;
 }
-div.jockeysrank > table{
+div.jockeysrank.flex table.table{
+  width: auto;
+  flex: 1;
   margin: 4px 4px 24px;
 }
 </style>

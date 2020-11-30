@@ -1,8 +1,11 @@
 module.exports = {
     publicPath: "/dist/",
-    // devServer: {
-    //     proxy: 'http://localhost:5000'
-    // },
+    devServer: {
+        proxy: {
+            "/nkdb/": {target: 'https://db.netkeiba.com'},
+            "/nkrace/": {target: 'https://race.netkeiba.com'}
+        }
+    },
     pages: {
         index: {
             entry: 'src/main.js',

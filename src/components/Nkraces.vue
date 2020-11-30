@@ -1,45 +1,50 @@
 <template>
-  <div class="tmpelm">
-    <div class="dispplacerace">
+  <div class="component-root">
+    <nav class="dispplacerace navbar">
       <div class="dispplace">
         <h5><span class="badge bg-secondary">場所</span></h5>
-        <button class="dispallplace btn btn-outline-primary btn-sm"
-          @click="dispCategory($event, 'all', 'all', 'all')"
-        >ALL</button>
-        <button class="dispplace btn btn-outline-primary btn-sm"
-          v-for="place in places"
-          @click="dispCategory($event, place, 'all', 'all')"
-          :key="place"
-        >{{ place }}</button>
+        <div class="btn-group">
+          <button class="dispallplace btn btn-outline-primary btn-sm"
+            @click="dispCategory($event, 'all', 'all', 'all')"
+          >ALL</button>
+          <button class="dispplace btn btn-outline-primary btn-sm"
+            v-for="place in places"
+            @click="dispCategory($event, place, 'all', 'all')"
+            :key="place"
+          >{{ place }}</button>
+        </div>
       </div>
       <div class="dispcoursetype">
         <h5><span class="badge bg-secondary">コース</span></h5>
-        <button class="dispallcoursetypes btn btn-outline-secondary btn-sm"
-          @click="dispCategory($event, 'all', 'all', 'all')"
-        >ALL</button>
-        <button class="dispcoursetype btn btn-outline-secondary btn-sm"
-          @click="dispCategory($event, 'all', '芝', 'all')"
-        >芝</button>
-        <button class="dispcoursetype btn btn-outline-secondary btn-sm"
-          @click="dispCategory($event, 'all', 'ダート', 'all')"
-        >ダート</button>
+        <div class="btn-group">
+          <button class="dispallcoursetypes btn btn-outline-secondary btn-sm"
+            @click="dispCategory($event, 'all', 'all', 'all')"
+          >ALL</button>
+          <button class="dispcoursetype btn btn-outline-secondary btn-sm"
+            @click="dispCategory($event, 'all', '芝', 'all')"
+          >芝</button>
+          <button class="dispcoursetype btn btn-outline-secondary btn-sm"
+            @click="dispCategory($event, 'all', 'ダート', 'all')"
+          >ダート</button>
+        </div>
       </div>
-      <div class="disprace btn-group-dummy">
+      <div class="disprace">
         <h5><span class="badge bg-secondary">レース</span></h5>
-        <button class="dispallraces btn btn-outline-secondary btn-sm"
-          @click="dispCategory($event, 'all', 'all', 'all')"
-        >ALL</button>
-      <!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
-        <button class="dispracenum btn btn-outline-secondary btn-sm"
-          v-for="idx in 12"
-          @click="dispCategory($event, 'all', 'all', idx)"
-          :key="idx"
-        >{{ idx }}</button>
+        <div class="btn-group">
+          <button class="dispallraces btn btn-outline-secondary btn-sm"
+            @click="dispCategory($event, 'all', 'all', 'all')"
+          >ALL</button>
+          <button class="dispracenum btn btn-outline-secondary btn-sm"
+            v-for="idx in 12"
+            @click="dispCategory($event, 'all', 'all', idx)"
+            :key="idx"
+          >{{ idx }}</button>
+        </div>
       </div>
       <!-- <div>
         <button class="crawl btn btn-outline-primary btn-sm" style="display: auto; width: auto;">api</button>
       </div> -->
-    </div>
+    </nav>
     <div class="dispraceresults scrollable">
       <table class="raceresults table table-sm table-hover table-striped-inactive">
         <thead class="table-dark">
@@ -63,7 +68,7 @@
               'rankinfo_'+record.rankinfo
             ]"
             v-show="dispPlace(record.場所) && dispRacenum(record.R) && dispRankinfo(record.rankinfo) && dispCoursetype(record.形式)"
-            @click="if($event.target.tagName !== 'A'){
+            @click="if(!['A', 'BUTTON'].includes($event.target.tagName)){
               data.dispallsameraces = !data.dispallsameraces
               data.place = record.場所;
               data.racenum = record.R;
@@ -86,20 +91,29 @@
                 col === '距離' && record['rankinfo'] === 'initdisp_top' ? {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'} : ''
               ]"
               :key="record.index + '_' + col"
-              v-html="dispColStr(record, col)"
-            ></td>
+            >
+              <Nkracetd :text="String(record[col])" :record="record" :dispmode="getDispmode(col)"/>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <GeneralDialog/>
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive/*, onMounted, ref, onBeforeUpdate*/ } from 'vue'
+import Nkracetd from './Nkracetd.vue'
+import GeneralDialog from './GeneralDialog.vue'
 import $ from 'jquery'
+import axios from 'axios'
 export default  {
   name: 'Nkraces',
+  components: {
+    Nkracetd,
+    GeneralDialog
+  },
   props: {
     places: {
       type: Array,
@@ -121,11 +135,11 @@ export default  {
       racenum: 11,
       dispallsameraces: false
     })
-    const dispColStr = (record, col)=>{
-      let colstr = String(record[col]);
-      if(col === 'タイトル') colstr = '<a href="' + record.結果URL + '" target="_blank" rel="noopener noreferrer">' + colstr + '</a>';
-      else if(col === '馬名') colstr = '<a href="' + record.馬URL + '" target="_blank" rel="noopener noreferrer">' + colstr + '</a>';
-      return colstr;
+    const getDispmode = (col)=>{
+      let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
+      if(col === 'タイトル') response = {hasBtn: true, hasLink: true, urlinfo: '結果URL', callback: getModal, params: getResults_params};
+      else if(col === '馬名') response = {hasBtn: true, hasLink: true, urlinfo: '馬URL', callback: getModal, params: getHorseInfo_params};
+      return response;
     }
     const dispCategory = (event, place, coursetype, racenum)=>{
       data.place = place;
@@ -165,7 +179,7 @@ export default  {
     const flipDispPlace = (event)=>{
       if(!data.dispallsameraces){
         if(event.target.tagName === 'TD') data.place = 'all';
-        $('.rankinfo_initdisp_end, .rankinfo_initdisp_topend').css('border-bottom', '3px double #999');
+        $('.rankinfo_initdisp_end, .rankinfo_initdisp_topend').css({'border-bottom': '3px double #999'});
       }else{
         $('.rankinfo_initdisp_end, .rankinfo_initdisp_topend').css({'border-color': 'inherit', 'border-width': 0});
       }
@@ -179,7 +193,6 @@ export default  {
 
     return {
       data,
-      dispColStr,
       dispCategory,
       dispCoursetype,
       dispPlace,
@@ -187,34 +200,90 @@ export default  {
       dispRankinfo,
       flipDispPlace,
       makeClass,
+      getDispmode,
       wlog
     }
   }
 };
+const getHorseInfo_params = {
+  url_obj: {
+    replace: {from: 'https://db.netkeiba.com/', to: '/nkdb/'}
+  },
+  body_sel: '#contents table.db_h_race_results.nk_tb_common',
+  remove_sel_list: ['thead img'],
+  title_sel: '#db_main_box .horse_title h1',
+  replace_obj: [],
+  css_obj: [
+    {select: 'th, td', css: {'white-space': 'nowrap', 'padding': '0.05em'}},
+  ]
+};
+const getResults_params = {
+  url_obj: {
+    replace: {from: 'https://race.netkeiba.com/race/result.html?race_id=', to: '/nkrace/'}
+  },
+  body_sel: '.Result_Pay_Back',
+  remove_sel_list: ['div.Description_Box_Corner'],
+  title_sel: '.RaceList_NameBox .RaceName',
+  replace_obj: [
+    {select: 'h2', replacer: {start: '<h6><span class="badge bg-secondary">', end: '</span></h6>'}}
+  ],
+  css_obj: [
+    {select: 'div.FullWrap', css: {display: 'flex'}},
+    {select: 'th, td', css: {'white-space': 'nowrap', 'padding': '0.05em'}},
+    {select: 'ol, ul', css: {display: 'flex', margin: 0, padding: 0, 'list-style': 'none'}},
+    {select: 'li', css: {'margin-right': 'auto'}},
+    {select: 'td.Ninki', css: {display: 'flex', 'flex-direction': 'column'}}
+  ]
+};
+const getModal = (url, params)=>{
+  axios.get(url.replace(params.url_obj.replace.from, params.url_obj.replace.to))
+  .then((response)=>{
+    const htmltext = response.data;
+    const parsed_html = $.parseHTML(htmltext);
+    let $modal_body = $(parsed_html).find(params.body_sel);
+    params.remove_sel_list.forEach((value)=>{$modal_body.find(value).remove()});
+    let modal_title = $(parsed_html).find(params.title_sel).text().trim();
+    $('#modal-label').html(`<span class="badge bg-primary">${modal_title}</span>`);
+    $('#modal-wrapper .modal-body').empty().append($modal_body).wrapInner('<div class="scrollable">')
+    .find('table').addClass('table table-sm table-hover table-striped');
+    params.replace_obj.forEach((value)=>{
+      $('div.modal').find(value.select).each(function(){
+        $(this).replaceWith(`${value.replacer.start}${this.innerHTML}${value.replacer.end}`);
+      })
+    });
+    params.css_obj.forEach((value)=>{$('div.modal').find(value.select).css(value.css)});
+    $('#display-modal-btn').click();
+    // $('#modal-wrapper').modal('show')
+  })
+};
 </script>
 
 <style scoped>
-div.dispplacerace{
+nav.dispplacerace{
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 4px;
 }
-div.dispplacerace > div{
+nav.dispplacerace > div{
   display: flex;
   align-items: center;
-  padding: 4px;
+  /* padding: 4px; */
 }
-div.dispplacerace > div > h5{
+nav.dispplacerace > div > h5{
   /* width: 60px; */
-  margin: 0 8px;
+  margin: 0 4px;
   /* text-align: end; */
 }
-div.dispplacerace > div > h5 > span.badge{
+nav.dispplacerace h5 > span.bg-secondary{
+  width: 80px;
+  line-height: unset;
+}
+/* nav.dispplacerace > div > h5 > span.badge{
   width: 60px;
-  /* margin: 0 8px; */
-  /* text-align: end; */
-}
-div.dispplacerace button{
+  margin: 0 8px;
+  text-align: end;
+} */
+nav.dispplacerace button{
   width: 4.3em;
   margin-left: 1px;
 }
@@ -355,7 +424,7 @@ table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_to
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_天候,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_状態,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_時刻{
-  text-indent: 200%;
+  text-indent: 500%;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -375,4 +444,8 @@ tr.rankinfo_initdisp_top td.coursetype_ダート{
   background: #ee9738 !important;
   color: #ffffff;
 }
+/* table.db_h_race_results.nk_tb_common th,
+table.db_h_race_results.nk_tb_common td{
+  border: 1px solid #000;
+} */
 </style>

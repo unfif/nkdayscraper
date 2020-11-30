@@ -11,8 +11,8 @@
     <script src="{@url_for('static', filename='js/vue.js')@}"></script>
     <script src="{@url_for('static', filename='js/vue-composition-api@0.6.7.js')@}"></script>
     <script type="text/x-template" id="grid-template"><!-- component template -->
-      <div class="contents">
-        <div class="dispplacerace">
+      <main>
+        <nav class="dispplacerace navbar">
           <div class="dispplace">
             <h5><span class="badge bg-secondary">場所</span></h5>
             <button class="dispallplace btn btn-outline-secondary btn-sm" @click="dispplace = 'all'; dispcoursetype = 'all'; dispracenum = 'all'; dispallsameraces = false; flipDispPlace();">ALL</button>
@@ -42,7 +42,7 @@
           <!-- <div>
             <button class="crawl btn btn-outline-primary btn-sm" style="display: auto; width: auto;">api</button>
           </div> -->
-        </div>
+        </nav>
         <div class="dispraceresults scrollable">
           <table class="raceresults table table-sm table-hover table-striped-inactive">
             <thead class="table-dark">
@@ -105,7 +105,7 @@
             </tbody>
           </table>
         </div>
-      </div>
+      </main>
     </script>
   </head>
   <body>
