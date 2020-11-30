@@ -86,7 +86,9 @@ class NkdaySpider(CrawlSpider):
                 # if item['courseinfo1'] == '芝':
                 #     item['courseinfo1'] = item['courseinfo2']
 
+            if item['courseinfo2'] == '外内': item['courseinfo1'] = '外内'
             item['courseinfo2'] = ''
+                
             item['generation'] = '障害' + item['generation']
 
         yield item
@@ -110,7 +112,7 @@ class NkdaySpider(CrawlSpider):
             item['postnum'] = tr.css('td')[1].css('div::text').get()
             item['horsenum'] = tr.css('td')[2].css('div::text').get()
             item['horsename'] = tr.css('td')[3].css('.Horse_Name a::text').get()
-            horse_info_detail = tr.css('td')[4].css('.Horse_Info_Detail .Detail_Left::text').get().strip()
+            horse_info_detail = tr.css('td')[4].css('.Horse_Info_Detail span::text').get().strip()
             item['sex'] = {'牡':'牡','牝':'牝','騙':'騙','せ':'騙','セ':'騙','せん':'騙','セン':'騙'}.get(horse_info_detail[0])
             item['age'] = int(horse_info_detail[1:])
             item['jockeyweight'] = tr.css('td')[5].css('.JockeyWeight::text').get()

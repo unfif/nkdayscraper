@@ -19,7 +19,7 @@ export default {
 html header {
   display: flex;
   margin: 0;
-  padding: 8px;
+  padding: 8px 0 0;
   background: #343a40;
   color: #fff;
 }

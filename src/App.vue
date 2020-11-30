@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <Header :date="data.date" :places="data.places"/>
-    <div class="contents">
+    <main>
       <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
       <Nkraces :places="data.places" :cols="data.cols" :records="data.records"/>
       <Nkresults :results="data.results"/>
       <Nkjockeys :jockeys="data.jockeys" :places="data.places"/>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -43,7 +43,7 @@ export default {
     })
     onMounted(function(){
       axios.get("http://localhost:5000/api/")
-      .then(response => {
+      .then((response)=>{
         data.records = JSON.parse(response.data.racesdf).data;
         let racesinfo = JSON.parse(response.data.racesinfo);
         data.date = racesinfo.data[0].date.split('T')[0];
@@ -98,23 +98,23 @@ export default {
     min-width: 120px;
     padding: 10px 20px;
   } */
-  h1, h2, h3, h4, h5, h6{
-    margin: 0;
-    padding: 0;
-  }
   html body{
     padding: 0px;
     background: #666;
     font-size: 12px;
   }
+  h1, h2, h3, h4, h5, h6{
+    margin: 0;
+    padding: 0;
+  }
   h2, h3{
     margin: 0 8px;
   }
-  .contents{
+  main{
     /* display: flex;
     flex-direction: column;
     align-items: center; */
-    width: 95%;
+    /* width: 95%; */
     margin: 0 auto;
     padding: 4px 10px;
     background: #EEE;
@@ -127,6 +127,10 @@ export default {
     /* overflow-x: scroll; */
     white-space: nowrap;
   }
+  /* table.table.table-sm th,
+  table.table.table-sm td{
+    padding: 0.05em;
+  } */
 
   .postnum_1{
     background: #ffffff !important;
