@@ -14,11 +14,13 @@ from flask_cors import CORS
 import argparse as argp
 import subprocess as sp
 import shlex as se
-# import pandas as pd
+
 # import pathlib as pl
 import requests as rq
 import uvicorn, os, sys, getpass, csv#, json
+import datetime as dt
 
+import pandas as pd
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
 parser = argp.ArgumentParser()
 parser.add_argument('-H', '--host', type=str, default='0.0.0.0')
@@ -65,8 +67,8 @@ data = HorseResult.getRaceResults(session)
 # for key, df in data.items(): df.to_pickle('data/pickle/' + key + '.pkl')
 # data = {key: pd.read_pickle('data/pickle/' + key + '.pkl') for key in data.keys()}
 # for key, df in data.items(): df.to_pickle('data/pickle/' + key + '.pkl')
-data['racesdf'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
-data['racesdf'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
+data['records'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
+data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 # jsonforapi = pl.Path('data/json/raceresults.json').read_text()
 
 pass
@@ -83,10 +85,18 @@ def nkday():
 def nkraces():
     return render_template('nkraces.vue', **data)
 
-@app.route('/api/', methods=['GET', 'POST'])
-def api():
-    # return jsonforapi
+# @app.route('/api/', methods=['GET', 'POST'])
+# def api():
+#     # return jsonforapi
+#     return data['json']
+
+@app.route('/api/', methods=['GET'])
+def getall():
     return data['json']
+
+@app.route('/api/<string:key>/', methods=['GET'])
+def api(key):
+    return data['json'][key]
 
 @app.route('/crawl', methods=['GET'])
 def crawl():
@@ -120,10 +130,26 @@ def get_nkrace(raceid):
     response.encoding = response.apparent_encoding
     return response.text
 
+@app.route('/pedigree/<string:horseid>', methods=['GET'])
+def get_nkpedigree(horseid):
+    response = rq.get(f'https://db.netkeiba.com/horse/ped/{horseid}/')
+    response.encoding = response.apparent_encoding
+    return response.text
+
+@app.route('/redirect/<string:url>', methods=['GET'])
+def get_response(url):
+    response = rq.get(url)
+    response.encoding = response.apparent_encoding
+    return response.text
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     return render_template("index.html")
+
+@app.route('/now', methods=['GET'])
+def get_now():
+    return dt.datetime.now().isoformat()
 
 # %%
 if __name__ == '__main__':

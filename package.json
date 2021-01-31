@@ -1,6 +1,6 @@
 {
   "name": "nkdayscraper",
-  "version": "0.1.1",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
     "serve-prod": "vue-cli-service serve",
@@ -17,22 +17,24 @@
     "all": "npm run scrape && npm run app"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "bootstrap": "^5.0.0-alpha3",
-    "core-js": "^3.8.0",
+    "@popperjs/core": "^2.6.0",
+    "axios": "^0.21.1",
+    "bootstrap": "^5.0.0-beta1",
+    "core-js": "^3.8.1",
     "jquery": "^3.5.1",
-    "popper.js": "^1.16.1",
     "typescript": "^3.9.7",
-    "vue": "^3.0.3"
+    "vue": "^3.0.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.9",
     "@vue/cli-plugin-eslint": "^4.5.9",
     "@vue/cli-service": "^4.5.9",
-    "@vue/compiler-sfc": "^3.0.3",
+    "@vue/compiler-sfc": "^3.0.4",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.1.0"
+    "eslint-plugin-vue": "^7.3.0",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.0"
   },
   "eslintConfig": {
     "root": true,

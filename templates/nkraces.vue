@@ -110,7 +110,7 @@
   </head>
   <body>
     <header>
-      <h2>{@racesdf.日程[0]@}</h2>
+      <h2>{@records.日程[0]@}</h2>
       {%- for place in places %}
       <h2>{@place@}</h2>
       {%- endfor %}
@@ -257,7 +257,7 @@
     <!-- <script src="{@url_for('static', filename='js/main.js')@}"></script> -->
     <script>
       $(function(){
-        recordsGrid.records = JSON.parse('{@racesdf.to_json(orient='table', force_ascii=False)@}').data;
+        recordsGrid.records = JSON.parse('{@records.to_json(orient='table', force_ascii=False)@}').data;
       })
     </script>
   </body>

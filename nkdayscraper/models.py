@@ -12,6 +12,7 @@ import copy as cp
 import json
 
 # from sqlalchemy.sql import Select
+# pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
 # SQLITE_URL = get_project_settings().get('SQLITE_URL')
@@ -30,8 +31,8 @@ meta.reflect(bind=engine)
 # sql = outerjoin(hrs, jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2)).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
 # sql = Select([hrs, jrr]).outerjoin(jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2))#.order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
 # con = engine.connect()
-# racesdf = pd.read_sql(sql, con)
-# print(sql, racesdf.columns, '\n', racesdf.time.iloc[:,0], type(racesdf.time.iloc[:,0]))
+# records = pd.read_sql(sql, con)
+# print(sql, records.columns, '\n', records.time.iloc[:,0], type(records.time.iloc[:,0]))
 
 # %%
 class RBase():
@@ -123,6 +124,33 @@ class Payback(Base):
 
     race = relationship('Race')
 
+class Jrarecord(Base):
+    __tablename__ = 'jrarecords'
+    # __table_args__ = (UniqueConstraint(
+    #     'place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'),
+    #     {}
+    # )
+    # __mapper_args__ = {'column_prefix': 'jrarecords_'}
+    place = Column(Text, primary_key=True, comment='場所')
+    coursetype = Column(Text, primary_key=True, comment='形式')
+    generation = Column(Text, primary_key=True, comment='世代')
+    distance = Column(Integer, primary_key=True, comment='距離')
+    courseinfo1 = Column(Text, primary_key=True, comment='情報1')
+    courseinfo2 = Column(Text, primary_key=True, comment='情報2')
+    time = Column(Time(timezone=False), comment='タイム')
+    horsename = Column(Text, comment='馬名')
+    sire = Column(Text, comment='父馬')
+    dam = Column(Text, comment='母馬')
+    sex = Column(Text, comment='性')
+    age = Column(Integer, comment='齢')
+    jockeyweight = Column(Float, comment='斤量')
+    jockey = Column(Text, comment='騎手')
+    jockeyfullname = Column(Text, comment='騎手姓名')
+    date = Column(Date, comment='日程')
+    weather = Column(Text, comment='天候')
+    condition = Column(Text, comment='状態')
+    reference = Column(Boolean, comment='基準')
+
 class HorseResult(Base):
     __tablename__ = 'horseresults'
     __table_args__ = (
@@ -162,45 +190,55 @@ class HorseResult(Base):
         # sql = outerjoin(hrs, jrr).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
+        pay = aliased(Payback, name='pay')
         sql = session\
-            .query(Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl, hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl)\
-            .join(hrs).outerjoin(jrr).order_by(Race.place, Race.racenum, hrs.ranking).statement
-        racesdf = pd.read_sql(sql, con)
-        # if len(racesdf) == 0: return {'racesdf': pd.DataFrame(),'jockeys': pd.DataFrame(), 'racesgp2': pd.DataFrame()}
+            .query(
+                Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
+                hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl,
+                pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
+            )\
+            .join(hrs)\
+            .outerjoin(pay)\
+            .outerjoin(jrr)\
+            .order_by(Race.place, Race.racenum, hrs.ranking).statement
+        print(sql, '\n')
+        records = pd.read_sql(sql, con)
+        # if len(records) == 0: return {'records': pd.DataFrame(),'jockeys': pd.DataFrame(), 'racesgp2': pd.DataFrame()}
 
-        racesdf.title = racesdf.title.apply(lambda x: x.rstrip('タイトル'))
-        racesdf.posttime = racesdf.posttime.apply(lambda x: x.strftime('%H:%M'))
-        racesdf.time = racesdf.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
-        racesdf.record = racesdf.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
-        racesdf.fav = racesdf.fav.fillna(99).astype(int)
-        racesdf.horseweight = racesdf.horseweight.fillna(0).astype(int)
-        racesdf.horseweightdiff = racesdf.horseweightdiff.fillna(0).astype(int)
+        records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
+        records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
+        records.time = records.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
+        records.record = records.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
+        records.fav = records.fav.fillna(99).astype(int)
+        records.horseweight = records.horseweight.fillna(0).astype(int)
+        records.horseweightdiff = records.horseweightdiff.fillna(0).astype(int)
 
-        racesdf = racesdf.sort_values(['place', 'racenum', 'ranking']).reset_index(drop=True)
-        racesdf.ranking = racesdf[['place', 'racenum', 'ranking']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
-        racesdf['last3frank'] = racesdf[['place', 'racenum', 'last3f']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
+        records = records.sort_values(['place', 'racenum', 'ranking']).reset_index(drop=True)
+        records.ranking = records[['place', 'racenum', 'ranking']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
+        records['last3frank'] = records[['place', 'racenum', 'last3f']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
 
-        racesdf['nextracerank'] = pd.concat([racesdf.ranking[1:], racesdf.ranking[0:1]]).reset_index(drop=True)
-        racesdf['prevracerank'] = pd.concat([racesdf.ranking[-1:], racesdf.ranking[:-1]]).reset_index(drop=True)
-        racesdf.loc[racesdf.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
-        racesdf.loc[(racesdf.ranking <= 3) & (racesdf.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
-        racesdf.loc[racesdf.ranking > 3, 'rankinfo'] = 'initnone_mid'
-        racesdf.loc[racesdf.ranking - racesdf.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
-        racesdf.loc[(racesdf.rankinfo == 'initdisp_top') & (racesdf.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
-        racesdf.loc[racesdf.nextracerank - racesdf.ranking < 0, 'rankinfo'] = 'initnone_end'
+        records['nextracerank'] = pd.concat([records.ranking[1:], records.ranking[0:1]]).reset_index(drop=True)
+        records['prevracerank'] = pd.concat([records.ranking[-1:], records.ranking[:-1]]).reset_index(drop=True)
+        records.loc[records.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
+        records.loc[(records.ranking <= 3) & (records.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
+        records.loc[records.ranking > 3, 'rankinfo'] = 'initnone_mid'
+        records.loc[records.ranking - records.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
+        records.loc[(records.rankinfo == 'initdisp_top') & (records.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
+        records.loc[records.nextracerank - records.ranking < 0, 'rankinfo'] = 'initnone_end'
 
         sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
         sql += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
         sql += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'horseresults') "
-        sql += "AND psat.relname IN ('races', 'horseresults') AND psat.relid=pd.objoid "
+        sql += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
         sql += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
         sql += "ORDER BY pd.objsubid"
+        print(sql, '\n')
 
         jplabels = {}
         comments = pd.read_sql(sql, con)
         con.close()
-
-        jockeyct = pd.crosstab([racesdf.place, racesdf.jockey], racesdf.ranking, margins=True)
+        print(comments.query('table_name == "paybacks"'))
+        jockeyct = pd.crosstab([records.place, records.jockey], records.ranking, margins=True)
         jockeyct.columns = [int(x) if type(x) is float else x for x in jockeyct.columns]
         ranges = [list(range(1, x+1)) for x in range(1, 4)]
         jockeyct['単勝率'], jockeyct['連対率'], jockeyct['複勝率'] = [round(100 * jockeyct[ranknum].sum(axis=1) / jockeyct.All, 1) for ranknum in ranges]
@@ -239,11 +277,11 @@ class HorseResult(Base):
             jplabels.update({comment[1].column_name: comment[1].column_comment})
 
         jplabels.update({'record': 'レコード'})
-        data['racesdf'] = racesdf.rename(columns=jplabels)
-        data['racesinfo'] = pd.DataFrame({'date': racesdf.date[0], 'places': [None]})
-        data['racesinfo'].loc[0, 'places'] = racesdf.place.unique()
+        data['records'] = records.rename(columns=jplabels)
+        data['racesinfo'] = pd.DataFrame({'date': records.date[0], 'places': [None]})
+        data['racesinfo'].loc[0, 'places'] = records.place.unique()
 
-        racesgp = cp.deepcopy(data['racesdf'])
+        racesgp = cp.deepcopy(data['records'])
         racesgp['R2'] = racesgp.R
         racesgp[['グレード', '賞金', '通過']] = racesgp[['グレード', '賞金', '通過']].applymap(str)
         racesgp = racesgp.query('着順 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
@@ -258,34 +296,9 @@ class HorseResult(Base):
         jsondict = {}
         for key, df in data.items():
             jsondict[key] = df.to_json(orient='table', force_ascii=False)
+            # jsondict[key] = df.to_dict(orient='records')
 
-        data['json'] = json.dumps(jsondict, ensure_ascii=False)
+        # data['json'] = json.dumps(jsondict, ensure_ascii=False)
+        data['json'] = jsondict
         
         return data
-
-class Jrarecord(Base):
-    __tablename__ = 'jrarecords'
-    # __table_args__ = (UniqueConstraint(
-    #     'place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'),
-    #     {}
-    # )
-    # __mapper_args__ = {'column_prefix': 'jrarecords_'}
-    place = Column(Text, primary_key=True, comment='場所')
-    coursetype = Column(Text, primary_key=True, comment='形式')
-    generation = Column(Text, primary_key=True, comment='世代')
-    distance = Column(Integer, primary_key=True, comment='距離')
-    courseinfo1 = Column(Text, primary_key=True, comment='情報1')
-    courseinfo2 = Column(Text, primary_key=True, comment='情報2')
-    time = Column(Time(timezone=False), comment='タイム')
-    horsename = Column(Text, comment='馬名')
-    sire = Column(Text, comment='父馬')
-    dam = Column(Text, comment='母馬')
-    sex = Column(Text, comment='性')
-    age = Column(Integer, comment='齢')
-    jockeyweight = Column(Float, comment='斤量')
-    jockey = Column(Text, comment='騎手')
-    jockeyfullname = Column(Text, comment='騎手姓名')
-    date = Column(Date, comment='日程')
-    weather = Column(Text, comment='天候')
-    condition = Column(Text, comment='状態')
-    reference = Column(Boolean, comment='基準')

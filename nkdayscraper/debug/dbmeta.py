@@ -16,10 +16,10 @@ sql = table.select().where(cols.raceid.like('2019030203__')).where(cols.placenum
 # sql = "SELECT * FROM horseresults AS nk "
 # sql += "WHERE nk.raceid LIKE '2019030202__' AND nk.placenum IN (1, 2, 3) "
 # sql += "ORDER BY nk.racenum, nk.placenum"
-racesdf = pd.read_sql_query(sql, con)
-racesdf.columns
+records = pd.read_sql_query(sql, con)
+records.columns
 
-for index, row in racesdf.iterrows():
+for index, row in records.iterrows():
     if index == 0:
         sr = row
         for column in row:
