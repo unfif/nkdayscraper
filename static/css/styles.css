@@ -144,7 +144,7 @@ table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_to
   white-space: nowrap;
   overflow: hidden;
 }
-table.raceresults tbody tr:not(.場所_{{racesdf.場所.unique()[0]}}){
+table.raceresults tbody tr:not(.場所_{{records.場所.unique()[0]}}){
   display: none;
 }
 table.racejockeys th,

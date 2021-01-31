@@ -39,7 +39,7 @@
 <script>
 import { reactive } from 'vue'
 export default {
-  name: 'Nkjockeys',
+  name: 'NkJockeys',
   props: {
     jockeys: {
       type: Object,
@@ -86,14 +86,21 @@ export default {
 }
 </script>
 
-<style scoped>
-.table-sm th, .table-sm td{
+<style lang="scss" scoped>
+.table-sm th,
+.table-sm td{
   /* padding: 0.25em; */
   white-space: nowrap;
 }
-div.jockeysrank.flex table.table{
-  width: auto;
-  flex: 1;
-  margin: 4px 4px 24px;
+div.jockeysrank.flex{
+  table.table{
+    // width: auto;
+    // flex: 1;
+    // margin: 4px 4px 24px;
+    margin: 0 1rem 1rem 0
+  }
+  table.table:last-of-type{
+    margin-right: 0
+  }
 }
 </style>

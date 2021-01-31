@@ -32,7 +32,7 @@
 <script>
 import { reactive } from 'vue'
 export default {
-  name: 'Nkresults',
+  name: 'NkResults',
   props: {
     results: {
       type: Object,
@@ -47,17 +47,21 @@ export default {
 }
 </script>
 
-<style scoped>
-table.sticky thead th:nth-child(1),
-table.sticky tbody th:nth-child(1){
-  position: sticky;
-  left: 0;
+<style lang="scss" scoped>
+table.sticky{
+  thead th:nth-child(1){
+    background-color: #454d55;
+  }
+  thead th:nth-child(1),
+  tbody th:nth-child(1){
+    position: sticky;
+    left: 0;
+  }
 }
-table.sticky thead th:nth-child(1){
-  background-color: #454d55;
-}
-.table-sm th, .table-sm td{
-  /* padding: 0.25em; */
-  white-space: nowrap;
+.table-sm{
+  th,
+  td{
+    white-space: nowrap;
+  }
 }
 </style>

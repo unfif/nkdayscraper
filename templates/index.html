@@ -44,12 +44,12 @@
     <div class="scrollable">
       <table class="raceresults table table-sm table-hover">
         <thead class="table-dark">
-          {%- for column in racesdf.columns: %}
+          {%- for column in records.columns: %}
           <th class="col_{@column@}">{@column@}</th>
           {%- endfor %}
         </thead>
         <tbody>
-          {%- for index, row in racesdf.iterrows(): %}
+          {%- for index, row in records.iterrows(): %}
           <tr class="場所_{@row.場所@} 形式_{@row.形式@} R_{@row.R@} 着順_{@row.着順@} idx_{@index@} rankinfo_{@row.rankinfo@}" data-place="{@row.場所@}" data-coursetype="{@row.形式@}" data-racenum="{@row.R@}" data-rank="{@row.着順@}">
             {%- for col, val in row.items(): %}
             <td class="col_{@col@} 場所_{@row.場所@} 形式_{@row.形式@} R_{@row.R@} 着順_{@row.着順@} idx_{@index@}{% if col == '形式' %} coursetype_{@val@}{% endif %}{% if col == '枠番' %} postnum_{@val@}{% endif %}{% if col == '人気' %} rank_{@val@}{% endif %}{% if col == '上り' %} rank_{@row.last3frank@}{% endif %}{% if col == '所属' and val == '栗東' %} text-primary{% endif %}">{@val@}</td>

@@ -1,37 +1,36 @@
 <template>
   <div id="app">
-    <Header :date="data.date" :places="data.places"/>
+    <NkHeader :date="data.date" :places="data.places"/>
     <main>
-      <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-      <Nkraces :places="data.places" :cols="data.cols" :records="data.records"/>
-      <Nkresults :results="data.results"/>
-      <Nkjockeys :jockeys="data.jockeys" :places="data.places"/>
+      <NkRaces :places="data.places" :cols="data.cols" :records="data.records"/>
+      <NkResults :results="data.results"/>
+      <NkJockeys :jockeys="data.jockeys" :places="data.places"/>
     </main>
   </div>
 </template>
 
 <script>
 import { reactive, onMounted } from 'vue'
-import Header from './components/Header.vue'
-import Nkraces from './components/Nkraces.vue'
-import Nkresults from './components/Nkresults.vue'
-import Nkjockeys from './components/Nkjockeys.vue'
+import NkHeader from './components/NkHeader.vue'
+import NkRaces from './components/NkRaces.vue'
+import NkResults from './components/NkResults.vue'
+import NkJockeys from './components/NkJockeys.vue'
 import axios from 'axios'
 
 export default {
   name: 'App',
   components: {
-    Header,
-    Nkraces,
-    Nkresults,
-    Nkjockeys
+    NkHeader,
+    NkRaces,
+    NkResults,
+    NkJockeys
   },
-  setup(){
+  /* async */ setup(){
     const data = reactive({
       date: '',
       places: [],
       cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
-      records: [],
+      records: [],// [{'index': 0, 'レースID': "202107010601", '場所': "中京", 'R': 1, 'タイトル': "3歳未勝利", 'rankinfo': "initdisp_top"},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'}],
       results: {
         schema: {fields: null},
         data: null
@@ -41,17 +40,56 @@ export default {
         data: null
       }
     })
-    onMounted(function(){
-      axios.get("http://localhost:5000/api/")
+    // const data = reactive({
+    //   date: window.nkracesinfo.data[0].date.split('T')[0],
+    //   places: window.nkracesinfo.data[0].places,
+    //   cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
+    //   records: window.nkrecords.data,
+    //   results: window.nkresults,
+    //   jockeys: window.nkjockeys
+    // })
+    onMounted(()=>{
+      // axios.get("/api/")
+      // .then((response)=>{
+      //   const racesinfo = JSON.parse(response.data.racesinfo);
+      //   data.date = racesinfo.data[0].date.split('T')[0];
+      //   data.places = racesinfo.data[0].places;
+      //   data.records = JSON.parse(response.data.records).data;
+      //   data.results = JSON.parse(response.data.racesgp2);
+      //   data.jockeys = JSON.parse(response.data.jockeys);
+      // })
+      // .catch(err => console.log('err:', err))
+
+      axios.get("/api/racesinfo/")
       .then((response)=>{
-        data.records = JSON.parse(response.data.racesdf).data;
-        let racesinfo = JSON.parse(response.data.racesinfo);
+        const racesinfo = response.data;
         data.date = racesinfo.data[0].date.split('T')[0];
         data.places = racesinfo.data[0].places;
-        data.results = JSON.parse(response.data.racesgp2);
-        data.jockeys = JSON.parse(response.data.jockeys);
       })
       .catch(err => console.log('err:', err))
+
+      axios.get("/api/records/")
+      .then((response)=>{
+        data.records = response.data.data;
+        // console.log(data.records[0]);
+      })
+      .catch(err => console.log('err:', err))
+
+      axios.get("/api/racesgp2/")
+      .then((response)=>{
+        data.results = response.data;
+      })
+      .catch(err => console.log('err:', err))
+
+      axios.get("/api/jockeys/")
+      .then((response)=>{
+        data.jockeys = response.data;
+      })
+      .catch(err => console.log('err:', err))
+
+      // data.records = await axios.get("/api/records2/").data.data
+      // // .catch(err => console.log('err:', err))
+
     })
     return {data}
   }
@@ -59,121 +97,74 @@ export default {
 </script>
 
 <style>
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} */
-  /* body {
-    font-family: Helvetica Neue, Arial, sans-serif;
-    font-size: 14px;
-    color: #444;
-  }
+html body{
+  padding: 0px;
+  background: #666;
+  font-size: 12px;
+}
+h1, h2, h3, h4, h5, h6{
+  margin: 0;
+  padding: 0;
+}
+h2, h3{
+  margin: 0 8px;
+}
+main{
+  margin: 0 auto;
+  /* padding: 4px 10px; */
+  padding: 1rem;
+  background: #EEE;
+}
+.flex{
+  display: flex;
+}
+.scrollable{
+  overflow: auto;
+  white-space: nowrap;
+}
 
-  table {
-    border: 2px solid #42b983;
-    border-radius: 3px;
-    background-color: #fff;
-  }
-
-  th {
-    background-color: #42b983;
-    color: rgba(255, 255, 255, 0.66);
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  td {
-    background-color: #f9f9f9;
-  }
-
-  th,
-  td {
-    min-width: 120px;
-    padding: 10px 20px;
-  } */
-  html body{
-    padding: 0px;
-    background: #666;
-    font-size: 12px;
-  }
-  h1, h2, h3, h4, h5, h6{
-    margin: 0;
-    padding: 0;
-  }
-  h2, h3{
-    margin: 0 8px;
-  }
-  main{
-    /* display: flex;
-    flex-direction: column;
-    align-items: center; */
-    /* width: 95%; */
-    margin: 0 auto;
-    padding: 4px 10px;
-    background: #EEE;
-  }
-  .flex{
-    display: flex;
-  }
-  .scrollable{
-    overflow: auto;
-    /* overflow-x: scroll; */
-    white-space: nowrap;
-  }
-  /* table.table.table-sm th,
-  table.table.table-sm td{
-    padding: 0.05em;
-  } */
-
-  .postnum_1{
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
-  .postnum_2{
-    background: #444444 !important;
-    color: #ffffff !important;
-  }
-  .postnum_3{
-    background: #e95556 !important;
-    color: #ffffff !important;
-  }
-  .postnum_4{
-    background: #416cba !important;
-    color: #ffffff !important;
-  }
-  .postnum_5{
-    background: #e7c52c !important;
-    color: #ffffff !important;
-  }
-  .postnum_6{
-    background: #45af4c !important;
-    color: #ffffff !important;
-  }
-  .postnum_7{
-    background: #ee9738 !important;
-    color: #ffffff !important;
-  }
-  .postnum_8{
-    background: #ef8fa0 !important;
-    color: #ffffff !important;
-  }
-  .BgYellow,
-  .rank_1{
-    background: #fff080 !important;
-  }
-  .BgBlue02,
-  .rank_2{
-    background: #ccdfff !important;
-  }
-  .BgOrange,
-  .rank_3{
-    background: #f0c8a0 !important;
-  }
+.postnum_1{
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+.postnum_2{
+  background: #444444 !important;
+  color: #ffffff !important;
+}
+.postnum_3{
+  background: #e95556 !important;
+  color: #ffffff !important;
+}
+.postnum_4{
+  background: #416cba !important;
+  color: #ffffff !important;
+}
+.postnum_5{
+  background: #e7c52c !important;
+  color: #ffffff !important;
+}
+.postnum_6{
+  background: #45af4c !important;
+  color: #ffffff !important;
+}
+.postnum_7{
+  background: #ee9738 !important;
+  color: #ffffff !important;
+}
+.postnum_8{
+  background: #ef8fa0 !important;
+  color: #ffffff !important;
+}
+.BgYellow,
+.rank_1{
+  background: #fff080 !important;
+}
+.BgBlue02,
+.rank_2{
+  background: #ccdfff !important;
+}
+.BgOrange,
+.rank_3{
+  background: #f0c8a0 !important;
+}
 </style>
