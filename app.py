@@ -3,7 +3,7 @@ from flask import Flask, render_template, jsonify#, redirect, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy_session import flask_scoped_session
 from scrapy.utils.project import get_project_settings
-from nkdayscraper.models import HorseResult, Session
+from nkdayscraper.models import HorseResult, Session, engine, create_tables
 from nkdayscraper.spiders.nkday import NkdaySpider
 from twisted.internet import reactor
 from scrapy.crawler import CrawlerRunner
@@ -20,7 +20,7 @@ import requests as rq
 import uvicorn, os, sys, getpass, csv#, json
 import datetime as dt
 
-import pandas as pd
+# import pandas as pd
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
 parser = argp.ArgumentParser()
 parser.add_argument('-H', '--host', type=str, default='0.0.0.0')
@@ -63,6 +63,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 session = flask_scoped_session(Session, app)
+# create_table(engine)
+# %%
 data = HorseResult.getRaceResults(session)
 # for key, df in data.items(): df.to_pickle('data/pickle/' + key + '.pkl')
 # data = {key: pd.read_pickle('data/pickle/' + key + '.pkl') for key in data.keys()}
