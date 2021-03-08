@@ -84,24 +84,11 @@ export default {
       data.coursetype = coursetype;
       data.racenum = racenum;
       data.is_show_all_ranks = false;
-      flipBorderForRace(event);
+      flipDisplayForSameRoundRaces(event);
       emit('click-nav-button', {event, data});
     }
-    const flipBorderForRace = (event)=>{
-      const elements = document.querySelectorAll('.rankinfo_initdisp_end, .rankinfo_initdisp_topend');
-      if(!data.is_show_all_ranks){
-        if(event.target.tagName === 'TD') data.place = 'all';
-        elements.forEach((element)=>{
-          element.style.borderBottom = '3px double #999';
-        });
-        // $('.rankinfo_initdisp_end, .rankinfo_initdisp_topend').css({'border-bottom': '3px double #999'});
-      }else{
-        elements.forEach((element)=>{
-          element.style.borderColor = 'inherit';
-          element.style.borderWidth = 0;
-        });
-        // $('.rankinfo_initdisp_end, .rankinfo_initdisp_topend').css({'border-color': 'inherit', 'border-width': 0});
-      }
+    const flipDisplayForSameRoundRaces = (event)=>{
+      if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
     }
     const handleNavEvent = (event)=>{
       showTargets(event.event, event.data.place, event.data.coursetype, event.data.racenum);
@@ -109,7 +96,7 @@ export default {
     return {
       data,
       showTargets,
-      flipBorderForRace,
+      flipDisplayForSameRoundRaces,
       handleNavEvent
     }
   }
