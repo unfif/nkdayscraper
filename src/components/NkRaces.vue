@@ -93,7 +93,7 @@ export default  {
       data.racenum = racenum;
       data.is_show_all_ranks = false;
       console.log(data);
-      flipBorderForRace(event);
+      flipDisplayForSameRoundRaces(event);
     }
     const showTargetByRecordMap = (record, map)=>{
       return map.reduce((acc, cur)=>{
@@ -141,24 +141,11 @@ export default  {
         data.is_show_all_ranks = !data.is_show_all_ranks
         data.place = record.場所;
         data.racenum = record.R;
-        flipBorderForRace(event);
+        flipDisplayForSameRoundRaces(event);
       }
     }
-    const flipBorderForRace = (event)=>{
-      const elements = document.querySelectorAll('.rankinfo_initdisp_end, .rankinfo_initdisp_topend');
-      if(!data.is_show_all_ranks){
-        if(event.target.tagName === 'TD') data.place = 'all';
-        elements.forEach((element)=>{
-          element.style.borderBottom = '3px double #999';
-        });
-        // $('.rankinfo_initdisp_end, .rankinfo_initdisp_topend').css({'border-bottom': '3px double #999'});
-      }else{
-        elements.forEach((element)=>{
-          element.style.borderColor = 'inherit';
-          element.style.borderWidth = 0;
-        });
-        // $('.rankinfo_initdisp_end, .rankinfo_initdisp_topend').css({'border-color': 'inherit', 'border-width': 0});
-      }
+    const flipDisplayForSameRoundRaces = (event)=>{
+      if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
     }
     const makeClass = (condition, cls)=>{
       return condition ? cls : ''
@@ -184,7 +171,7 @@ export default  {
       // showTargetByCoursetype,
       showTargetByRankInfo,
       flipDisplayTargets,
-      flipBorderForRace,
+      flipDisplayForSameRoundRaces,
       makeClass,
       makeClassesFromRecord,
       handleNavEvent
@@ -366,6 +353,7 @@ td.col_人気,
 td.col_所属{
   text-align: center;
 }
+
 td.col_形式,
 td.col_情報1,
 td.col_姓,
@@ -381,31 +369,57 @@ td.col_連対率,
 td.col_複勝率{
   text-align: right;
 }
-.rankinfo_initdisp_end,
-.rankinfo_initdisp_topend{
-  border-bottom: 3px double #999;
-}
-.rankinfo_initnone_end{
-  border-bottom: 3px solid #999;
-}
 
-table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend){
-  .col_場所,
-  .col_R,
-  .col_タイトル,
-  .col_形式,
-  .col_距離,
-  .col_情報1,
-  .col_情報2,
-  .col_レコード,
-  .col_天候,
-  .col_状態,
-  .col_時刻{
-    text-indent: 500%;
-    white-space: nowrap;
-    overflow: hidden;
+// .rankinfo_initdisp_end,
+// .rankinfo_initdisp_topend{
+//   border-bottom: 3px double #999;
+// }
+
+// .rankinfo_initnone_end{
+//   border-bottom: 3px solid #999;
+// }
+
+table.raceresults tbody{
+  tr.rankinfo_initdisp_top,
+  tr.rankinfo_initdisp_topend{
+    border-top: 3px solid #999;
+  }
+  tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend){
+    .col_場所,
+    .col_R,
+    .col_タイトル,
+    .col_形式,
+    .col_距離,
+    .col_情報1,
+    .col_情報2,
+    .col_レコード,
+    .col_天候,
+    .col_状態,
+    .col_時刻{
+      text-indent: 500%;
+      white-space: nowrap;
+      overflow: hidden;
+    }
   }
 }
+
+// table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend){
+//   .col_場所,
+//   .col_R,
+//   .col_タイトル,
+//   .col_形式,
+//   .col_距離,
+//   .col_情報1,
+//   .col_情報2,
+//   .col_レコード,
+//   .col_天候,
+//   .col_状態,
+//   .col_時刻{
+//     text-indent: 500%;
+//     white-space: nowrap;
+//     overflow: hidden;
+//   }
+// }
 
 tr.rankinfo_initdisp_top{
   td.coursetype_芝{
