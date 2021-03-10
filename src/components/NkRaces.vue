@@ -4,33 +4,19 @@
     <table class="raceresults table table-sm table-hover table-striped-inactive">
       <thead class="table-dark">
         <tr>
-          <th v-for="col in cols"
-            :class="`col_${col}`"
-            :key="col"
-          >{{ col }}</th>
+          <th v-for="col in cols" :class="`col_${col}`" :key="col">{{ col }}</th>
         </tr>
       </thead>
       <tbody v-if="records.length">
-        <!-- v-show="showTargetByPlace(record.場所) && showTargetByRacenum(record.R) && showTargetByCoursetype(record.形式) && showTargetByRankInfo(record.rankinfo)" -->
         <tr v-for="record in records"
           :class="makeClassesFromRecord(record, ['場所', '形式', 'R', '着順', 'index', 'rankinfo'])"
-          v-show="showTargetByRecordMap(record, [{place: '場所'}, {racenum: 'R'}, {coursetype: '形式'}/*, {is_show_all_ranks: 'rankinfo'}*/]) && showTargetByRankInfo(record.rankinfo)"
+          v-show="showTargetByRecordMap(record, [{place: '場所'}, {racenum: 'R'}, {coursetype: '形式'}]) && showTargetByRankInfo(record.rankinfo)"
           @click="flipDisplayTargets($event, record)"
           :key="record.index"
         >
           <td v-for="(col, index) in cols"
-            :class="[
-              `col_${col}`,
-              makeClass(col === '形式', `coursetype_${record[col]}`),
-              makeClass(col === '枠番', `postnum_${record[col]}`),
-              makeClass(col === '人気', `rank_${record[col]}`),
-              makeClass(col === '上り', `rank_${record['last3frank']}`),
-              makeClass(col === '所属' && record[col] === '栗東', 'text-success'),
-              !Boolean(index % 2) ? 'x-odd' : 'x-even'
-            ]"
-            :style="[
-              col === '距離' && record['rankinfo'] === 'initdisp_top' ? {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'} : ''
-            ]"
+            :class="[`col_${col}`, makeClass(col, record), !Boolean(index % 2) ? 'x-odd' : 'x-even']"
+            :style="makeDistanceStyle(col, record)"
             :key="`${record.index}_${col}`"
           >
             <NkRaceTd :text="String(record[col])" :record="record" :displaymode="getDisplayMode(col)"/>
@@ -81,12 +67,14 @@ export default  {
       racenum: 11,
       is_show_all_ranks: false
     })
+
     const getDisplayMode = (col)=>{
       let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
       if(col === 'タイトル') response = {hasBtn: true, hasLink: true, urlinfo: '結果URL', callback: getModal, params: getResults_params};
       else if(col === '馬名') response = {hasBtn: true, hasLink: true, urlinfo: '馬URL', callback: getModal, params: getHorseInfo_params};
       return response;
     }
+
     const showTargets = (event, place, coursetype, racenum)=>{
       data.place = place;
       data.coursetype = coursetype;
@@ -95,47 +83,18 @@ export default  {
       console.log(data);
       flipDisplayForSameRoundRaces(event);
     }
+
     const showTargetByRecordMap = (record, map)=>{
       return map.reduce((acc, cur)=>{
         const key = Object.keys(cur)[0];
-        // if(data[key] === 'all'){
-        //   cur = true;
-        // }else{
-        //   cur = record[cur[key]] == data[key];
-        // }
-        // return acc && cur;
         return acc && (data[key] === 'all' ? true : record[cur[key]] == data[key]);
       }, true)
     }
-    // const showTargetByPlace = (place)=>{
-    //   if(data.place === 'all'){
-    //     return true;
-    //   }else{
-    //     return place == data.place;
-    //   }
-    // }
-    // const showTargetByRacenum = (racenum)=>{
-    //   if(data.racenum === 'all'){
-    //     return true;
-    //   }else{
-    //     return racenum == data.racenum;
-    //   }
-    // }
-    // const showTargetByCoursetype = (coursetype)=>{
-    //   if(data.coursetype === 'all'){
-    //     return true;
-    //   }else{
-    //     return coursetype == data.coursetype;
-    //   }
-    // }
-    const showTargetByRankInfo = (rankinfo)=>{// console.log('testvalue'.split('_')[0])
-      // if(data.is_show_all_ranks){
-      //   return true;
-      // }else{
-      //   return rankinfo.startsWith('initdisp_');
-      // }
+
+    const showTargetByRankInfo = (rankinfo)=>{
       return data.is_show_all_ranks ? true : rankinfo.startsWith('initdisp_');
     }
+
     const flipDisplayTargets = (event, record)=>{
       if(!['A', 'BUTTON'].includes(event.target.tagName)){
         data.is_show_all_ranks = !data.is_show_all_ranks
@@ -144,17 +103,30 @@ export default  {
         flipDisplayForSameRoundRaces(event);
       }
     }
+
     const flipDisplayForSameRoundRaces = (event)=>{
       if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
     }
-    const makeClass = (condition, cls)=>{
-      return condition ? cls : ''
+
+    const makeClass = (col, record)=>{
+      if(col === '形式') return `coursetype_${record[col]}`;
+      else if(col === '枠番') return `postnum_${record[col]}`;
+      else if(col === '人気') return `rank_${record[col]}`;
+      else if(col === '上り') return `rank_${record['last3frank']}`;
+      else if(col === '所属' && record[col] === '栗東') return 'text-success';
     }
+
     const makeClassesFromRecord = (record, prefixes)=>{
       const classes = prefixes.map((prefix)=>{
         return `${prefix}_${record[prefix]}`;
       })
       return classes;
+    }
+
+    const makeDistanceStyle = (col, record)=>{
+      if(record['rankinfo'] === 'initdisp_top' && col === '距離'){
+        return {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'}
+      }
     }
 
     const handleNavEvent = (event)=>{
@@ -166,18 +138,17 @@ export default  {
       getDisplayMode,
       showTargets,
       showTargetByRecordMap,
-      // showTargetByPlace,
-      // showTargetByRacenum,
-      // showTargetByCoursetype,
       showTargetByRankInfo,
       flipDisplayTargets,
       flipDisplayForSameRoundRaces,
       makeClass,
       makeClassesFromRecord,
+      makeDistanceStyle,
       handleNavEvent
     }
   }
 };
+
 const getHorseInfo_params = {
   url_obj: {
     replace: {from: 'https://db.netkeiba.com/', to: '/nkdb/'}
@@ -191,6 +162,7 @@ const getHorseInfo_params = {
     {select: 'td', css: {'whiteSpace': 'nowrap', 'padding': '0.05em'}},
   ]
 };
+
 const getResults_params = {
   url_obj: {
     replace: {from: 'https://race.netkeiba.com/race/result.html?race_id=', to: '/nkrace/'}
@@ -211,6 +183,7 @@ const getResults_params = {
     {select: 'td.Ninki', css: {display: 'flex', 'flexDirection': 'column'}}
   ]
 };
+
 const getModal = (url, params)=>{
   axios.get(url.replace(params.url_obj.replace.from, params.url_obj.replace.to))
   .then((response)=>{
