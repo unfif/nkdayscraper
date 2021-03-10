@@ -1,35 +1,5 @@
 <template>
   <nav v-bind="$attrs" class="dispplacerace navbar">
-    <!-- <div class="dispplace">
-      <h5><span class="badge bg-secondary">場所</span></h5>
-      <div class="btn-group">
-        <button v-for="place in ['all'].concat(places)"
-          class="btn btn-outline-primary btn-sm"
-          @click="showTargets($event, place, 'all', 'all')"
-          :key="place"
-        >{{ place.toUpperCase() }}</button>
-      </div>
-    </div>
-    <div class="dispcoursetype">
-      <h5><span class="badge bg-secondary">コース</span></h5>
-      <div class="btn-group">
-        <button v-for="coursetype in ['all'].concat(['芝', 'ダート'])"
-          class="btn btn-outline-secondary btn-sm"
-          @click="showTargets($event, 'all', coursetype, 'all')"
-          :key="coursetype"
-        >{{ coursetype.toUpperCase() }}</button>
-      </div>
-    </div>
-    <div class="dispracenum">
-      <h5><span class="badge bg-secondary">レース</span></h5>
-      <div class="btn-group">
-        <button v-for="racenum in ['all'].concat(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'])"
-          class="btn btn-outline-secondary btn-sm"
-          @click="showTargets($event, 'all', 'all', racenum)"
-          :key="racenum"
-        >{{ racenum.toUpperCase() }}</button>
-      </div>
-    </div> -->
     <NkShowTargets class="dispplace" :inner-text="'場所'"
       :display-targets="places"
       :display-params="{place: 'param', coursetype: 'all', racenum: 'all'}"
@@ -79,6 +49,7 @@ export default {
       racenum: 11,
       is_show_all_ranks: false,
     })
+
     const showTargets = (event, place, coursetype, racenum)=>{
       data.place = place;
       data.coursetype = coursetype;
@@ -87,12 +58,15 @@ export default {
       flipDisplayForSameRoundRaces(event);
       emit('click-nav-button', {event, data});
     }
+
     const flipDisplayForSameRoundRaces = (event)=>{
       if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
     }
+
     const handleNavEvent = (event)=>{
       showTargets(event.event, event.data.place, event.data.coursetype, event.data.racenum);
     }
+
     return {
       data,
       showTargets,
