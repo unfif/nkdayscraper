@@ -16,9 +16,12 @@ import subprocess as sp
 import shlex as se
 
 # import pathlib as pl
+from pathlib import Path
+# from pathlib import PurePosixPath
 import requests as rq
 import uvicorn, os, sys, getpass, csv#, json
 import datetime as dt
+from zipfile import ZipFile, ZIP_DEFLATED
 
 # import pandas as pd
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
@@ -34,12 +37,12 @@ print('args: ', args, '\n')
 
 user = getpass.getuser()
 versionmm = str(sys.version_info.major) + str(sys.version_info.minor)
-pypath = 'C:\\Users\\' + user + '\\AppData\\Local\\Programs\\Python\\Python' + versionmm
+pypath = f'C:\\Users\\{user}\\AppData\\Local\\Programs\\Python\\Python{versionmm}'
 env = os.environ
 env['PYTHONPATH'] = ';'.join([
     os.getcwd(),
     pypath,
-    pypath + '\\python' + versionmm + '.zip',
+    pypath + f'\\python{versionmm}.zip',
     pypath + '\\DLLs',
     pypath + '\\lib',
     pypath + '\\lib\\site-packages',
@@ -66,14 +69,22 @@ session = flask_scoped_session(Session, app)
 # create_table(engine)
 # %%
 data = HorseResult.getRaceResults(session)
-# for key, df in data.items(): df.to_pickle('data/pickle/' + key + '.pkl')
-# data = {key: pd.read_pickle('data/pickle/' + key + '.pkl') for key in data.keys()}
-# for key, df in data.items(): df.to_pickle('data/pickle/' + key + '.pkl')
+# for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
+# data = {key: pd.read_pickle(f'data/pickle/{key}.pkl') for key in data.keys()}
+# for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
 data['records'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
 data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 # jsonforapi = pl.Path('data/json/raceresults.json').read_text()
+# %%
+jsonDir = Path('data/json')
+for jsonPath in jsonDir.iterdir():
+    if jsonPath.suffix == '.json':
+        zipPath = jsonDir / f'{jsonPath.stem}.zip'
+        print(f'making {zipPath}.')
+        with ZipFile(zipPath, 'w', ZIP_DEFLATED) as zip:
+            zip.write(jsonPath, jsonPath.name)
 
-pass
+# %%
 
 # @app.route('/')
 # def index():

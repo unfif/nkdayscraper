@@ -1,6 +1,6 @@
 {
   "name": "nkdayscraper",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "scripts": {
     "serve-prod": "vue-cli-service serve",
@@ -9,8 +9,8 @@
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode development",
     "lint": "vue-cli-service lint --mode development",
-    "jrr": "scrapy crawl jrarecords -o data/jrarecords.json",
-    "nkd": "scrapy crawl nkday -o data/nkday.json",
+    "jrr": "scrapy crawl jrarecords -o data/json/jrarecords.json",
+    "nkd": "scrapy crawl nkday -o data/json/nkday.json",
     "flask": "python3 app.py",
     "scrape": "npm run jrr && npm run nkd",
     "app": "npm run build && npm run flask",
