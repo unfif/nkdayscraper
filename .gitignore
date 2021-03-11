@@ -13,9 +13,10 @@ node_modules
 *.un~
 *~
 
-data/tmp
-data/pickle/tmp
-nkdayviewer/
+/data/tmp
+/data/pickle/tmp
+/nkdayviewer
+/data/json/*.json
 
 # vue-cli
 /dist
