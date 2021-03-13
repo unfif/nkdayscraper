@@ -7,23 +7,23 @@ from nkdayscraper.items import JrarecordItem
 class JrarecordSpider(CrawlSpider):
     name = 'jrarecords'
     allowed_domains = ['jra.jp']
-    start_urls = ['http://jra.jp/datafile/record/']
+    start_urls = ['https://jra.jp/datafile/record/']
 
     rules = (
         Rule(
             LinkExtractor(
                 allow = ['jra.jp/datafile/record', '127.0.0.1'],
                 deny = [
-                    # 'http://jra.jp/datafile/record/sapporo.html',
-                    # 'http://jra.jp/datafile/record/hakodate.html',
-                    # 'http://jra.jp/datafile/record/fukushima.html',
-                    # 'http://jra.jp/datafile/record/niigata.html',
-                    # 'http://jra.jp/datafile/record/nakayama.html',
-                    # 'http://jra.jp/datafile/record/tokyo.html',
-                    # 'http://jra.jp/datafile/record/chukyo.html',
-                    # 'http://jra.jp/datafile/record/kyoto.html',
-                    # 'http://jra.jp/datafile/record/hanshin.html',
-                    # 'http://jra.jp/datafile/record/kokura.html'
+                    # 'https://jra.jp/datafile/record/sapporo.html',
+                    # 'https://jra.jp/datafile/record/hakodate.html',
+                    # 'https://jra.jp/datafile/record/fukushima.html',
+                    # 'https://jra.jp/datafile/record/niigata.html',
+                    # 'https://jra.jp/datafile/record/nakayama.html',
+                    # 'https://jra.jp/datafile/record/tokyo.html',
+                    # 'https://jra.jp/datafile/record/chukyo.html',
+                    # 'https://jra.jp/datafile/record/kyoto.html',
+                    # 'https://jra.jp/datafile/record/hanshin.html',
+                    # 'https://jra.jp/datafile/record/kokura.html'
                 ],
                 restrict_css = ['ul.link_list.multi.div5']
             ),
