@@ -2,22 +2,19 @@
 from flask import Flask, render_template, jsonify#, redirect, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy_session import flask_scoped_session
+from flask_cors import CORS
+from scrapy.crawler import CrawlerRunner#, CrawlerProcess
+# from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
 from nkdayscraper.models import HorseResult, Session, engine, create_tables
 from nkdayscraper.spiders.nkday import NkdaySpider
 from twisted.internet import reactor
-from scrapy.crawler import CrawlerRunner
-# from scrapy.utils.log import configure_logging
-from flask_cors import CORS
-# from scrapy.crawler import CrawlerProcess
 
 import argparse as argp
 import subprocess as sp
 import shlex as se
 
-# import pathlib as pl
 from pathlib import Path
-# from pathlib import PurePosixPath
 import requests as rq
 import uvicorn, os, sys, getpass, csv#, json
 import datetime as dt
@@ -31,7 +28,6 @@ parser.add_argument('-p', '--port', type=int, default=5000)
 parser.add_argument('-l', '--log-level', type=str, default='info')
 parser.add_argument('--orig', action='store_true')
 parser.add_argument('--reload', action='store_true')
-# args = parser.parse_args()
 args = parser.parse_args(args=[])
 print('args: ', args, '\n')
 
@@ -74,7 +70,7 @@ data = HorseResult.getRaceResults(session)
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
 data['records'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
 data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
-# jsonforapi = pl.Path('data/json/raceresults.json').read_text()
+# jsonforapi = Path('data/json/raceresults.json').read_text()
 # %%
 jsonDir = Path('data/json')
 for jsonPath in jsonDir.iterdir():

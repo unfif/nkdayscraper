@@ -71,7 +71,6 @@ export default {
       axios.get("/api/records/")
       .then((response)=>{
         data.records = response.data.data;
-        // console.log(data.records[0]);
       })
       .catch(err => console.log('err:', err))
 
@@ -111,7 +110,6 @@ h2, h3{
 }
 main{
   margin: 0 auto;
-  /* padding: 4px 10px; */
   padding: 1rem;
   background: #EEE;
 }

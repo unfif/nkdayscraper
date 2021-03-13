@@ -230,31 +230,6 @@ const getModal = (url, params)=>{
 </script>
 
 <style lang="scss" scoped>
-// nav.dispplacerace{
-//   display: flex;
-//   flex-wrap: wrap;
-//   margin-bottom: 4px;
-//   > div{
-//     display: flex;
-//     align-items: center;
-//     > h5{
-//       margin: 0 4px;
-//     }
-//   }
-//   h5 > span.bg-secondary{
-//     width: 80px;
-//     line-height: unset;
-//   }
-//   button{
-//     width: 4.3em;
-//     margin-left: 1px;
-//   }
-// }
-
-// table.raceresults{
-//   width: 100%;
-//   // margin: 0 auto 10px;
-// }
 .table-sm{
   th,
   td{
@@ -343,15 +318,6 @@ td.col_複勝率{
   text-align: right;
 }
 
-// .rankinfo_initdisp_end,
-// .rankinfo_initdisp_topend{
-//   border-bottom: 3px double #999;
-// }
-
-// .rankinfo_initnone_end{
-//   border-bottom: 3px solid #999;
-// }
-
 table.raceresults tbody{
   tr.rankinfo_initdisp_top,
   tr.rankinfo_initdisp_topend{
@@ -375,24 +341,6 @@ table.raceresults tbody{
     }
   }
 }
-
-// table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend){
-//   .col_場所,
-//   .col_R,
-//   .col_タイトル,
-//   .col_形式,
-//   .col_距離,
-//   .col_情報1,
-//   .col_情報2,
-//   .col_レコード,
-//   .col_天候,
-//   .col_状態,
-//   .col_時刻{
-//     text-indent: 500%;
-//     white-space: nowrap;
-//     overflow: hidden;
-//   }
-// }
 
 tr.rankinfo_initdisp_top{
   td.coursetype_芝{
