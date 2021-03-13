@@ -9,6 +9,7 @@ from scrapy.utils.project import get_project_settings
 from nkdayscraper.models import HorseResult, Session, engine, create_tables
 from nkdayscraper.spiders.nkday import NkdaySpider
 from twisted.internet import reactor
+from concurrent.futures import ThreadPoolExecutor
 
 import argparse as argp
 import subprocess as sp
@@ -19,6 +20,11 @@ import requests as rq
 import uvicorn, os, sys, getpass, csv#, json
 import datetime as dt
 from zipfile import ZipFile, ZIP_DEFLATED
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 # import pandas as pd
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
@@ -29,7 +35,7 @@ parser.add_argument('-l', '--log-level', type=str, default='info')
 parser.add_argument('--orig', action='store_true')
 parser.add_argument('--reload', action='store_true')
 args = parser.parse_args(args=[])
-print('args: ', args, '\n')
+logging.info(f'{args=}')
 
 user = getpass.getuser()
 versionmm = str(sys.version_info.major) + str(sys.version_info.minor)
@@ -72,13 +78,21 @@ data['records'].to_json('data/json/raceresults.json', orient='table', force_asci
 data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 # jsonforapi = Path('data/json/raceresults.json').read_text()
 # %%
+def zipWithInfo(zipPath, filePath):
+    logging.info(f'making {zipPath=}')
+    with ZipFile(zipPath, 'w', ZIP_DEFLATED) as zip:
+        zip.write(filePath, filePath.name)
+    logging.info(f'zipped {filePath=}')
+
+def zipEachFilesInDir(dirPath):
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        for jsonPath in dirPath.iterdir():
+            if jsonPath.suffix == '.json':
+                zipPath = dirPath / f'{jsonPath.stem}.zip'
+                executor.submit(zipWithInfo, zipPath, jsonPath)
+
 jsonDir = Path('data/json')
-for jsonPath in jsonDir.iterdir():
-    if jsonPath.suffix == '.json':
-        zipPath = jsonDir / f'{jsonPath.stem}.zip'
-        print(f'making {zipPath}...')
-        with ZipFile(zipPath, 'w', ZIP_DEFLATED) as zip:
-            zip.write(jsonPath, jsonPath.name)
+zipEachFilesInDir(jsonDir)
 
 # %%
 
