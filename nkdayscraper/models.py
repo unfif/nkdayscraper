@@ -6,10 +6,10 @@ from sqlalchemy.orm import sessionmaker, relationship, aliased
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
 
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import copy as cp
-import json
+# import json
 
 # from sqlalchemy.sql import Select
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)

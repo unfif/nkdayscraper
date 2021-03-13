@@ -64,11 +64,6 @@ export default {
 
 <style lang="scss" scoped>
 nav.navbar.dispplacerace{
-  // display: flex;
-  // flex-wrap: wrap;
-  // margin-bottom: 4px;
-  // padding: 0;
-  // margin-bottom: 1rem;
   > div{
     display: flex;
     align-items: center;
@@ -82,7 +77,6 @@ nav.navbar.dispplacerace{
   }
   button{
     width: 4.3em;
-    // margin-left: 1px;
   }
 }
 </style>

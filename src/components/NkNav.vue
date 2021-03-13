@@ -32,15 +32,7 @@ export default {
     places: {
       type: Array,
       'default': ()=>[]
-    },
-    // cols: {
-    //   type: Array,
-    //   'default': ()=>[]
-    // },
-    // records: {
-    //   type: Array,
-    //   'default': ()=>[]
-    // }
+    }
   },
   setup(props, { emit }){
     const data = reactive({
@@ -79,25 +71,7 @@ export default {
 
 <style lang="scss" scoped>
 nav.navbar.dispplacerace{
-  // display: flex;
-  // flex-wrap: wrap;
-  // margin-bottom: 4px;
   padding: 0;
   margin-bottom: 1rem;
-  // > div{
-  //   display: flex;
-  //   align-items: center;
-  //   > h5{
-  //     margin: 0 4px;
-  //   }
-  // }
-  // h5 > span.bg-secondary{
-  //   width: 80px;
-  //   line-height: unset;
-  // }
-  // button{
-  //   width: 4.3em;
-  //   margin-left: 1px;
-  // }
 }
 </style>

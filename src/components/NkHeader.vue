@@ -6,12 +6,8 @@
 </template>
 
 <script>
-// import NkNav from './NkNav.vue'
 export default {
   name: "NkHeader",
-  // components: {
-  //   NkNav,
-  // },
   props: {
     date: {type: String},
     places: {type: Array}
