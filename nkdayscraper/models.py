@@ -223,6 +223,7 @@ class HorseResult(Base):
         records.loc[(records.ranking <= 3) & (records.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
         records.loc[records.ranking > 3, 'rankinfo'] = 'initnone_mid'
         records.loc[records.ranking - records.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
+        records.loc[(records.ranking == 1) & (records.prevracerank == 1), 'rankinfo'] = 'initdisp_top'
         # records.loc[(records.rankinfo == 'initdisp_top') & (records.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
         records.loc[records.nextracerank - records.ranking < 0, 'rankinfo'] = 'initnone_end'
 

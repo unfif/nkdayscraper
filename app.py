@@ -80,7 +80,7 @@ jsonDir = Path('data/json')
 for jsonPath in jsonDir.iterdir():
     if jsonPath.suffix == '.json':
         zipPath = jsonDir / f'{jsonPath.stem}.zip'
-        print(f'making {zipPath}.')
+        print(f'making {zipPath}...')
         with ZipFile(zipPath, 'w', ZIP_DEFLATED) as zip:
             zip.write(jsonPath, jsonPath.name)
 
