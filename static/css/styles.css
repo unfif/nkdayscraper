@@ -115,17 +115,17 @@ td.col_複勝率{
 .col_rankinfo{
   display: none;
 }
-.rankinfo_initnone_mid,
-.rankinfo_initnone_end{
+.rankinfo_initnone_mid/*,
+.rankinfo_initnone_end*/{
   display: none;
 }
-.rankinfo_initdisp_end,
+/* .rankinfo_initdisp_end,
 .rankinfo_initdisp_topend{
   border-bottom: 3px double #999;
-}
-.rankinfo_initnone_end{
+} */
+/* .rankinfo_initnone_end{
   border-bottom: 3px solid #999;
-}
+} */
 div.jockeysrank > table{
   margin: 4px 4px 24px;
 }
