@@ -217,15 +217,16 @@ class HorseResult(Base):
         records.ranking = records[['place', 'racenum', 'ranking']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
         records['last3frank'] = records[['place', 'racenum', 'last3f']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
 
-        records['nextracerank'] = pd.concat([records.ranking[1:], records.ranking[0:1]]).reset_index(drop=True)
-        records['prevracerank'] = pd.concat([records.ranking[-1:], records.ranking[:-1]]).reset_index(drop=True)
+        # records['nextracerank'] = pd.concat([records.ranking[1:], records.ranking[0:1]]).reset_index(drop=True)
+        # records['prevracerank'] = pd.concat([records.ranking[-1:], records.ranking[:-1]]).reset_index(drop=True)
         records.loc[records.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
-        records.loc[(records.ranking <= 3) & (records.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
+        # records.loc[(records.ranking <= 3) & (records.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
         records.loc[records.ranking > 3, 'rankinfo'] = 'initnone_mid'
-        records.loc[records.ranking - records.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
-        records.loc[(records.ranking == 1) & (records.prevracerank == 1), 'rankinfo'] = 'initdisp_top'
+        # records.loc[records.ranking - records.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
+        records.loc[records.racenum.diff().fillna(12) != 0, 'rankinfo'] = 'initdisp_top'
+        # records.loc[(records.ranking == 1) & (records.prevracerank == 1), 'rankinfo'] = 'initdisp_top'
         # records.loc[(records.rankinfo == 'initdisp_top') & (records.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
-        records.loc[records.nextracerank - records.ranking < 0, 'rankinfo'] = 'initnone_end'
+        # records.loc[records.nextracerank - records.ranking < 0, 'rankinfo'] = 'initnone_end'
 
         sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
         sql += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
