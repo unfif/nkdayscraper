@@ -5,12 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, aliased
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
-
-# from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import copy as cp
-# import json
-
+import logging
 # from sqlalchemy.sql import Select
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
 
@@ -32,7 +29,6 @@ meta.reflect(bind=engine)
 # sql = Select([hrs, jrr]).outerjoin(jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2))#.order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
 # con = engine.connect()
 # records = pd.read_sql(sql, con)
-# print(sql, records.columns, '\n', records.time.iloc[:,0], type(records.time.iloc[:,0]))
 
 # %%
 class RBase():
@@ -51,7 +47,7 @@ def mongo_connect(url=MONGO_URL, query=None):
         if not url.endswith('/'): url += '/'
         url += '?'
         for key, val in query.items():
-            url += key + '=' + str(val)
+            url += f'{key}={str(val)}'
 
     client = MongoClient(url)
     return client
@@ -201,7 +197,6 @@ class HorseResult(Base):
             .outerjoin(pay)\
             .outerjoin(jrr)\
             .order_by(Race.place, Race.racenum, hrs.ranking).statement
-        print(sql, '\n')
         records = pd.read_sql(sql, con)
         # if len(records) == 0: return {'records': pd.DataFrame(),'jockeys': pd.DataFrame(), 'racesgp2': pd.DataFrame()}
 
@@ -234,12 +229,10 @@ class HorseResult(Base):
         sql += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
         sql += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
         sql += "ORDER BY pd.objsubid"
-        print(sql, '\n')
 
         jplabels = {}
         comments = pd.read_sql(sql, con)
         con.close()
-        print(comments.query('table_name == "paybacks"'))
         jockeyct = pd.crosstab([records.place, records.jockey], records.ranking, margins=True)
         jockeyct.columns = [int(x) if type(x) is float else x for x in jockeyct.columns]
         ranges = [list(range(1, x+1)) for x in range(1, 4)]
@@ -300,7 +293,6 @@ class HorseResult(Base):
             jsondict[key] = df.to_json(orient='table', force_ascii=False)
             # jsondict[key] = df.to_dict(orient='records')
 
-        # data['json'] = json.dumps(jsondict, ensure_ascii=False)
         data['json'] = jsondict
         
         return data
