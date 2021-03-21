@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker, declarative_base, relationship, aliased
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
 import pandas as pd
-import copy as cp
 # from sqlalchemy.sql import Select
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
 
@@ -255,7 +254,7 @@ class HorseResult(Base):
         jockeysindex.remove('騎乗数')
         jockeysindex.insert(0,'騎乗数')
         jockeyct['騎乗数'] = jockeyct['騎乗数'].astype(int)
-        jockeys = jockeyct[jockeysindex]
+        jockeys = jockeyct[jockeysindex].copy(deep=True)
         for targetcol in ['1着', '2着', '3着', '単勝率', '連対率', '複勝率']:
             for place in jockeys.index.get_level_values(0).unique():
                 tmprank = jockeys.loc[place, targetcol].rank(method='dense', ascending=False, na_option='bottom')
@@ -271,11 +270,11 @@ class HorseResult(Base):
             jplabels.update({comment[1].column_name: comment[1].column_comment})
 
         jplabels.update({'record': 'レコード'})
-        data['records'] = records.rename(columns=jplabels)
+        data['records'] = records.rename(columns=jplabels).copy(deep=True)
         data['racesinfo'] = pd.DataFrame({'date': records.date[0], 'places': [None]})
         data['racesinfo'].loc[0, 'places'] = records.place.unique()
 
-        racesgp = cp.deepcopy(data['records'])
+        racesgp = data['records']
         racesgp['R2'] = racesgp.R
         racesgp[['グレード', '賞金', '通過']] = racesgp[['グレード', '賞金', '通過']].applymap(str)
         racesgp = racesgp.query('着順 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
