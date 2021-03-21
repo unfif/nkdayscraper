@@ -83,8 +83,9 @@ class NkdaySpider(CrawlSpider):
                 item['courseinfo1'] = 'ダート'
             else:
                 item['coursetype'] = item['courseinfo1']
-                # if item['courseinfo1'] == '芝':
-                #     item['courseinfo1'] = item['courseinfo2']
+                # if item['courseinfo1'] == '芝': item['courseinfo1'] = item['courseinfo2']
+                if item['place'] == '中山' and item['generation'] == '3歳以上' and item['distance'] == '3350' and item['courseinfo1'] == '芝' and item['courseinfo2'] == '外':
+                    item['courseinfo1'] = '外'
 
             if item['courseinfo2'] == '外内': item['courseinfo1'] = '外内'
             item['courseinfo2'] = ''
