@@ -31,13 +31,13 @@ class NkdayscraperPipeline():
         finally:
             session.close()
 
-        self.is_mongoerr = False
+        self.has_mongoerr = False
         self.mongo = mongo_connect(query={'serverSelectionTimeoutMS': 3000})
-        self.mongodb = self.mongo.netkeiba
+        self.mongodb = self.mongo.nkday
         self.collection = self.mongodb.horseresults
 
         try: self.collection.drop()
-        except: self.is_mongoerr = True
+        except: self.has_mongoerr = True
 
     def open_spider(self, spider):
         # DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
@@ -72,7 +72,7 @@ class NkdayscraperPipeline():
         finally:
             session.close()
 
-        if not self.is_mongoerr:
+        if not self.has_mongoerr:
             mongoitem = cp.deepcopy(item)
             if isinstance(mongoitem, RaceItem): mongoitem['posttime'] = str(mongoitem['posttime'])
             if isinstance(mongoitem, HorseResultItem): mongoitem['time'] = str(mongoitem['time'])
@@ -100,13 +100,13 @@ class JrarecordsscraperPipeline():
         # finally:
         #     session.close()
 
-        self.is_mongoerr = False
+        self.has_mongoerr = False
         self.mongo = mongo_connect(query={'serverSelectionTimeoutMS': 3000})
-        self.mongodb = self.mongo.jra
+        self.mongodb = self.mongo.nkday
         self.collection = self.mongodb.jrarecords
 
         try: self.collection.drop()
-        except: self.is_mongoerr = True
+        except: self.has_mongoerr = True
 
     def open_spider(self, spider):
         # DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
@@ -134,7 +134,7 @@ class JrarecordsscraperPipeline():
         finally:
             session.close()
 
-        if not self.is_mongoerr:
+        if not self.has_mongoerr:
             mongoitem = cp.deepcopy(item)
             # mongoitem['posttime'] = str(mongoitem['posttime'])
             # mongoitem['time'] = str(mongoitem['time'])
