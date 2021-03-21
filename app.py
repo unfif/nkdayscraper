@@ -1,12 +1,11 @@
 # %%
 from flask import Flask, render_template, jsonify#, redirect, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_sqlalchemy_session import flask_scoped_session
 from flask_cors import CORS
 from scrapy.crawler import CrawlerRunner#, CrawlerProcess
 # from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
-from nkdayscraper.models import HorseResult, Session, engine, create_tables
+from nkdayscraper.models import HorseResult#, engine, create_tables
 from nkdayscraper.spiders.nkday import NkdaySpider
 from nkdayscraper.ziptools import Ziptools
 from twisted.internet import reactor
@@ -61,10 +60,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 # create_table(engine)
-session = flask_scoped_session(Session, app)
 # %%
-data = HorseResult.getRaceResults(session)
-session.close()
+data = HorseResult.getRaceResults()
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
 # data = {key: pd.read_pickle(f'data/pickle/{key}.pkl') for key in data.keys()}
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
