@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker
-from models import horseresults, db_connect#, create_tables
+from ..models import horseresults, db_connect#, create_tables
 
 engine = db_connect(echo=True)
 # drop_table(engine, horseresults)
