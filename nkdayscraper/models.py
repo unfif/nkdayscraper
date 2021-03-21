@@ -1,24 +1,23 @@
 # %%
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Float, String, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint#, ForeignKey, UniqueConstraint, outerjoin, and_, LargeBinary, SmallInteger
 from sqlalchemy.dialects import postgresql as pg
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship, aliased
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship, aliased
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
 import pandas as pd
 import copy as cp
-import logging
 # from sqlalchemy.sql import Select
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
-# SQLITE_URL = get_project_settings().get('SQLITE_URL')
 MONGO_URL = get_project_settings().get('MONGO_URL')
-engine = create_engine(DATABASE_URL, echo=False)
+# ES_URL = get_project_settings().get('ES_URL')
+# SQLITE_URL = get_project_settings().get('SQLITE_URL')
+engine = create_engine(DATABASE_URL, echo=False, future=False)
 
 Session = sessionmaker(bind=engine)
-meta = MetaData()
-meta.reflect(bind=engine)
+# meta = MetaData()
+# meta.reflect(bind=engine)
 # hrs = meta.tables['horseresults'].alias('hrs')
 # jrr = meta.tables['jrarecords'].alias('jrr')
 # hrs = Table('horseresults', meta, autoload=True)
@@ -27,8 +26,8 @@ meta.reflect(bind=engine)
 # sql = hrs.select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
 # sql = outerjoin(hrs, jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2)).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
 # sql = Select([hrs, jrr]).outerjoin(jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2))#.order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
-# con = engine.connect()
-# records = pd.read_sql(sql, con)
+# conn = engine.connect()
+# records = pd.read_sql(sql, conn)
 
 # %%
 class RBase():
@@ -181,58 +180,58 @@ class HorseResult(Base):
 
     def getRaceResults(session):
         data = {}
-        con = engine.connect()
         # sql = hrs.select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
         # sql = outerjoin(hrs, jrr).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
-        sql = session\
-            .query(
-                Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
-                hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl,
-                pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
-            )\
-            .join(hrs)\
-            .outerjoin(pay)\
-            .outerjoin(jrr)\
-            .order_by(Race.place, Race.racenum, hrs.ranking).statement
-        records = pd.read_sql(sql, con)
-        # if len(records) == 0: return {'records': pd.DataFrame(),'jockeys': pd.DataFrame(), 'racesgp2': pd.DataFrame()}
+        sql = session.query(
+            Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
+            hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl,
+            pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
+        )\
+        .join(hrs)\
+        .outerjoin(pay)\
+        .outerjoin(jrr)\
+        .order_by(Race.place, Race.racenum, hrs.ranking).statement
 
-        records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
-        records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
-        records.time = records.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
-        records.record = records.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
-        records.fav = records.fav.fillna(99).astype(int)
-        records.horseweight = records.horseweight.fillna(0).astype(int)
-        records.horseweightdiff = records.horseweightdiff.fillna(0).astype(int)
+        with engine.connect() as conn:
+            records = pd.read_sql(sql, conn)
+            # if len(records) == 0: return {'records': pd.DataFrame(),'jockeys': pd.DataFrame(), 'racesgp2': pd.DataFrame()}
 
-        records = records.sort_values(['place', 'racenum', 'ranking']).reset_index(drop=True)
-        records.ranking = records[['place', 'racenum', 'ranking']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
-        records['last3frank'] = records[['place', 'racenum', 'last3f']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
+            records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
+            records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
+            records.time = records.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
+            records.record = records.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
+            records.fav = records.fav.fillna(99).astype(int)
+            records.horseweight = records.horseweight.fillna(0).astype(int)
+            records.horseweightdiff = records.horseweightdiff.fillna(0).astype(int)
 
-        # records['nextracerank'] = pd.concat([records.ranking[1:], records.ranking[0:1]]).reset_index(drop=True)
-        # records['prevracerank'] = pd.concat([records.ranking[-1:], records.ranking[:-1]]).reset_index(drop=True)
-        records.loc[records.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
-        # records.loc[(records.ranking <= 3) & (records.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
-        records.loc[records.ranking > 3, 'rankinfo'] = 'initnone_mid'
-        # records.loc[records.ranking - records.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
-        records.loc[records.racenum.diff().fillna(12) != 0, 'rankinfo'] = 'initdisp_top'
-        # records.loc[(records.ranking == 1) & (records.prevracerank == 1), 'rankinfo'] = 'initdisp_top'
-        # records.loc[(records.rankinfo == 'initdisp_top') & (records.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
-        # records.loc[records.nextracerank - records.ranking < 0, 'rankinfo'] = 'initnone_end'
+            records = records.sort_values(['place', 'racenum', 'ranking']).reset_index(drop=True)
+            records.ranking = records[['place', 'racenum', 'ranking']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
+            records['last3frank'] = records[['place', 'racenum', 'last3f']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
 
-        sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
-        sql += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
-        sql += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'horseresults') "
-        sql += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
-        sql += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
-        sql += "ORDER BY pd.objsubid"
+            # records['nextracerank'] = pd.concat([records.ranking[1:], records.ranking[0:1]]).reset_index(drop=True)
+            # records['prevracerank'] = pd.concat([records.ranking[-1:], records.ranking[:-1]]).reset_index(drop=True)
+            records.loc[records.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
+            # records.loc[(records.ranking <= 3) & (records.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
+            records.loc[records.ranking > 3, 'rankinfo'] = 'initnone_mid'
+            # records.loc[records.ranking - records.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
+            records.loc[records.racenum.diff().fillna(12) != 0, 'rankinfo'] = 'initdisp_top'
+            # records.loc[(records.ranking == 1) & (records.prevracerank == 1), 'rankinfo'] = 'initdisp_top'
+            # records.loc[(records.rankinfo == 'initdisp_top') & (records.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
+            # records.loc[records.nextracerank - records.ranking < 0, 'rankinfo'] = 'initnone_end'
 
-        jplabels = {}
-        comments = pd.read_sql(sql, con)
-        con.close()
+            sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
+            sql += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
+            sql += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'horseresults') "
+            sql += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
+            sql += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
+            sql += "ORDER BY pd.objsubid"
+
+            jplabels = {}
+            comments = pd.read_sql(sql, conn)
+
         jockeyct = pd.crosstab([records.place, records.jockey], records.ranking, margins=True)
         jockeyct.columns = [int(x) if type(x) is float else x for x in jockeyct.columns]
         ranges = [list(range(1, x+1)) for x in range(1, 4)]

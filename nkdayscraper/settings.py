@@ -10,10 +10,10 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 import os
-import pathlib as pl
+from pathlib import Path
 from dotenv import load_dotenv
 
-envpath = pl.Path(__file__).parent.parent/'.env'
+envpath = Path(__file__).parent.parent/'.env'
 load_dotenv(envpath)
 env = os.environ
 
@@ -107,6 +107,11 @@ FEED_EXPORT_ENCODING = 'utf-8'
 DATABASE_URL = env.get('DATABASE_URL')
 SQLITE_URL = env.get('SQLITE_URL')
 MONGO_URL = env.get('MONGO_URL')
+ES_USERID = env.get('ES_USERID')
+ES_PASSWORD = env.get('ES_PASSWORD')
+ES_HOST = env.get('ES_HOST')
+ES_PORT = env.get('ES_PORT')
+ES_URL = env.get('ES_URL')
 if DATABASE_URL is None:
     if SQLITE_URL is None:
         DATABASE_URL = "sqlite:///data/raceresults.sqlite3"
