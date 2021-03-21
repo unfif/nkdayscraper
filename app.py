@@ -8,6 +8,7 @@ from scrapy.crawler import CrawlerRunner#, CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from nkdayscraper.models import HorseResult, Session, engine, create_tables
 from nkdayscraper.spiders.nkday import NkdaySpider
+from nkdayscraper.ziptools import Ziptools
 from twisted.internet import reactor
 from concurrent.futures import ThreadPoolExecutor
 
@@ -43,22 +44,15 @@ pypath = f'C:\\Users\\{user}\\AppData\\Local\\Programs\\Python\\Python{versionmm
 env = os.environ
 env['PYTHONPATH'] = ';'.join([
     os.getcwd(),
-    pypath,
-    pypath + f'\\python{versionmm}.zip',
-    pypath + '\\DLLs',
-    pypath + '\\lib',
-    pypath + '\\lib\\site-packages',
-    pypath + '\\lib\\site-packages\\win32',
-    pypath + '\\lib\\site-packages\\win32\\lib',
-    pypath + '\\lib\\site-packages\\Pythonwin'
+    pypath, f'{pypath}\\python{versionmm}.zip', f'{pypath}\\DLLs', f'{pypath}\\lib',
+    f'{pypath}\\lib\\site-packages', f'{pypath}\\lib\\site-packages\\win32',
+    f'{pypath}\\lib\\site-packages\\win32\\lib', f'{pypath}\\lib\\site-packages\\Pythonwin'
 ])
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
 
 app = Flask(__name__) if args.orig else Flask(
-    __name__,
-    static_folder = 'dist',
-    template_folder = 'dist'
+    __name__, static_folder = 'dist', template_folder = 'dist'
 )
 app.jinja_env.add_extension('jinja2.ext.do')
 app.jinja_env.variable_start_string = '{@'
@@ -67,10 +61,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
-session = flask_scoped_session(Session, app)
 # create_table(engine)
+session = flask_scoped_session(Session, app)
 # %%
 data = HorseResult.getRaceResults(session)
+session.close()
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
 # data = {key: pd.read_pickle(f'data/pickle/{key}.pkl') for key in data.keys()}
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
@@ -78,24 +73,11 @@ data['records'].to_json('data/json/raceresults.json', orient='table', force_asci
 data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 # jsonforapi = Path('data/json/raceresults.json').read_text()
 # %%
-def zipWithInfo(zipPath, filePath):
-    logging.info(f'making {zipPath=}')
-    with ZipFile(zipPath, 'w', ZIP_DEFLATED) as zip:
-        zip.write(filePath, filePath.name)
-    logging.info(f'zipped {filePath=}')
-
-def zipEachFilesInDir(dirPath):
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        for jsonPath in dirPath.iterdir():
-            if jsonPath.suffix == '.json':
-                zipPath = dirPath / f'{jsonPath.stem}.zip'
-                executor.submit(zipWithInfo, zipPath, jsonPath)
-
 jsonDir = Path('data/json')
-zipEachFilesInDir(jsonDir)
+ziptools = Ziptools()
+ziptools.zipEachFilesInDir(jsonDir)
 
 # %%
-
 # @app.route('/')
 # def index():
 #     return redirect(url_for('nkday'))
