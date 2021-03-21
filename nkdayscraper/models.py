@@ -1,11 +1,11 @@
 # %%
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Float, String, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint#, ForeignKey, UniqueConstraint, outerjoin, and_, LargeBinary, SmallInteger
+from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship, aliased
+from sqlalchemy.orm import declarative_base, relationship, aliased
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
 import pandas as pd
-# from sqlalchemy.sql import Select
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
@@ -14,21 +14,6 @@ MONGO_URL = get_project_settings().get('MONGO_URL')
 # SQLITE_URL = get_project_settings().get('SQLITE_URL')
 engine = create_engine(DATABASE_URL, echo=False, future=False)
 
-Session = sessionmaker(bind=engine)
-# meta = MetaData()
-# meta.reflect(bind=engine)
-# hrs = meta.tables['horseresults'].alias('hrs')
-# jrr = meta.tables['jrarecords'].alias('jrr')
-# hrs = Table('horseresults', meta, autoload=True)
-# jrr = Table('jrarecords', meta, autoload=True)
-# sql = outerjoin(hrs, jrr).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
-# sql = hrs.select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
-# sql = outerjoin(hrs, jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2)).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
-# sql = Select([hrs, jrr]).outerjoin(jrr, and_(jrr.c.place == hrs.c.place, jrr.c.distance == hrs.c.distance, jrr.c.coursetype == hrs.c.coursetype, jrr.c.courseinfo1 == hrs.c.courseinfo1, jrr.c.courseinfo2 == hrs.c.courseinfo2))#.order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
-# conn = engine.connect()
-# records = pd.read_sql(sql, conn)
-
-# %%
 class RBase():
     def __repr__(self):
         columns = ', '.join([
@@ -177,14 +162,12 @@ class HorseResult(Base):
 
     race = relationship('Race')
 
-    def getRaceResults(session):
+    def getRaceResults():
         data = {}
-        # sql = hrs.select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
-        # sql = outerjoin(hrs, jrr).select().order_by(hrs.c.place, hrs.c.racenum, hrs.c.ranking)
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
-        sql = session.query(
+        sql = select(
             Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
             hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
@@ -192,11 +175,10 @@ class HorseResult(Base):
         .join(hrs)\
         .outerjoin(pay)\
         .outerjoin(jrr)\
-        .order_by(Race.place, Race.racenum, hrs.ranking).statement
+        .order_by(Race.place, Race.racenum, hrs.ranking)
 
         with engine.connect() as conn:
             records = pd.read_sql(sql, conn)
-            # if len(records) == 0: return {'records': pd.DataFrame(),'jockeys': pd.DataFrame(), 'racesgp2': pd.DataFrame()}
 
             records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
             records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
@@ -249,7 +231,7 @@ class HorseResult(Base):
 
         jockeyct = jockeyct.drop([('All', ''), ('', '')])
         for ranknum in ranges: jockeyct[ranknum] = jockeyct[ranknum].astype(int)
-        jockeyct = jockeyct.rename(columns={1:'1着',2:'2着',3:'3着','All':'騎乗数'})
+        jockeyct = jockeyct.rename(columns={1: '1着', 2: '2着', 3: '3着', 'All': '騎乗数'})
         jockeysindex = list(jockeyct.columns)
         jockeysindex.remove('騎乗数')
         jockeysindex.insert(0,'騎乗数')
@@ -259,10 +241,9 @@ class HorseResult(Base):
             for place in jockeys.index.get_level_values(0).unique():
                 tmprank = jockeys.loc[place, targetcol].rank(method='dense', ascending=False, na_option='bottom')
                 tmprank.index = pd.MultiIndex.from_product([(place, ), tmprank.index])
-                jockeys.loc[place, targetcol + '順'] = tmprank
+                jockeys.loc[place, f'{targetcol}順'] = tmprank
 
-            jockeys.loc[:, targetcol + '順'] = jockeys.loc[:, targetcol + '順'].astype(int)
-            # jockeys[targetcol + '順'] = jockeys[targetcol + '順'].astype(int)
+            jockeys.loc[:, f'{targetcol}順'] = jockeys.loc[:, f'{targetcol}順'].astype(int)
 
         data['jockeys'] = jockeys
 
