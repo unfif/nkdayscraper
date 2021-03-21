@@ -1,10 +1,8 @@
 from sqlalchemy import create_engine
 from scrapy.utils.project import get_project_settings
 
-engine = create_engine(get_project_settings().get('DATABASE_URL'))
+engine = create_engine(get_project_settings().get('DATABASE_URL'), future=False)
 
-con = engine.connect()
-res = con.execute("SELECT * FROM horseresults")
-for row in res: print(row)
-
-con.close()
+with engine.connect() as conn:
+    res = conn.execute("SELECT * FROM horseresults")
+    for row in res: print(row)
