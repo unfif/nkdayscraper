@@ -39,7 +39,7 @@ args = parser.parse_args(args=[])
 logging.info(f'{args=}')
 
 user = getpass.getuser()
-versionmm = str(sys.version_info.major) + str(sys.version_info.minor)
+versionmm = f'{sys.version_info.major}{sys.version_info.minor}'
 pypath = f'C:\\Users\\{user}\\AppData\\Local\\Programs\\Python\\Python{versionmm}'
 env = os.environ
 env['PYTHONPATH'] = ';'.join([
@@ -48,7 +48,6 @@ env['PYTHONPATH'] = ';'.join([
     f'{pypath}\\lib\\site-packages', f'{pypath}\\lib\\site-packages\\win32',
     f'{pypath}\\lib\\site-packages\\win32\\lib', f'{pypath}\\lib\\site-packages\\Pythonwin'
 ])
-
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
 
 app = Flask(__name__) if args.orig else Flask(
