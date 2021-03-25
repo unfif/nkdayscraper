@@ -3,6 +3,7 @@ import scrapy, re, requests, datetime as dt
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from ..items import HorseResultItem, PaybackItem, RaceItem#, JrarecordItem
+# from scrapy.shell import inspect_response
 
 today = dt.date.today()
 if today.weekday() in [5, 6]:
@@ -113,14 +114,16 @@ class NkdaySpider(CrawlSpider):
             item['postnum'] = tr.css('td')[1].css('div::text').get()
             item['horsenum'] = tr.css('td')[2].css('div::text').get()
             item['horsename'] = tr.css('td')[3].css('.Horse_Name a::text').get()
+            item['horseurl'] = tr.css('.Horse_Info .Horse_Name a::attr(href)').get()
             horse_info_detail = tr.css('td')[4].css('.Horse_Info_Detail span::text').get().strip()
             item['sex'] = {'牡':'牡','牝':'牝','騙':'騙','せ':'騙','セ':'騙','せん':'騙','セン':'騙'}.get(horse_info_detail[0])
             item['age'] = int(horse_info_detail[1:])
             item['jockeyweight'] = tr.css('td')[5].css('.JockeyWeight::text').get()
             item['jockey'] = ''.join(tr.css('td')[6].css('a ::text').getall()).strip().lstrip('▲ △ ★ ☆ ◇')
+            item['jockeyurl'] = tr.css('td')[6].css('a ::attr(href)').get()
             item['affiliate'] = tr.css('td')[13].css('span::text').get()
             item['trainer'] = tr.css('td')[13].css('a::text').get()
-            item['horseurl'] = tr.css('.Horse_Info .Horse_Name a::attr(href)').get()
+            item['trainerurl'] = tr.css('td')[13].css('a::attr(href)').get()
 
             if item['ranking'] not in ['取消', '除外']:
                 item['time'] = dt.datetime.strptime(tr.css('td')[7].css('.RaceTime::text').get(), '%M:%S.%f').time() if item['ranking'] != '中止' else None
