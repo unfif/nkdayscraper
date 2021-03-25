@@ -72,6 +72,8 @@ export default  {
       let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
       if(col === 'タイトル') response = {hasBtn: true, hasLink: true, urlinfo: '結果URL', callback: getModal, params: getResults_params};
       else if(col === '馬名') response = {hasBtn: true, hasLink: true, urlinfo: '馬URL', callback: getModal, params: getHorseInfo_params};
+      else if(col === '騎手') response = {hasBtn: false, hasLink: true, urlinfo: '騎手URL', callback: null, params: null};
+      else if(col === '調教師') response = {hasBtn: false, hasLink: true, urlinfo: '調教師URL', callback: null, params: null};
       return response;
     }
 
@@ -188,33 +190,23 @@ const getModal = (url, params)=>{
   axios.get(url.replace(params.url_obj.replace.from, params.url_obj.replace.to))
   .then((response)=>{
     const htmltext = response.data;
-    // const doc = $.parseHTML(htmltext);
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmltext, 'text/html');
-    // let $modal_body = $(doc).find(params.body_sel);
     let modal_body = doc.querySelector(params.body_sel);
     modal_body.parentNode.querySelectorAll('table').forEach(
       (table)=>{table.classList.add('table', 'table-sm', 'table-hover', 'table-striped', 'col', 'mx-1')}
     );
-    // modal_body.find('.FullWrap').addClass('row').wrap('<div class="container">');
     params.remove_sel_list.forEach((value)=>{modal_body.querySelector(value).remove()});
     let modal_title = doc.querySelector(params.title_sel).innerText.trim();
-    // $('#modal-title').html(`<span class="badge bg-primary">${modal_title}</span>`);
     document.querySelector('#modal-title').innerHTML = `<span class="badge bg-primary">${modal_title}</span>`;
-    // $('#modal-wrapper .modal-body').empty().append(modal_body).wrapInner('<div class="scrollable">')
-    // .find('table').addClass('table table-sm table-hover table-striped col mx-1');
     document.querySelector('#modal-wrapper .modal-body').innerHTML = `<div class="scrollable">${modal_body.outerHTML}<div>`;
     params.replace_obj.forEach((value)=>{
-      // $('div.modal').find(value.select).each(function(){
-      //   $(this).replaceWith(`${value.replacer.start}${this.innerHTML}${value.replacer.end}`);
-      // })
-      document.querySelectorAll('div.modal ' + value.select).forEach(
+      document.querySelectorAll(`div.modal ${value.select}`).forEach(
         (node, index, nodeList)=>{nodeList[index].outerHTML = `${value.replacer.start}${node.innerHTML}${value.replacer.end}`}
       )
     });
-    // params.css_obj.forEach((value)=>{$('div.modal').find(value.select).css(value.css)});
     params.css_obj.forEach((value)=>{
-      document.querySelectorAll('div.modal ' + value.select).forEach(
+      document.querySelectorAll(`div.modal ${value.select}`).forEach(
         (node, index, nodeList)=>{
           for(let property in value.css){
             nodeList[index].style[property] = value.css[property];
@@ -222,9 +214,7 @@ const getModal = (url, params)=>{
         }
       )
     });
-    // $('#display-modal-btn').click();
     document.querySelector('#display-modal-btn').click();
-    // $('#modal-wrapper').modal('show')
   })
 };
 </script>

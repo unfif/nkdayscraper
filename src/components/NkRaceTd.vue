@@ -1,7 +1,7 @@
 <template>
   <span>
     <button v-if="displaymode.hasBtn"
-      type="button" class="horseinfomodalbtn btn btn-sm btn-outline-info"
+      type="button" class="btn btn-sm btn-outline-info"
       @click="displaymode.callback(record[displaymode.urlinfo], displaymode.params)"
     >
     </button>

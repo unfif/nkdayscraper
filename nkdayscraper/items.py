@@ -64,10 +64,12 @@ class HorseResultItem(scrapy.Item):
     postnum = scrapy.Field()
     horsenum = scrapy.Field()
     horsename = scrapy.Field()
+    horseurl = scrapy.Field()
     sex = scrapy.Field()
     age = scrapy.Field()
     jockeyweight = scrapy.Field()
     jockey = scrapy.Field()
+    jockeyurl = scrapy.Field()
     time = scrapy.Field()
     margin  = scrapy.Field()
     fav = scrapy.Field()
@@ -76,9 +78,9 @@ class HorseResultItem(scrapy.Item):
     passageratelist = scrapy.Field()
     affiliate = scrapy.Field()
     trainer = scrapy.Field()
+    trainerurl = scrapy.Field()
     horseweight = scrapy.Field()
     horseweightdiff = scrapy.Field()
-    horseurl = scrapy.Field()
 
 class JrarecordItem(scrapy.Item):
     place = scrapy.Field()
