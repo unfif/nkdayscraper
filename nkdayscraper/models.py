@@ -142,10 +142,12 @@ class HorseResult(Base):
     postnum = Column(Integer, comment='枠番')
     horsenum = Column(Integer, primary_key=True, comment='馬番')
     horsename = Column(Text, comment='馬名')
+    horseurl = Column(Text, comment='馬URL')
     sex = Column(Text, comment='性')
     age = Column(Integer, comment='齢')
     jockeyweight = Column(Float, comment='斤量')
     jockey = Column(Text, comment='騎手')
+    jockeyurl = Column(Text, comment='騎手URL')
     time = Column(Time(timezone=False), comment='タイム')
     margin = Column(Text, comment='着差')
 
@@ -156,9 +158,9 @@ class HorseResult(Base):
     else: passageratelist = Column(Text, comment='通過')
     affiliate = Column(Text, comment='所属')
     trainer = Column(Text, comment='調教師')
+    trainerurl = Column(Text, comment='調教師URL')
     horseweight = Column(Float, comment='馬体重')
     horseweightdiff = Column(Integer, comment='増減')
-    horseurl = Column(Text, comment='馬URL')
 
     race = relationship('Race')
 
@@ -169,7 +171,7 @@ class HorseResult(Base):
         pay = aliased(Payback, name='pay')
         sql = select(
             Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
-            hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl,
+            hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
         )\
         .join(hrs)\
@@ -192,16 +194,9 @@ class HorseResult(Base):
             records.ranking = records[['place', 'racenum', 'ranking']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
             records['last3frank'] = records[['place', 'racenum', 'last3f']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
 
-            # records['nextracerank'] = pd.concat([records.ranking[1:], records.ranking[0:1]]).reset_index(drop=True)
-            # records['prevracerank'] = pd.concat([records.ranking[-1:], records.ranking[:-1]]).reset_index(drop=True)
             records.loc[records.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
-            # records.loc[(records.ranking <= 3) & (records.nextracerank > 3), 'rankinfo'] = 'initdisp_end'
             records.loc[records.ranking > 3, 'rankinfo'] = 'initnone_mid'
-            # records.loc[records.ranking - records.prevracerank < 0, 'rankinfo'] = 'initdisp_top'
             records.loc[records.racenum.diff().fillna(12) != 0, 'rankinfo'] = 'initdisp_top'
-            # records.loc[(records.ranking == 1) & (records.prevracerank == 1), 'rankinfo'] = 'initdisp_top'
-            # records.loc[(records.rankinfo == 'initdisp_top') & (records.nextracerank == 1), 'rankinfo'] = 'initdisp_topend'
-            # records.loc[records.nextracerank - records.ranking < 0, 'rankinfo'] = 'initnone_end'
 
             sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
             sql += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
@@ -210,7 +205,6 @@ class HorseResult(Base):
             sql += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
             sql += "ORDER BY pd.objsubid"
 
-            jplabels = {}
             comments = pd.read_sql(sql, conn)
 
         jockeyct = pd.crosstab([records.place, records.jockey], records.ranking, margins=True)
@@ -247,6 +241,7 @@ class HorseResult(Base):
 
         data['jockeys'] = jockeys
 
+        jplabels = {}
         for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
             jplabels.update({comment[1].column_name: comment[1].column_comment})
 
