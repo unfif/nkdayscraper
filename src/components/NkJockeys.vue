@@ -46,7 +46,7 @@ export default {
     },
     places: {
       type: Array,
-      'default': ()=>[]
+      default: ()=>[]
     }
   },
   setup(){

@@ -31,7 +31,7 @@ export default {
   props: {
     places: {
       type: Array,
-      'default': ()=>[]
+      default: ()=>[]
     }
   },
   setup(props, { emit }){
