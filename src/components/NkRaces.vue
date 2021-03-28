@@ -49,15 +49,15 @@ export default  {
   props: {
     places: {
       type: Array,
-      'default': ()=>[]
+      default: ()=>[]
     },
     cols: {
       type: Array,
-      'default': ()=>[]
+      default: ()=>[]
     },
     records: {
       type: Array,
-      'default': ()=>[]
+      default: ()=>[]
     }
   },
   setup(){
