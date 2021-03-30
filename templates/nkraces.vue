@@ -218,18 +218,13 @@
             return condition ? cls : ''
           },
           toggleSameRaceTr: function(){
-            console.log(!this.dispallsameraces);
             this.dispallsameraces = !this.dispallsameraces;
           },
           sortBy: function(col){
             this.sortKey = col;
             this.sortOrders[col] = this.sortOrders[col] * -1;
           }
-        },
-        // mounted: function(){
-        //   $('.raceresults tr').find('td:visible:odd').css('background', '#ddd');
-        //   console.log($('.raceresults tr').find('td:visible:odd'));
-        // }
+        }
       });
 
       var cols = ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"];

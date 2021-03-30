@@ -9,8 +9,8 @@
       </thead>
       <tbody v-if="records.length">
         <tr v-for="record in records"
-          :class="makeClassesFromRecord(record, ['場所', '形式', 'R', '着順', 'index', 'rankinfo'])"
           v-show="showTargetByRecordMap(record, [{place: '場所'}, {racenum: 'R'}, {coursetype: '形式'}]) && showTargetByRankInfo(record.rankinfo)"
+          :class="makeClassesFromRecord(record, ['場所', '形式', 'R', '着順', 'index', 'rankinfo'])"
           @click="flipDisplayTargets($event, record)"
           :key="record.index"
         >
@@ -36,10 +36,9 @@ import { reactive } from 'vue'
 import NkNav from './NkNav.vue'
 import NkRaceTd from './NkRaceTd.vue'
 import GeneralDialog from './GeneralDialog.vue'
-// import $ from 'jquery'
 import axios from 'axios'
 
-export default  {
+export default {
   name: 'NkRaces',
   components: {
     NkNav,
@@ -82,7 +81,6 @@ export default  {
       data.coursetype = coursetype;
       data.racenum = racenum;
       data.is_show_all_ranks = false;
-      console.log(data);
       flipDisplayForSameRoundRaces(event);
     }
 
