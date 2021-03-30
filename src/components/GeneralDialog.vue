@@ -23,7 +23,7 @@
 <script>
 import '@popperjs/core'
 import 'bootstrap'
-export default  {
+export default {
   name: 'GeneralDialog'
 };
 </script>

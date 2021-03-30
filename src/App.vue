@@ -25,12 +25,12 @@ export default {
     NkResults,
     NkJockeys
   },
-  /* async */ setup(){
+  setup(){
     const data = reactive({
       date: '',
       places: [],
       cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
-      records: [],// [{'index': 0, 'レースID': "202107010601", '場所': "中京", 'R': 1, 'タイトル': "3歳未勝利", 'rankinfo': "initdisp_top"},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'},{'タイトル': 'Now Loading'}],
+      records: [],
       results: {
         schema: {fields: null},
         data: null
@@ -40,26 +40,7 @@ export default {
         data: null
       }
     })
-    // const data = reactive({
-    //   date: window.nkracesinfo.data[0].date.split('T')[0],
-    //   places: window.nkracesinfo.data[0].places,
-    //   cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
-    //   records: window.nkrecords.data,
-    //   results: window.nkresults,
-    //   jockeys: window.nkjockeys
-    // })
     onMounted(()=>{
-      // axios.get("/api/")
-      // .then((response)=>{
-      //   const racesinfo = JSON.parse(response.data.racesinfo);
-      //   data.date = racesinfo.data[0].date.split('T')[0];
-      //   data.places = racesinfo.data[0].places;
-      //   data.records = JSON.parse(response.data.records).data;
-      //   data.results = JSON.parse(response.data.racesgp2);
-      //   data.jockeys = JSON.parse(response.data.jockeys);
-      // })
-      // .catch(err => console.log('err:', err))
-
       axios.get("/api/racesinfo/")
       .then((response)=>{
         const racesinfo = response.data;
@@ -85,10 +66,6 @@ export default {
         data.jockeys = response.data;
       })
       .catch(err => console.log('err:', err))
-
-      // data.records = await axios.get("/api/records2/").data.data
-      // // .catch(err => console.log('err:', err))
-
     })
     return {data}
   }
