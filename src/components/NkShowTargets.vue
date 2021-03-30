@@ -20,7 +20,7 @@ export default {
   props: {
     innerText: {
       type: String,
-      default: ()=>'Title'
+      default: 'Title'
     },
     displayTargets: {
       type: Array,
@@ -28,7 +28,7 @@ export default {
     },
     displayParams: {
       type: Object,
-      default: ()=>{return {place: 'all', coursetype: 'all', racenum: 'all'}}
+      default: ()=>({place: 'all', coursetype: 'all', racenum: 'all'})
     }
   },
   setup(props, { emit } ){
