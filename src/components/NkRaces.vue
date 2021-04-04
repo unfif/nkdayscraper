@@ -194,7 +194,9 @@ const getModal = (url, params)=>{
     modal_body.parentNode.querySelectorAll('table').forEach(
       (table)=>{table.classList.add('table', 'table-sm', 'table-hover', 'table-striped', 'col', 'mx-1')}
     );
-    params.remove_sel_list.forEach((value)=>{modal_body.querySelector(value).remove()});
+    params.remove_sel_list.forEach((value)=>{
+      if(modal_body.querySelector(value) != null) modal_body.querySelector(value).remove();
+    });
     let modal_title = doc.querySelector(params.title_sel).innerText.trim();
     document.querySelector('#modal-title').innerHTML = `<span class="badge bg-primary">${modal_title}</span>`;
     document.querySelector('#modal-wrapper .modal-body').innerHTML = `<div class="scrollable">${modal_body.outerHTML}<div>`;
