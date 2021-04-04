@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from 'vue'
+import { reactive } from 'vue'
 import NkHeader from './components/NkHeader.vue'
 import NkRaces from './components/NkRaces.vue'
 import NkResults from './components/NkResults.vue'
@@ -40,33 +40,33 @@ export default {
         data: null
       }
     })
-    onMounted(()=>{
-      axios.get("/api/racesinfo/")
-      .then((response)=>{
-        const racesinfo = response.data;
-        data.date = racesinfo.data[0].date.split('T')[0];
-        data.places = racesinfo.data[0].places;
-      })
-      .catch(err => console.log('err:', err))
-
-      axios.get("/api/records/")
-      .then((response)=>{
-        data.records = response.data.data;
-      })
-      .catch(err => console.log('err:', err))
-
-      axios.get("/api/racesgp2/")
-      .then((response)=>{
-        data.results = response.data;
-      })
-      .catch(err => console.log('err:', err))
-
-      axios.get("/api/jockeys/")
-      .then((response)=>{
-        data.jockeys = response.data;
-      })
-      .catch(err => console.log('err:', err))
+    
+    axios.get("/api/racesinfo/")
+    .then((response)=>{
+      const racesinfo = response.data;
+      data.date = racesinfo.data[0].date.split('T')[0];
+      data.places = racesinfo.data[0].places;
     })
+    .catch(err => console.log('err:', err))
+
+    axios.get("/api/records/")
+    .then((response)=>{
+      data.records = response.data.data;
+    })
+    .catch(err => console.log('err:', err))
+
+    axios.get("/api/racesgp2/")
+    .then((response)=>{
+      data.results = response.data;
+    })
+    .catch(err => console.log('err:', err))
+
+    axios.get("/api/jockeys/")
+    .then((response)=>{
+      data.jockeys = response.data;
+    })
+    .catch(err => console.log('err:', err))
+
     return {data}
   }
 }
