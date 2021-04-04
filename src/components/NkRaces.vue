@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import NkNav from './NkNav.vue'
 import NkRaceTd from './NkRaceTd.vue'
 import GeneralDialog from './GeneralDialog.vue'
@@ -67,14 +67,14 @@ export default {
       is_show_all_ranks: false
     })
 
-    const getDisplayMode = (col)=>{
+    const getDisplayMode = computed(()=>(col)=>{
       let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
       if(col === 'タイトル') response = {hasBtn: true, hasLink: true, urlinfo: '結果URL', callback: getModal, params: getResults_params};
       else if(col === '馬名') response = {hasBtn: true, hasLink: true, urlinfo: '馬URL', callback: getModal, params: getHorseInfo_params};
       else if(col === '騎手') response = {hasBtn: false, hasLink: true, urlinfo: '騎手URL', callback: null, params: null};
       else if(col === '調教師') response = {hasBtn: false, hasLink: true, urlinfo: '調教師URL', callback: null, params: null};
       return response;
-    }
+    })
 
     const showTargets = (event, place, coursetype, racenum)=>{
       data.place = place;
@@ -84,37 +84,37 @@ export default {
       flipDisplayForSameRoundRaces(event);
     }
 
-    const showTargetByRecordMap = (record, map)=>{
+    const showTargetByRecordMap = computed(()=>(record, map)=>{
       return map.reduce((acc, cur)=>{
         const key = Object.keys(cur)[0];
         return acc && (data[key] === 'all' ? true : record[cur[key]] == data[key]);
       }, true)
-    }
+    })
 
-    const showTargetByRankInfo = (rankinfo)=>{
+    const showTargetByRankInfo = computed(()=>(rankinfo)=>{
       return data.is_show_all_ranks ? true : rankinfo.startsWith('initdisp_');
-    }
+    })
 
-    const flipDisplayTargets = (event, record)=>{
+    const flipDisplayTargets = computed(()=>(event, record)=>{
       if(!['A', 'BUTTON'].includes(event.target.tagName)){
         data.is_show_all_ranks = !data.is_show_all_ranks
         data.place = record.場所;
         data.racenum = record.R;
         flipDisplayForSameRoundRaces(event);
       }
-    }
+    })
 
     const flipDisplayForSameRoundRaces = (event)=>{
       if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
     }
 
-    const makeClass = (col, record)=>{
+    const makeClass = computed(()=>(col, record)=>{
       if(col === '形式') return `coursetype_${record[col]}`;
       else if(col === '枠番') return `postnum_${record[col]}`;
       else if(col === '人気') return `rank_${record[col]}`;
       else if(col === '上り') return `rank_${record['last3frank']}`;
       else if(col === '所属' && record[col] === '栗東') return 'text-success';
-    }
+    })
 
     const makeClassesFromRecord = (record, prefixes)=>{
       const classes = prefixes.map((prefix)=>{
@@ -129,9 +129,9 @@ export default {
       }
     }
 
-    const handleNavEvent = (event)=>{
+    const handleNavEvent = computed(()=>(event)=>{
       showTargets(event.event, event.data.place, event.data.coursetype, event.data.racenum);
-    }
+    })
 
     return {
       data,
