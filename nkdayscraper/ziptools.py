@@ -2,7 +2,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from concurrent.futures import ThreadPoolExecutor
 import logging
 
-class Ziptools:
+class ZipTools:
     def zipWithInfo(self, zipPath, filePath):
         logging.info(f'making {zipPath=}')
         with ZipFile(zipPath, 'w', ZIP_DEFLATED) as zip:
@@ -15,3 +15,17 @@ class Ziptools:
                 if jsonPath.suffix == '.json':
                     zipPath = dirPath / f'{jsonPath.stem}.zip'
                     executor.submit(self.zipWithInfo, zipPath, jsonPath)
+
+if __name__ == '__main__':
+    from sys import argv
+    logging.basicConfig(
+        level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    if len(argv) > 1:
+        from pathlib import Path
+        zipDir = Path(argv[1])
+        zipTools = ZipTools()
+        zipTools.zipEachFilesInDir(zipDir)
+    else:
+        logging.info('No file was Zipped.')
+        

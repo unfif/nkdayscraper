@@ -7,19 +7,15 @@ from scrapy.crawler import CrawlerRunner#, CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from nkdayscraper.models import HorseResult#, engine, create_tables
 from nkdayscraper.spiders.nkday import NkdaySpider
-from nkdayscraper.ziptools import Ziptools
 from twisted.internet import reactor
-from concurrent.futures import ThreadPoolExecutor
 
 import argparse as argp
 import subprocess as sp
 import shlex as se
 
-from pathlib import Path
 import requests as rq
 import uvicorn, os, sys, getpass, csv#, json
 import datetime as dt
-from zipfile import ZipFile, ZIP_DEFLATED
 import logging
 
 logging.basicConfig(
@@ -34,6 +30,7 @@ parser.add_argument('-p', '--port', type=int, default=5000)
 parser.add_argument('-l', '--log-level', type=str, default='info')
 parser.add_argument('--orig', action='store_true')
 parser.add_argument('--reload', action='store_true')
+parser.add_argument('-z', '--zip', action='store_true')
 args = parser.parse_args(args=[])
 logging.info(f'{args=}')
 
@@ -69,9 +66,12 @@ data['records'].to_json('data/json/raceresults.json', orient='table', force_asci
 data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 # jsonforapi = Path('data/json/raceresults.json').read_text()
 # %%
-jsonDir = Path('data/json')
-ziptools = Ziptools()
-ziptools.zipEachFilesInDir(jsonDir)
+if(args.zip):
+    from nkdayscraper.ziptools import ZipTools
+    from pathlib import Path
+    jsonDir = Path('data/json')
+    zipTools = ZipTools()
+    zipTools.zipEachFilesInDir(jsonDir)
 
 # %%
 # @app.route('/')
