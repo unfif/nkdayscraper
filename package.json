@@ -15,7 +15,9 @@
     "flask-dev": "SQLALCHEMY_WARN_20=1 python3 -W always::DeprecationWarning app.py",
     "scrape": "npm run jrr && npm run nkd",
     "app": "npm run build && npm run flask",
-    "all": "npm run scrape && npm run app"
+    "deploy": "npm run scrape && npm run app",
+    "zip": "python3 nkdayscraper/ziptools.py data/json",
+    "all": "npm run scrape && npm run zip && npm run app"
   },
   "dependencies": {
     "@popperjs/core": "^2.6.0",
