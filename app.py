@@ -58,7 +58,8 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 # create_table(engine)
 # %%
-data = HorseResult.getRaceResults()
+horseResult = HorseResult()
+data = horseResult.getRaceResults()
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
 # data = {key: pd.read_pickle(f'data/pickle/{key}.pkl') for key in data.keys()}
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
