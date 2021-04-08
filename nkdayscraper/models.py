@@ -164,12 +164,27 @@ class HorseResult(Base):
 
     race = relationship('Race')
 
-    def getRaceResults():
+    def getRaceResults(self):
         data = {}
+        with engine.connect() as conn:
+            records = pd.read_sql(self.makeRecordsQuery(), conn)
+            comments = pd.read_sql(self.makeCommentsQuery(), conn)
+
+        jpLabels = self.makeJpLabels(comments)
+        records = self.makeRecords(records)
+        data['jockeys'] = self.makeJockeys(records)
+        data['records'] = records.rename(columns=jpLabels).copy(deep=True)
+        data['racesinfo'] = pd.DataFrame({'date': records.date[0], 'places': [records.place.unique()]})
+        data['racesgp2'] = self.makeRacesgp2(data['records'])
+        data['json'] = self.makeJsonDict(data)
+        
+        return data
+
+    def makeRecordsQuery(self):
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
-        sql = select(
+        recordsQuery = select(
             Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
             hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
@@ -179,34 +194,47 @@ class HorseResult(Base):
         .outerjoin(jrr)\
         .order_by(Race.place, Race.racenum, hrs.ranking)
 
-        with engine.connect() as conn:
-            records = pd.read_sql(sql, conn)
+        return recordsQuery
 
-            records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
-            records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
-            records.time = records.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
-            records.record = records.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
-            records.fav = records.fav.fillna(99).astype(int)
-            records.horseweight = records.horseweight.fillna(0).astype(int)
-            records.horseweightdiff = records.horseweightdiff.fillna(0).astype(int)
+    def makeCommentsQuery(self):
+        commentsQuery = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
+        commentsQuery += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
+        commentsQuery += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'horseresults') "
+        commentsQuery += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
+        commentsQuery += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
+        commentsQuery += "ORDER BY pd.objsubid"
 
-            records = records.sort_values(['place', 'racenum', 'ranking']).reset_index(drop=True)
-            records.ranking = records[['place', 'racenum', 'ranking']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
-            records['last3frank'] = records[['place', 'racenum', 'last3f']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
+        return commentsQuery
 
-            records.loc[records.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
-            records.loc[records.ranking > 3, 'rankinfo'] = 'initnone_mid'
-            records.loc[records.racenum.diff().fillna(12) != 0, 'rankinfo'] = 'initdisp_top'
+    def makeJpLabels(self, comments):
+        jpLabels = {}
+        for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
+            jpLabels.update({comment[1].column_name: comment[1].column_comment})
 
-            sql = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
-            sql += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
-            sql += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'horseresults') "
-            sql += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
-            sql += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
-            sql += "ORDER BY pd.objsubid"
+        jpLabels.update({'record': 'レコード'})
 
-            comments = pd.read_sql(sql, conn)
+        return jpLabels
 
+    def makeRecords(self, records):
+        records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
+        records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
+        records.time = records.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
+        records.record = records.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
+        records.fav = records.fav.fillna(99).astype(int)
+        records.horseweight = records.horseweight.fillna(0).astype(int)
+        records.horseweightdiff = records.horseweightdiff.fillna(0).astype(int)
+
+        records = records.sort_values(['place', 'racenum', 'ranking']).reset_index(drop=True)
+        records.ranking = records[['place', 'racenum', 'ranking']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
+        records['last3frank'] = records[['place', 'racenum', 'last3f']].groupby(['place', 'racenum']).rank(method='dense', na_option='bottom').astype(int)
+
+        records.loc[records.ranking <= 3, 'rankinfo'] = 'initdisp_mid'
+        records.loc[records.ranking > 3, 'rankinfo'] = 'initnone_mid'
+        records.loc[records.racenum.diff().fillna(12) != 0, 'rankinfo'] = 'initdisp_top'
+
+        return records
+
+    def makeJockeys(self, records):
         jockeyct = pd.crosstab([records.place, records.jockey], records.ranking, margins=True)
         jockeyct.columns = [int(x) if type(x) is float else x for x in jockeyct.columns]
         ranges = [list(range(1, x+1)) for x in range(1, 4)]
@@ -239,18 +267,10 @@ class HorseResult(Base):
 
             jockeys.loc[:, f'{targetcol}順'] = jockeys.loc[:, f'{targetcol}順'].astype(int)
 
-        data['jockeys'] = jockeys
+        return jockeys
 
-        jplabels = {}
-        for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
-            jplabels.update({comment[1].column_name: comment[1].column_comment})
-
-        jplabels.update({'record': 'レコード'})
-        data['records'] = records.rename(columns=jplabels).copy(deep=True)
-        data['racesinfo'] = pd.DataFrame({'date': records.date[0], 'places': [None]})
-        data['racesinfo'].loc[0, 'places'] = records.place.unique()
-
-        racesgp = data['records']
+    def makeRacesgp2(self, records):
+        racesgp = records
         racesgp['R2'] = racesgp.R
         racesgp[['グレード', '賞金', '通過']] = racesgp[['グレード', '賞金', '通過']].applymap(str)
         racesgp = racesgp.query('着順 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
@@ -260,13 +280,13 @@ class HorseResult(Base):
         racesgp2 = racesgp2.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
         racesgp2 = racesgp2.applymap(lambda x: x.strip('['']'))
         racesgp2.R2 = racesgp2.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
-        data['racesgp2'] = racesgp2[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
 
-        jsondict = {}
+        return racesgp2[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
+
+    def makeJsonDict(self, data):
+        jsonDict = {}
         for key, df in data.items():
-            jsondict[key] = df.to_json(orient='table', force_ascii=False)
-            # jsondict[key] = df.to_dict(orient='records')
+            jsonDict[key] = df.to_json(orient='table', force_ascii=False)
+            # jsonDict[key] = df.to_dict(orient='records')
 
-        data['json'] = jsondict
-        
-        return data
+        return jsonDict
