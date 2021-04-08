@@ -13,7 +13,7 @@ const showEvents = ['mouseenter', 'focus'];
 const hideEvents = ['mouseleave', 'blur'];
 
 export default {
-  name: 'NkTooltip',
+  name: 'GeneralTooltip',
   props: {
     target: {
       default: ref(null)

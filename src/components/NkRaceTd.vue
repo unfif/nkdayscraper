@@ -18,7 +18,7 @@
       >
         {{ text }}
       </a>
-      <NkTooltip v-if="['結果URL', '馬URL'].includes(displaymode.urlinfo)"
+      <GeneralTooltip v-if="['結果URL', '馬URL'].includes(displaymode.urlinfo)"
         :target="ref_target"
         :placement="displaymode.urlinfo === '馬URL' ? 'right' : 'bottom'"
         :callback="getCaptionFromEachUrl(displaymode.urlinfo)"
@@ -30,13 +30,13 @@
 
 <script>
 import { ref } from 'vue'
-import NkTooltip from './NkTooltip.vue'
+import GeneralTooltip from './GeneralTooltip.vue'
 import axios from 'axios'
 
 export default {
   name: 'NkRaceTd',
   components: {
-    NkTooltip
+    GeneralTooltip
   },
   props: {
     text: {
