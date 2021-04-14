@@ -6,30 +6,32 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 from sqlalchemy.orm import sessionmaker
-from .models import HorseResult, Jrarecord, Race, Payback, engine, create_tables, mongo_connect
+from .models import HorseResult, Jrarecord, Race, Payback, engine, create_tables, drop_tables, drop_race_tables, mongo_connect
 from .items import HorseResultItem, PaybackItem, RaceItem#, JrarecordItem
-import datetime as dt
 import copy as cp
+
+from time import perf_counter
 
 class NkdayscraperPipeline():
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.engine = engine
         # if self.engine.has_table('horseresults'): HorseResult.__table__.drop(self.engine)
-        # create_tables(self.engine)
+        drop_race_tables(self.engine)
+        create_tables(self.engine)
         self.Session = sessionmaker(bind=self.engine)
-        session = self.Session()
-        try:
-            session.query(Payback).delete()
-            session.query(HorseResult).delete()
-            session.query(Race).delete()
-            # session.query(Jrarecord).delete()
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
+        # session = self.Session()
+        # try:
+        #     session.query(Payback).delete()
+        #     session.query(HorseResult).delete()
+        #     session.query(Race).delete()
+        #     # session.query(Jrarecord).delete()
+        #     session.commit()
+        # except:
+        #     session.rollback()
+        #     raise
+        # finally:
+        #     session.close()
 
         self.has_mongoerr = False
         self.mongo = mongo_connect(query={'serverSelectionTimeoutMS': 3000})
@@ -43,16 +45,17 @@ class NkdayscraperPipeline():
         # DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
         # self.conn = psycopg2.connect(DATABASE_URL)
         pass
+        self.time_start = perf_counter()
 
     def close_spider(self, spider):
         self.mongo.close()
+        print('【spider_time: ' + str(perf_counter() - self.time_start) + '】')
 
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
-        session = self.Session()
         if self.engine.name not in ['postgresql', 'mongodb']:
-            item['addedmoneylist'] = str(item['addedmoneylist'])
-            item['passageratelist'] = str(item['passageratelist'])
+            for columnName in ['addedmoneylist', 'passageratelist']:
+                item[columnName] = str(item[columnName])
         
         if isinstance(item, RaceItem):
             record = Race(**item)
@@ -60,17 +63,15 @@ class NkdayscraperPipeline():
             record = Payback(**item)
         elif isinstance(item, HorseResultItem):
             record = HorseResult(**item)
-
         # elif isinstance(item, JrarecordItem): record = Jrarecord(**item)
 
-        try:
-            session.add(record)
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
+        with self.Session() as session:
+            try:
+                session.add(record)
+                session.commit()
+            except:
+                session.rollback()
+                raise
 
         if not self.has_mongoerr:
             mongoitem = cp.deepcopy(item)
@@ -84,12 +85,14 @@ class JrarecordsscraperPipeline():
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.engine = engine
-        if self.engine.has_table('paybacks'): Payback.__table__.drop(self.engine)
-        if self.engine.has_table('horseresults'): HorseResult.__table__.drop(self.engine)
-        if self.engine.has_table('races'): Race.__table__.drop(self.engine)
-        if self.engine.has_table('jrarecords'): Jrarecord.__table__.drop(self.engine)
+        # if self.engine.has_table('jrarecords'): Jrarecord.__table__.drop(self.engine)
+        # Jrarecord.__table__.create(self.engine)
+        drop_tables(self.engine)
         create_tables(self.engine)
         self.Session = sessionmaker(bind=self.engine)
+        # with self.Session() as session:
+        #     session.query(Jrarecord.__table__).delete()
+
         # session = self.Session()
         # try:
         #     session.query(Jrarecord).delete()
@@ -118,21 +121,19 @@ class JrarecordsscraperPipeline():
 
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
-        session = self.Session()
         if self.engine.name not in ['postgresql', 'mongodb']:
             # item['addedmoneylist'] = str(item['addedmoneylist'])
             # item['passageratelist'] = str(item['passageratelist'])
             pass
 
         record = Jrarecord(**item)
-        try:
-            session.add(record)
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
+        with self.Session() as session:
+            try:
+                session.add(record)
+                session.commit()
+            except:
+                session.rollback()
+                raise
 
         if not self.has_mongoerr:
             mongoitem = cp.deepcopy(item)

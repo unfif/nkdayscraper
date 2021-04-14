@@ -1,5 +1,5 @@
 # %%
-from flask import Flask, render_template, jsonify#, redirect, request, url_for
+from flask import Flask, render_template, jsonify#, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from scrapy.crawler import CrawlerRunner#, CrawlerProcess
@@ -56,7 +56,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
-# create_table(engine)
+# create_tables(engine)
 # %%
 horseResult = HorseResult()
 data = horseResult.getRaceResults()
