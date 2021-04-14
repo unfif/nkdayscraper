@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import scrapy, re, requests, datetime as dt
+import re, datetime as dt#, scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from ..items import HorseResultItem, PaybackItem, RaceItem#, JrarecordItem
+from ..items import HorseResultItem, PaybackItem, RaceItem
 # from scrapy.shell import inspect_response
 
 today = dt.date.today()
@@ -36,7 +36,7 @@ class NkdaySpider(CrawlSpider):
 
     def __init__(self, date=date, *args, **kwargs):
         super(NkdaySpider, self).__init__(*args, **kwargs)
-        self.start_urls = [baseurl + date]#'http://127.0.0.1:5555']
+        self.start_urls = [baseurl + date]
 
     # def start_requests(self):
     #     url = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id=c' + cdate

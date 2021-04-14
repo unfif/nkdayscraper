@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import scrapy, re, datetime as dt
+import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from nkdayscraper.items import JrarecordItem

@@ -1,5 +1,5 @@
 # %%
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Float, String, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint#, ForeignKey, UniqueConstraint, outerjoin, and_, LargeBinary, SmallInteger
+from sqlalchemy import create_engine, Column, Integer, Float, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint#, ForeignKey, UniqueConstraint, outerjoin, and_, LargeBinary, SmallInteger
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import declarative_base, relationship, aliased
@@ -37,6 +37,15 @@ def mongo_connect(url=MONGO_URL, query=None):
 
 def create_tables(engine):
     Base.metadata.create_all(engine)
+
+def drop_race_tables(engine):
+    if engine.has_table('paybacks'): Payback.__table__.drop(engine)
+    if engine.has_table('horseresults'): HorseResult.__table__.drop(engine)
+    if engine.has_table('races'): Race.__table__.drop(engine)
+
+def drop_tables(engine):
+    drop_race_tables(engine)
+    if engine.has_table('jrarecords'): Jrarecord.__table__.drop(engine)
 
 class Race(Base):
     __tablename__ = 'races'
@@ -105,6 +114,11 @@ class Payback(Base):
 
 class Jrarecord(Base):
     __tablename__ = 'jrarecords'
+    # __table_args__ = (ForeignKeyConstraint(
+    #     ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
+    #     ['races.place', 'races.coursetype', 'races.generation', 'races.distance', 'races.courseinfo1', 'races.courseinfo2']),
+    #     {}
+    # )
     # __table_args__ = (UniqueConstraint(
     #     'place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'),
     #     {}
@@ -129,6 +143,8 @@ class Jrarecord(Base):
     weather = Column(Text, comment='天候')
     condition = Column(Text, comment='状態')
     reference = Column(Boolean, comment='基準')
+
+    # race = relationship('Race')
 
 class HorseResult(Base):
     __tablename__ = 'horseresults'
