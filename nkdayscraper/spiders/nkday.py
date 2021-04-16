@@ -5,13 +5,18 @@ from scrapy.spiders import CrawlSpider, Rule
 from ..items import HorseResultItem, PaybackItem, RaceItem
 # from scrapy.shell import inspect_response
 
-today = dt.date.today()
-if today.weekday() in [5, 6]:
-    targetdate = today
-else:
-    targetdate = today - dt.timedelta((today.weekday() + 1) % 7)
+def getTargetDate():
+    today = dt.date.today()
+    if today.weekday() in [5, 6]:
+        targetDate = today
+    else:
+        targetDate = today - dt.timedelta((today.weekday() + 1) % 7)
 
-date = f'{targetdate:%Y%m%d}'
+    return targetDate
+
+targetDate = getTargetDate()
+targetDate = f'{targetDate:%Y%m%d}'
+
 baseurl = 'https://race.netkeiba.com/top/race_list_sub.html?kaisai_date='
 
 class NkdaySpider(CrawlSpider):
@@ -34,9 +39,9 @@ class NkdaySpider(CrawlSpider):
         'ITEM_PIPELINES': {'nkdayscraper.pipelines.NkdayscraperPipeline': 300}
     }
 
-    def __init__(self, date=date, *args, **kwargs):
+    def __init__(self, date=targetDate, *args, **kwargs):
         super(NkdaySpider, self).__init__(*args, **kwargs)
-        self.start_urls = [baseurl + date]
+        self.start_urls = [baseurl + targetDate]
 
     # def start_requests(self):
     #     url = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id=c' + cdate

@@ -17,8 +17,8 @@ class NkdayscraperPipeline():
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.engine = engine
         # if self.engine.has_table('horseresults'): HorseResult.__table__.drop(self.engine)
-        drop_race_tables(self.engine)
-        create_tables(self.engine)
+        # drop_race_tables(self.engine)
+        # create_tables(self.engine)
         self.Session = sessionmaker(bind=self.engine)
         # session = self.Session()
         # try:
@@ -67,7 +67,7 @@ class NkdayscraperPipeline():
 
         with self.Session() as session:
             try:
-                session.add(record)
+                session.merge(record)
                 session.commit()
             except:
                 session.rollback()
@@ -87,8 +87,8 @@ class JrarecordsscraperPipeline():
         self.engine = engine
         # if self.engine.has_table('jrarecords'): Jrarecord.__table__.drop(self.engine)
         # Jrarecord.__table__.create(self.engine)
-        drop_tables(self.engine)
-        create_tables(self.engine)
+        # drop_tables(self.engine)
+        # create_tables(self.engine)
         self.Session = sessionmaker(bind=self.engine)
         # with self.Session() as session:
         #     session.query(Jrarecord.__table__).delete()
@@ -129,7 +129,7 @@ class JrarecordsscraperPipeline():
         record = Jrarecord(**item)
         with self.Session() as session:
             try:
-                session.add(record)
+                session.merge(record)
                 session.commit()
             except:
                 session.rollback()
