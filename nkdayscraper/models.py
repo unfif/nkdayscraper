@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, Column, Integer, Float, Text, Date, DateTi
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import declarative_base, relationship, aliased
+from .spiders.nkday import getTargetDate
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
 import pandas as pd
@@ -182,8 +183,9 @@ class HorseResult(Base):
 
     def getRaceResults(self):
         data = {}
+        targetDate = getTargetDate()
         with engine.connect() as conn:
-            records = pd.read_sql(self.makeRecordsQuery(), conn)
+            records = pd.read_sql(self.makeRecordsQuery(targetDate), conn)
             comments = pd.read_sql(self.makeCommentsQuery(), conn)
 
         jpLabels = self.makeJpLabels(comments)
@@ -196,11 +198,11 @@ class HorseResult(Base):
         
         return data
 
-    def makeRecordsQuery(self):
+    def makeRecordsQuery(self, date):
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
-        recordsQuery = select(
+        query = select(
             Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
             hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
@@ -208,19 +210,20 @@ class HorseResult(Base):
         .join(hrs)\
         .outerjoin(pay)\
         .outerjoin(jrr)\
+        .filter(Race.date == date)\
         .order_by(Race.place, Race.racenum, hrs.ranking)
 
-        return recordsQuery
+        return query
 
     def makeCommentsQuery(self):
-        commentsQuery = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
-        commentsQuery += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
-        commentsQuery += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'horseresults') "
-        commentsQuery += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
-        commentsQuery += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
-        commentsQuery += "ORDER BY pd.objsubid"
+        query = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
+        query += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
+        query += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'horseresults') "
+        query += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
+        query += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
+        query += "ORDER BY pd.objsubid"
 
-        return commentsQuery
+        return query
 
     def makeJpLabels(self, comments):
         jpLabels = {}
