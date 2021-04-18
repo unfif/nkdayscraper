@@ -9,12 +9,12 @@ from nkdayscraper.models import HorseResult#, engine, create_tables
 from nkdayscraper.spiders.nkday import NkdaySpider
 from twisted.internet import reactor
 
-import argparse as argp
+from argparse import ArgumentParser
 import subprocess as sp
 import shlex as se
 
 import requests as rq
-import uvicorn, os, sys, getpass, csv#, json
+import uvicorn, os, sys, platform, getpass, csv#, json
 import datetime as dt
 import logging
 
@@ -24,27 +24,34 @@ logging.basicConfig(
 
 # import pandas as pd
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
-parser = argp.ArgumentParser()
-parser.add_argument('-H', '--host', type=str, default='0.0.0.0')
-parser.add_argument('-p', '--port', type=int, default=5000)
-parser.add_argument('-l', '--log-level', type=str, default='info')
-parser.add_argument('--orig', action='store_true')
-parser.add_argument('--reload', action='store_true')
-parser.add_argument('-z', '--zip', action='store_true')
-args = parser.parse_args(args=[])
-logging.info(f'{args=}')
 
-user = getpass.getuser()
-versionmm = f'{sys.version_info.major}{sys.version_info.minor}'
-pypath = f'C:\\Users\\{user}\\AppData\\Local\\Programs\\Python\\Python{versionmm}'
+def getArgs():
+    parser = ArgumentParser()
+    parser.add_argument('-H', '--host', type=str, default='0.0.0.0')
+    parser.add_argument('-p', '--port', type=int, default=5000)
+    parser.add_argument('-l', '--log-level', type=str, default='info')
+    parser.add_argument('--orig', action='store_true')
+    parser.add_argument('--reload', action='store_true')
+    parser.add_argument('-z', '--zip', action='store_true')
+    args = parser.parse_args(args=[])
+    logging.info(f'{args=}')
+
+    return args
+
+args = getArgs()
 env = os.environ
-env['PYTHONPATH'] = ';'.join([
-    os.getcwd(),
-    pypath, f'{pypath}\\python{versionmm}.zip', f'{pypath}\\DLLs', f'{pypath}\\lib',
-    f'{pypath}\\lib\\site-packages', f'{pypath}\\lib\\site-packages\\win32',
-    f'{pypath}\\lib\\site-packages\\win32\\lib', f'{pypath}\\lib\\site-packages\\Pythonwin'
-])
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
+
+if platform.system() == 'Windows':
+    user = getpass.getuser()
+    pyVersion = f'{sys.version_info.major}{sys.version_info.minor}'
+    pyPath = f'C:\\Users\\{user}\\AppData\\Local\\Programs\\Python\\Python{pyVersion}'
+    env['PYTHONPATH'] = ';'.join([
+        os.getcwd(),
+        pyPath, f'{pyPath}\\python{pyVersion}.zip', f'{pyPath}\\DLLs', f'{pyPath}\\lib',
+        f'{pyPath}\\lib\\site-packages', f'{pyPath}\\lib\\site-packages\\win32',
+        f'{pyPath}\\lib\\site-packages\\win32\\lib', f'{pyPath}\\lib\\site-packages\\Pythonwin'
+    ])
 
 app = Flask(__name__) if args.orig else Flask(
     __name__, static_folder = 'dist', template_folder = 'dist'
