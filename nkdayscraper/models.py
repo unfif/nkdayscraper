@@ -182,17 +182,18 @@ class HorseResult(Base):
     race = relationship('Race')
 
     def getRaceResults(self):
-        data = {}
-        targetDate = getTargetDate()
+        date = getTargetDate()
         with engine.connect() as conn:
-            records = pd.read_sql(self.makeRecordsQuery(targetDate), conn)
+            records = pd.read_sql(self.makeRecordsQuery(date), conn)
             comments = pd.read_sql(self.makeCommentsQuery(), conn)
 
         jpLabels = self.makeJpLabels(comments)
         records = self.makeRecords(records)
-        data['jockeys'] = self.makeJockeys(records)
-        data['records'] = records.rename(columns=jpLabels).copy(deep=True)
-        data['racesinfo'] = pd.DataFrame({'date': records.date[0], 'places': [records.place.unique()]})
+        data = {
+            'jockeys': self.makeJockeys(records),
+            'records': records.rename(columns=jpLabels).copy(deep=True),
+            'racesinfo': pd.DataFrame({'date': records.date[0], 'places': [records.place.unique()]})
+        }
         data['racesgp2'] = self.makeRacesgp2(data['records'])
         data['json'] = self.makeJsonDict(data)
         
