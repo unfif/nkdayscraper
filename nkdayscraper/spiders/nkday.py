@@ -15,7 +15,7 @@ def getTargetDate():
     return targetDate
 
 targetDate = getTargetDate()
-targetDate = f'{targetDate:%Y%m%d}'
+date = f'{targetDate:%Y%m%d}'
 
 baseurl = 'https://race.netkeiba.com/top/race_list_sub.html?kaisai_date='
 
@@ -39,9 +39,9 @@ class NkdaySpider(CrawlSpider):
         'ITEM_PIPELINES': {'nkdayscraper.pipelines.NkdayscraperPipeline': 300}
     }
 
-    def __init__(self, date=targetDate, *args, **kwargs):
+    def __init__(self, date=date, *args, **kwargs):
         super(NkdaySpider, self).__init__(*args, **kwargs)
-        self.start_urls = [baseurl + targetDate]
+        self.start_urls = [baseurl + date]
 
     # def start_requests(self):
     #     url = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id=c' + cdate
