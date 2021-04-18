@@ -19,7 +19,7 @@ class NkdayscraperPipeline():
         # if self.engine.has_table('horseresults'): HorseResult.__table__.drop(self.engine)
         # drop_race_tables(self.engine)
         # create_tables(self.engine)
-        self.Session = sessionmaker(bind=self.engine)
+        self.Session = sessionmaker(bind=self.engine, future=False)
         # session = self.Session()
         # try:
         #     session.query(Payback).delete()
@@ -89,7 +89,7 @@ class JrarecordsscraperPipeline():
         # Jrarecord.__table__.create(self.engine)
         # drop_tables(self.engine)
         # create_tables(self.engine)
-        self.Session = sessionmaker(bind=self.engine)
+        self.Session = sessionmaker(bind=self.engine, future=False)
         # with self.Session() as session:
         #     session.query(Jrarecord.__table__).delete()
 
