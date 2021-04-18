@@ -1,5 +1,5 @@
 # %%
-from sqlalchemy import create_engine, Column, Integer, Float, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint#, ForeignKey, UniqueConstraint, outerjoin, and_, LargeBinary, SmallInteger
+from sqlalchemy import create_engine, Column, Integer, Float, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint, exists, and_#, ForeignKey, UniqueConstraint, outerjoin, and_, LargeBinary, SmallInteger
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import declarative_base, relationship, aliased
@@ -200,6 +200,7 @@ class HorseResult(Base):
         return data
 
     def makeRecordsQuery(self, date):
+        rac = aliased(Race, name='rac')
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
@@ -211,7 +212,13 @@ class HorseResult(Base):
         .join(hrs)\
         .outerjoin(pay)\
         .outerjoin(jrr)\
-        .filter(Race.date == date)\
+        .filter(
+            ~exists().where(and_(
+                rac.place == Race.place,
+                rac.racenum == Race.racenum,
+                rac.date > Race.date
+            ))
+        )\
         .order_by(Race.place, Race.racenum, hrs.ranking)
 
         return query

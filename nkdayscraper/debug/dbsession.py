@@ -4,7 +4,7 @@ from ..models import horseresults, db_connect#, create_tables
 engine = db_connect(echo=True)
 # drop_table(engine, horseresults)
 # create_tables(engine)
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine, future=False)
 session = Session()
 records = session.query(horseresults).all()
 # session.commit()
