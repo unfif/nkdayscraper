@@ -317,3 +317,8 @@ class HorseResult(Base):
             # jsonDict[key] = df.to_dict(orient='records')
 
         return jsonDict
+
+class Racecourses(Base):
+    __tablename__ = 'racecourses'
+    id = Column(Text, primary_key=True, comment='コースID')
+    name = Column(Text, primary_key=True, comment='コース名')
