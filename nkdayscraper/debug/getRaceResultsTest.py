@@ -1,6 +1,6 @@
 # %%
 from sqlalchemy import create_engine, select
-from sqlalchemy.orm import Session, aliased
+from sqlalchemy.future.orm import Session, aliased
 import pandas as pd
 import settings
 from models import Race, Payback, Jrarecord, HorseResult
