@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch, helpers
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
+from sqlalchemy.future.orm import Session
 import settings
 
 es = Elasticsearch(settings.ES_URL)
