@@ -214,8 +214,8 @@ class HorseResult(Base):
         .outerjoin(jrr)\
         .filter(
             ~exists().where(and_(
-                rac.place == Race.place,
-                rac.racenum == Race.racenum,
+                # rac.place == Race.place,
+                # rac.racenum == Race.racenum,
                 rac.date > Race.date
             ))
         )\
