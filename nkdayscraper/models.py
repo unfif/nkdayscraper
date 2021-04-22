@@ -157,6 +157,7 @@ class HorseResult(Base):
 
     ranking = Column(Integer, comment='着順')
     postnum = Column(Integer, comment='枠番')
+    horseid = Column(Integer, comment='馬ID')
     horsenum = Column(Integer, primary_key=True, comment='馬番')
     horsename = Column(Text, comment='馬名')
     horseurl = Column(Text, comment='馬URL')

@@ -114,12 +114,14 @@ class NkdaySpider(CrawlSpider):
 
         for tr in raceinfo.css('#All_Result_Table tbody tr'):
             item = HorseResultItem()
+            horseurl = tr.css('.Horse_Info .Horse_Name a::attr(href)').get()
             item['raceid'] = raceid
             item['ranking'] = tr.css('td')[0].css('div::text').get().strip()
             item['postnum'] = tr.css('td')[1].css('div::text').get()
+            item['horseid'] = horseurl.split('/')[-1]
             item['horsenum'] = tr.css('td')[2].css('div::text').get()
             item['horsename'] = tr.css('td')[3].css('.Horse_Name a::text').get()
-            item['horseurl'] = tr.css('.Horse_Info .Horse_Name a::attr(href)').get()
+            item['horseurl'] = horseurl
             horse_info_detail = tr.css('td')[4].css('.Horse_Info_Detail span::text').get().strip()
             item['sex'] = {'牡':'牡','牝':'牝','騙':'騙','せ':'騙','セ':'騙','せん':'騙','セン':'騙'}.get(horse_info_detail[0])
             item['age'] = int(horse_info_detail[1:])

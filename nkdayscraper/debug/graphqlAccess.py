@@ -29,6 +29,7 @@ query = """query MyQuery {
     horseresults(order_by: {ranking: asc}) {
       ranking
       postnum
+      horseid
       horsenum
       horsename
       horseurl
