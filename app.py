@@ -75,7 +75,7 @@ data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOT
 # jsonforapi = Path('data/json/raceresults.json').read_text()
 # %%
 if(args.zip):
-    from nkdayscraper.ziptools import ZipTools
+    from nkdayscraper.utils.ziptools import ZipTools
     from pathlib import Path
     jsonDir = Path('data/json')
     zipTools = ZipTools()
