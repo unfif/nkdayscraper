@@ -16,7 +16,7 @@
     "scrape": "npm run jrr && npm run nkd",
     "app": "npm run build && npm run flask",
     "deploy": "npm run scrape && npm run app",
-    "zip": "python3 nkdayscraper/ziptools.py data/json",
+    "zip": "python3 nkdayscraper/utils/ziptools.py data/json",
     "all": "npm run scrape && npm run zip && npm run app"
   },
   "dependencies": {
