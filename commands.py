@@ -1,16 +1,14 @@
 if __name__ == '__main__':
-    from nkdayscraper.models import engine, Base, Racecourses#, create_tables, drop_tables, drop_race_tables
+    from nkdayscraper.models import engine, Base, Racecourses, create_tables, drop_tables, drop_race_tables
     from sys import argv
 
     if argv[1] == 'create_tables':
-        print(argv[1])
+        create_tables(engine)
     elif argv[1] == 'drop_tables':
-        print(argv[1])
+        drop_tables(engine)
     elif argv[1] == 'drop_race_tables':
-        print(argv[1])
+        drop_race_tables(engine)
     elif argv[1] == 'recreate_racecourses':
-        print(argv[1])
-
         Base.metadata.drop_all(engine, tables=[Racecourses.__table__])
         Base.metadata.create_all(engine, tables=[Racecourses.__table__])
 
