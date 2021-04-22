@@ -62,6 +62,7 @@ class HorseResultItem(scrapy.Item):
 
     ranking = scrapy.Field()
     postnum = scrapy.Field()
+    horseid = scrapy.Field()
     horsenum = scrapy.Field()
     horsename = scrapy.Field()
     horseurl = scrapy.Field()
