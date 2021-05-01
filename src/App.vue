@@ -27,7 +27,7 @@ export default {
   },
   setup(){
     const data = reactive({
-      date: '',
+      date: new Date(),
       places: [],
       cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
       records: [],
@@ -44,7 +44,7 @@ export default {
     axios.get("/api/racesinfo/")
     .then((response)=>{
       const racesinfo = response.data;
-      data.date = racesinfo.data[0].date.split('T')[0];
+      data.date = new Date(racesinfo.data[0].date);
       data.places = racesinfo.data[0].places;
     })
     .catch(err => console.log('err:', err))
