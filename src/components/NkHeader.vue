@@ -1,16 +1,27 @@
 <template>
   <header>
-    <h2>{{ date }}</h2>
+    <h2>{{ dateFormated }}</h2>
     <h2 v-for="place in places" :key="place">{{ place }}</h2>
   </header>
 </template>
 
 <script>
+import { computed } from 'vue'
+
 export default {
   name: "NkHeader",
   props: {
-    date: {type: String},
+    date: {type: Date},
     places: {type: Array}
+  },
+  setup(props){
+    const dateFormated = computed(()=>{
+      return props.date.toLocaleDateString();
+    });
+
+    return {
+      dateFormated
+    }
   }
 };
 </script>
