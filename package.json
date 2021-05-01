@@ -23,7 +23,7 @@
     "@popperjs/core": "^2.6.0",
     "axios": "^0.21.1",
     "bootstrap": "^5.0.0-beta1",
-    "core-js": "^3.8.1",
+    "core-js": "^3.11.1",
     "jquery": "^3.5.1",
     "typescript": "^3.9.7",
     "vue": "^3.0.4"
