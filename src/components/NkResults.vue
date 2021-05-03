@@ -35,7 +35,7 @@ export default {
   name: 'NkResults',
   props: {
     results: {
-      type: Object,
+      type: Object
     }
   },
   setup(){

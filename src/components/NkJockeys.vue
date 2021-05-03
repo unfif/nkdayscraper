@@ -42,7 +42,7 @@ export default {
   name: 'NkJockeys',
   props: {
     jockeys: {
-      type: Object,
+      type: Object
     },
     places: {
       type: Array,
