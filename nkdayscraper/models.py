@@ -1,5 +1,5 @@
 # %%
-from sqlalchemy import create_engine, Column, Integer, Float, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint, exists, and_#, ForeignKey, UniqueConstraint, outerjoin, and_, LargeBinary, SmallInteger
+from sqlalchemy import create_engine, Column, Integer, Float, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint, exists#, and_, ForeignKey, UniqueConstraint, outerjoin, LargeBinary, SmallInteger
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import declarative_base, relationship, aliased
@@ -182,8 +182,8 @@ class HorseResult(Base):
 
     race = relationship('Race')
 
-    def getRaceResults(self):
-        date = getTargetDate()
+    def getRaceResults(self, date = None):
+        if not date: date = getTargetDate()
         with engine.connect() as conn:
             records = pd.read_sql(self.makeRecordsQuery(date), conn)
             comments = pd.read_sql(self.makeCommentsQuery(), conn)
@@ -195,16 +195,18 @@ class HorseResult(Base):
             'records': records.rename(columns=jpLabels).copy(deep=True),
             'racesinfo': pd.DataFrame({'date': records.date[0], 'places': [records.place.unique()]})
         }
-        data['racesgp2'] = self.makeRacesgp2(data['records'])
+        data['results'] = self.makeResults(data['records'])
         data['json'] = self.makeJsonDict(data)
         
         return data
 
-    def makeRecordsQuery(self, date):
-        rac = aliased(Race, name='rac')
+    def makeRecordsQuery(self, date = None):
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
+        # rac = aliased(Race, name='rac')
+        # filterQuery = ~exists().where(rac.date > Race.date)
+        filterQuery = Race.date == date if date else True
         query = select(
             Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
             hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
@@ -213,13 +215,7 @@ class HorseResult(Base):
         .join(hrs)\
         .outerjoin(pay)\
         .outerjoin(jrr)\
-        .filter(
-            ~exists().where(and_(
-                # rac.place == Race.place,
-                # rac.racenum == Race.racenum,
-                rac.date > Race.date
-            ))
-        )\
+        .filter(filterQuery)\
         .order_by(Race.place, Race.racenum, hrs.ranking)
 
         return query
@@ -297,19 +293,19 @@ class HorseResult(Base):
 
         return jockeys
 
-    def makeRacesgp2(self, records):
+    def makeResults(self, records):
         racesgp = records
         racesgp['R2'] = racesgp.R
         racesgp[['グレード', '賞金', '通過']] = racesgp[['グレード', '賞金', '通過']].applymap(str)
         racesgp = racesgp.query('着順 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
-        racesgp2 = racesgp.agg(list)
-        racesgp2.R2 = racesgp2.R2.apply(set)
-        racesgp2 = racesgp2.applymap(lambda x: '(' + ', '.join(map(str, x)) + ')')
-        racesgp2 = racesgp2.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
-        racesgp2 = racesgp2.applymap(lambda x: x.strip('['']'))
-        racesgp2.R2 = racesgp2.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
+        results = racesgp.agg(list)
+        results.R2 = results.R2.apply(set)
+        results = results.applymap(lambda x: '(' + ', '.join(map(str, x)) + ')')
+        results = results.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
+        results = results.applymap(lambda x: x.strip('['']'))
+        results.R2 = results.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
 
-        return racesgp2[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
+        return results[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
 
     def makeJsonDict(self, data):
         jsonDict = {}

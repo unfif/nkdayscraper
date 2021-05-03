@@ -1,6 +1,6 @@
 # %%
 from sqlalchemy import create_engine, select
-from sqlalchemy.future.orm import Session, aliased
+from sqlalchemy.orm import Session, aliased
 import pandas as pd
 import settings
 from models import Race, Payback, Jrarecord, HorseResult
@@ -38,7 +38,7 @@ print(sql)
 # %%
 with engine.connect() as conn:
     records = pd.read_sql(sql, conn)
-    # if len(records) == 0: return {'records': pd.DataFrame(),'jockeys': pd.DataFrame(), 'racesgp2': pd.DataFrame()}
+    # if len(records) == 0: return {'records': pd.DataFrame(),'jockeys': pd.DataFrame(), 'results': pd.DataFrame()}
 
     records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
     records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
@@ -120,13 +120,13 @@ racesgp = data['records']
 racesgp['R2'] = racesgp.R
 racesgp[['グレード', '賞金', '通過']] = racesgp[['グレード', '賞金', '通過']].applymap(str)
 racesgp = racesgp.query('着順 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
-racesgp2 = racesgp.agg(list)
-racesgp2.R2 = racesgp2.R2.apply(set)
-racesgp2 = racesgp2.applymap(lambda x: '(' + ', '.join(map(str, x)) + ')')
-racesgp2 = racesgp2.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
-racesgp2 = racesgp2.applymap(lambda x: x.strip('['']'))
-racesgp2.R2 = racesgp2.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
-data['racesgp2'] = racesgp2[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
+results = racesgp.agg(list)
+results.R2 = results.R2.apply(set)
+results = results.applymap(lambda x: '(' + ', '.join(map(str, x)) + ')')
+results = results.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
+results = results.applymap(lambda x: x.strip('['']'))
+results.R2 = results.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
+data['results'] = results[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
 
 jsondict = {}
 for key, df in data.items():

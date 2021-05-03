@@ -7,8 +7,8 @@
           <th v-for="col in cols" :class="`col_${col}`" :key="col">{{ col }}</th>
         </tr>
       </thead>
-      <tbody v-if="records.length">
-        <tr v-for="record in records"
+      <tbody v-if="records.data.length">
+        <tr v-for="record in records.data"
           v-show="showTargetByRecordMap(record, [{place: '場所'}, {racenum: 'R'}, {coursetype: '形式'}]) && showTargetByRankInfo(record.rankinfo)"
           :class="makeClassesFromRecord(record, ['場所', '形式', 'R', '着順', 'index', 'rankinfo'])"
           @click="flipDisplayTargets($event, record)"
@@ -55,8 +55,13 @@ export default {
       default: ()=>[]
     },
     records: {
-      type: Array,
-      default: ()=>[]
+      type: Object,
+      default: ()=>{
+        return {
+          schema: {fields: null},
+          data: []
+        }
+      }
     }
   },
   setup(){
