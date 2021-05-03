@@ -1,7 +1,7 @@
 <template>
   <header>
     <!-- <h2>{{ dateFormated }}</h2> -->
-    <input type="date" id="start" name="trip-start" :value="dateFormated">
+    <input type="date" :value="dateFormated" @change="emitRaceDate($event)">
     <h2 v-for="place in places" :key="place">{{ place }}</h2>
   </header>
 </template>
@@ -15,7 +15,7 @@ export default {
     date: {type: Date},
     places: {type: Array}
   },
-  setup(props){
+  setup(props, { emit }){
     const dateFormated = computed(()=>{
       const options = {
         year: 'numeric',
@@ -26,8 +26,14 @@ export default {
       return props.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-');
     });
 
+    const emitRaceDate = (event)=>{
+      const date = event.target.value;
+      emit('change-race-date', {date});
+    }
+
     return {
-      dateFormated
+      dateFormated,
+      emitRaceDate
     }
   }
 };
@@ -42,11 +48,11 @@ html header {
   h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1{
     margin: 0.5rem;
   }
-}
-input[type="date"] {
-  width: 12rem;
-  font-size: 1.5rem;
-  color: #fff;
-  background: #343a40;
+  input[type="date"] {
+    width: 15rem;
+    font-size: 2rem;
+    color: #fff;
+    background: #343a40;
+  }
 }
 </style>

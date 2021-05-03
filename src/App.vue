@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <NkHeader :date="data.date" :places="data.places"/>
+    <NkHeader :date="data.date" :places="data.places" @change-race-date="changeRaceDate($event)"/>
     <main>
+      <button @click="getData">getData</button>
+      <button @click="clearData">clearData</button>
       <NkRaces :places="data.places" :cols="data.cols" :records="data.records"/>
       <NkResults :results="data.results"/>
       <NkJockeys :jockeys="data.jockeys" :places="data.places"/>
@@ -30,44 +32,70 @@ export default {
       date: new Date(),
       places: [],
       cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
-      records: [],
-      results: {
-        schema: {fields: null},
-        data: null
-      },
-      jockeys: {
-        schema: {fields: null},
-        data: null
-      }
+      records: {schema: {fields: null}, data: []},
+      results: {schema: {fields: null}, data: []},
+      jockeys: {schema: {fields: null}, data: []}
     })
     
-    axios.get("/api/racesinfo/")
-    .then((response)=>{
-      const racesinfo = response.data;
-      data.date = new Date(racesinfo.data[0].date);
-      data.places = racesinfo.data[0].places;
-    })
-    .catch(err => console.log('err:', err))
+    // const getRecords = ()=>{
+    //   axios.get("/api/racesinfo/")
+    //   .then((response)=>{
+    //     const racesinfo = response.data;
+    //     data.date = new Date(racesinfo.data[0].date);
+    //     data.places = racesinfo.data[0].places;
+    //   })
+    //   .catch(err => console.log('err:', err));
+    //   ['records', 'results', 'jockeys'].forEach((value)=>{
+    //     axios.get(`/api/${value}/`)
+    //     .then((response)=>{data[value] = response.data;})
+    //     .catch(err => console.log('err:', err));
+    //   })
+    // }
 
-    axios.get("/api/records/")
-    .then((response)=>{
-      data.records = response.data.data;
-    })
-    .catch(err => console.log('err:', err))
+    const getData = (date = null)=>{
+      let url = '/api/';
+      if(date) url += `${date}/`;
+      axios.get(url)
+      .then((response)=>{
+        const racesinfo = JSON.parse(response.data.racesinfo);
+        data.date = new Date(racesinfo.data[0].date);
+        data.places = racesinfo.data[0].places;
+        data.records = JSON.parse(response.data.records);
+        data.results = JSON.parse(response.data.results);
+        data.jockeys = JSON.parse(response.data.jockeys);
+      })
+      .catch(err => console.log('err:', err));
+    }
 
-    axios.get("/api/racesgp2/")
-    .then((response)=>{
-      data.results = response.data;
-    })
-    .catch(err => console.log('err:', err))
+    const clearData = ()=>{
+      data.date = new Date();
+      data.places = [];
+      data.records = {schema: {fields: null}, data: []};
+      data.results = {schema: {fields: null}, data: []};
+      data.jockeys = {schema: {fields: null}, data: []};
+    }
 
-    axios.get("/api/jockeys/")
-    .then((response)=>{
-      data.jockeys = response.data;
-    })
-    .catch(err => console.log('err:', err))
+    const changeRaceDate = (event)=>{
+      data.date = new Date(event.date);
+      const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        // weekday : 'short'
+      };
+      getData(data.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-'));
+    }
 
-    return {data}
+    // getRecords();
+    getData();
+
+    return {
+      data,
+      // getRecords,
+      clearData,
+      getData,
+      changeRaceDate
+    }
   }
 }
 </script>

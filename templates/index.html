@@ -64,13 +64,13 @@
         <thead class="table-dark">
           <tr>
             <th>場所</th>
-            {%- for column in racesgp2.columns: %}
+            {%- for column in results.columns: %}
             <th>{@column@}</th>
             {%- endfor %}
           </tr>
         </thead>
         <tbody>
-          {%- for index, races in racesgp2.iterrows(): %}
+          {%- for index, races in results.iterrows(): %}
           <tr>
             <th class="table-secondary">
               {%- for thtext in index: -%}
