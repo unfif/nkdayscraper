@@ -6,7 +6,7 @@ from scrapy.crawler import CrawlerRunner#, CrawlerProcess
 # from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
 from nkdayscraper.models import HorseResult#, engine, create_tables
-from nkdayscraper.spiders.nkday import NkdaySpider
+from nkdayscraper.spiders.nkday import getTargetDate, NkdaySpider
 from twisted.internet import reactor
 
 from argparse import ArgumentParser
@@ -65,13 +65,15 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 # create_tables(engine)
 # %%
+date = getTargetDate()
 horseResult = HorseResult()
-data = horseResult.getRaceResults()
+data = horseResult.getRaceResults(date)
+data['records'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
+data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
+
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
 # data = {key: pd.read_pickle(f'data/pickle/{key}.pkl') for key in data.keys()}
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
-data['records'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
-data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 # jsonforapi = Path('data/json/raceresults.json').read_text()
 # %%
 if(args.zip):
@@ -103,9 +105,14 @@ def nkraces():
 def getall():
     return data['json']
 
-@app.route('/api/<string:key>/', methods=['GET'])
-def api(key):
-    return data['json'][key]
+@app.route('/api/<string:date>/', methods=['GET'])
+def api(date):
+    data = horseResult.getRaceResults(date)
+    return data['json']
+
+# @app.route('/api/<string:key>/', methods=['GET'])
+# def api(key):
+#     return data['json'][key]
 
 @app.route('/crawl', methods=['GET'])
 def crawl():
