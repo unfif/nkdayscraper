@@ -44,13 +44,21 @@ if __name__ == '__main__':
         with Session(engine) as session:
             result = session.execute(query)
 
-        print('------incomplete_records------')
+        print('----------------------------[ incomplete_records ]----------------------------')
         for row in result.fetchall():
             print(row[0].strftime('%Y-%m-%d'))
 
-        print('------------------------------')
+        print('------------------------------------------------------------------------------')
 
-    if argv[1] == 'create_tables':
+    if argv[1] == 'help':
+        print('-------------------------------[ command_list ]-------------------------------')
+        print('create_tables: this command creates all tables in model.')
+        print('drop_tables: this command drops some tables.')
+        print('drop_race_tables: this command drops tables related race.')
+        print('recreate_racecourses: this command drops and creates Racecourses table.')
+        print('check_records: this command checks incomplate records and displays race date.')
+        print('------------------------------------------------------------------------------')
+    elif argv[1] == 'create_tables':
         create_tables(engine)
     elif argv[1] == 'drop_tables':
         drop_tables(engine)
