@@ -17,6 +17,7 @@ node_modules
 /data/pickle/tmp
 /nkdayviewer
 /data/json/*.json
+/data/json/*.zip
 
 # vue-cli
 /dist
