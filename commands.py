@@ -1,3 +1,4 @@
+# %%
 if __name__ == '__main__':
     from nkdayscraper.models import engine, Base, Racecourses, create_tables, drop_tables, drop_race_tables
     from sys import argv
@@ -30,6 +31,25 @@ if __name__ == '__main__':
                 session.rollback()
                 raise
 
+    def check_records():
+        from sqlalchemy.future import select
+        from sqlalchemy.orm import Session
+        from nkdayscraper.models import Race, HorseResult
+
+        query = select(Race.date.distinct()).join(HorseResult)\
+        .filter(HorseResult.margin.notin_((('除外', '中止', '取消'))), HorseResult.passageratelist == None)
+
+        print(query.compile(compile_kwargs={"literal_binds": True}))
+
+        with Session(engine) as session:
+            result = session.execute(query)
+
+        print('------incomplete_records------')
+        for row in result.fetchall():
+            print(row[0].strftime('%Y-%m-%d'))
+
+        print('------------------------------')
+
     if argv[1] == 'create_tables':
         create_tables(engine)
     elif argv[1] == 'drop_tables':
@@ -38,5 +58,11 @@ if __name__ == '__main__':
         drop_race_tables(engine)
     elif argv[1] == 'recreate_racecourses':
         recreate_racecourses()
+    elif argv[1] == 'check_records':
+        check_records()
     else:
         print(f"'{argv[1]}' is not found in prepared commands.")
+
+    print('done...')
+
+# %%
