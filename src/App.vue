@@ -2,9 +2,9 @@
   <div id="app">
     <NkHeader :date="data.date" :places="data.places" @change-race-date="changeRaceDate($event)"/>
     <main>
-      <button @click="getData">getData</button>
-      <button @click="clearData">clearData</button>
-      <NkRaces :places="data.places" :cols="data.cols" :records="data.records"/>
+      <!-- <button @click="getData">getData</button>
+      <button @click="clearData">clearData</button> -->
+      <NkRaces :places="data.places" :cols="data.cols" :records="data.records" :is_raceLoading="data.is_raceLoading"/>
       <NkResults :results="data.results"/>
       <NkJockeys :jockeys="data.jockeys" :places="data.places"/>
     </main>
@@ -34,7 +34,8 @@ export default {
       cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
       records: {schema: {fields: null}, data: []},
       results: {schema: {fields: null}, data: []},
-      jockeys: {schema: {fields: null}, data: []}
+      jockeys: {schema: {fields: null}, data: []},
+      is_raceLoading: true
     })
     
     // const getRecords = ()=>{
@@ -53,6 +54,7 @@ export default {
     // }
 
     const getData = (date = null)=>{
+      data.is_raceLoading = true;
       let url = '/api/';
       if(date) url += `${date}/`;
       axios.get(url)
@@ -64,16 +66,17 @@ export default {
         data.results = JSON.parse(response.data.results);
         data.jockeys = JSON.parse(response.data.jockeys);
       })
-      .catch(err => console.log('err:', err));
+      .catch((err)=>{console.log('err:', err)})
+      .finally(()=>{data.is_raceLoading = false})
     }
 
-    const clearData = ()=>{
-      data.date = new Date();
-      data.places = [];
-      data.records = {schema: {fields: null}, data: []};
-      data.results = {schema: {fields: null}, data: []};
-      data.jockeys = {schema: {fields: null}, data: []};
-    }
+    // const clearData = ()=>{
+    //   data.date = new Date();
+    //   data.places = [];
+    //   data.records = {schema: {fields: null}, data: []};
+    //   data.results = {schema: {fields: null}, data: []};
+    //   data.jockeys = {schema: {fields: null}, data: []};
+    // }
 
     const changeRaceDate = (event)=>{
       data.date = new Date(event.date);
@@ -92,7 +95,7 @@ export default {
     return {
       data,
       // getRecords,
-      clearData,
+      // clearData,
       getData,
       changeRaceDate
     }

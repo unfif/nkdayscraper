@@ -2,7 +2,7 @@
   <header>
     <!-- <h2>{{ dateFormated }}</h2> -->
     <input type="date" :value="dateFormated" @change="emitRaceDate($event)">
-    <h2 v-for="place in places" :key="place">{{ place }}</h2>
+    <h4 v-for="place in places" :key="place">{{ place }}</h4>
   </header>
 </template>
 
@@ -49,8 +49,8 @@ html header {
     margin: 0.5rem;
   }
   input[type="date"] {
-    width: 15rem;
-    font-size: 2rem;
+    width: 12rem;
+    font-size: 1.5rem;
     color: #fff;
     background: #343a40;
   }
