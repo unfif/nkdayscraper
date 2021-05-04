@@ -7,7 +7,7 @@
           <th v-for="col in cols" :class="`col_${col}`" :key="col">{{ col }}</th>
         </tr>
       </thead>
-      <tbody v-if="records.data.length">
+      <tbody v-if="!is_raceLoading">
         <tr v-for="record in records.data"
           v-show="showTargetByRecordMap(record, [{place: '場所'}, {racenum: 'R'}, {coursetype: '形式'}]) && showTargetByRankInfo(record.rankinfo)"
           :class="makeClassesFromRecord(record, ['場所', '形式', 'R', '着順', 'index', 'rankinfo'])"
@@ -62,6 +62,10 @@ export default {
           data: []
         }
       }
+    },
+    is_raceLoading: {
+      type: Boolean,
+      default: true
     }
   },
   setup(){
