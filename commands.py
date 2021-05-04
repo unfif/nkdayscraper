@@ -32,12 +32,12 @@ if __name__ == '__main__':
                 raise
 
     def check_records():
-        from sqlalchemy.future import select
-        from sqlalchemy.orm import Session
         from nkdayscraper.models import Race, HorseResult
+        from sqlalchemy.orm import Session
 
-        query = select(Race.date.distinct()).join(HorseResult)\
-        .filter(HorseResult.margin.notin_((('除外', '中止', '取消'))), HorseResult.passageratelist == None)
+        query = getQueryForDatesOfExistsRecords()\
+        .filter(HorseResult.passageratelist == None)\
+        .order_by(Race.date.desc())
 
         print(query.compile(compile_kwargs={"literal_binds": True}))
 
@@ -50,6 +50,31 @@ if __name__ == '__main__':
 
         print('------------------------------------------------------------------------------')
 
+    def exists_records():
+        from nkdayscraper.models import Race, HorseResult
+        from sqlalchemy.orm import Session
+
+        query = getQueryForDatesOfExistsRecords()\
+        .order_by(Race.date.desc())
+
+        print(query.compile(compile_kwargs={"literal_binds": True}))
+
+        with Session(engine) as session:
+            result = session.execute(query)
+
+        print('------------------------------[ exists_records ]------------------------------')
+        for row in result.fetchall():
+            print(row[0].strftime('%Y-%m-%d'))
+
+        print('------------------------------------------------------------------------------')
+
+    def getQueryForDatesOfExistsRecords():
+        from sqlalchemy.future import select
+        from nkdayscraper.models import Race, HorseResult
+        query = select(Race.date.distinct()).join(HorseResult)\
+        .filter(HorseResult.margin.notin_((('除外', '中止', '取消'))))
+        return query
+
     if argv[1] == 'help':
         print('-------------------------------[ command_list ]-------------------------------')
         print('create_tables: this command creates all tables in model.')
@@ -57,6 +82,7 @@ if __name__ == '__main__':
         print('drop_race_tables: this command drops tables related race.')
         print('recreate_racecourses: this command drops and creates Racecourses table.')
         print('check_records: this command checks incomplate records and displays race date.')
+        print('exists_records: this command checks exists records and displays race date.')
         print('------------------------------------------------------------------------------')
     elif argv[1] == 'create_tables':
         create_tables(engine)
@@ -68,6 +94,8 @@ if __name__ == '__main__':
         recreate_racecourses()
     elif argv[1] == 'check_records':
         check_records()
+    elif argv[1] == 'exists_records':
+        exists_records()
     else:
         print(f"'{argv[1]}' is not found in prepared commands.")
 
