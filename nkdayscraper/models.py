@@ -6,6 +6,7 @@ from sqlalchemy.orm import declarative_base, relationship, aliased
 from .spiders.nkday import getTargetDate
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
+import datetime as dt
 import pandas as pd
 # pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
 
@@ -184,6 +185,7 @@ class HorseResult(Base):
 
     def getRaceResults(self, date = None):
         if not date: date = getTargetDate()
+        elif type(date) == 'str': date = dt.date(*[int(str) for str in date.split('-')])
         with engine.connect() as conn:
             records = pd.read_sql(self.makeRecordsQuery(date), conn)
             comments = pd.read_sql(self.makeCommentsQuery(), conn)

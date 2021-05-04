@@ -107,6 +107,7 @@ def getall():
 
 @app.route('/api/<string:date>/', methods=['GET'])
 def api(date):
+    date = dt.date(*[int(str) for str in date.split('-')])
     data = horseResult.getRaceResults(date)
     return data['json']
 
