@@ -2,13 +2,7 @@ if __name__ == '__main__':
     from nkdayscraper.models import engine, Base, Racecourses, create_tables, drop_tables, drop_race_tables
     from sys import argv
 
-    if argv[1] == 'create_tables':
-        create_tables(engine)
-    elif argv[1] == 'drop_tables':
-        drop_tables(engine)
-    elif argv[1] == 'drop_race_tables':
-        drop_race_tables(engine)
-    elif argv[1] == 'recreate_racecourses':
+    def recreate_racecourses():
         Base.metadata.drop_all(engine, tables=[Racecourses.__table__])
         Base.metadata.create_all(engine, tables=[Racecourses.__table__])
 
@@ -36,5 +30,13 @@ if __name__ == '__main__':
                 session.rollback()
                 raise
 
+    if argv[1] == 'create_tables':
+        create_tables(engine)
+    elif argv[1] == 'drop_tables':
+        drop_tables(engine)
+    elif argv[1] == 'drop_race_tables':
+        drop_race_tables(engine)
+    elif argv[1] == 'recreate_racecourses':
+        recreate_racecourses()
     else:
         print(f"'{argv[1]}' is not found in prepared commands.")
