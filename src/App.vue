@@ -37,7 +37,7 @@ export default {
       jockeys: {schema: {fields: null}, data: []},
       is_raceLoading: true
     })
-    
+
     // const getRecords = ()=>{
     //   axios.get("/api/racesinfo/")
     //   .then((response)=>{

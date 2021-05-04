@@ -65,11 +65,11 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 # create_tables(engine)
 # %%
-date = getTargetDate()
 horseResult = HorseResult()
+date = getTargetDate()
 data = horseResult.getRaceResults(date)
-data['records'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
-data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
+# data['records'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
+# data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 
 # for key, df in data.items(): df.to_pickle(f'data/pickle/{key}.pkl')
 # data = {key: pd.read_pickle(f'data/pickle/{key}.pkl') for key in data.keys()}
@@ -92,9 +92,9 @@ if(args.zip):
 def nkday():
     return render_template('index.html', **data)
 
-@app.route('/nkraces/')
-def nkraces():
-    return render_template('nkraces.vue', **data)
+# @app.route('/nkraces/')
+# def nkraces():
+#     return render_template('nkraces.vue', **data)
 
 # @app.route('/api/', methods=['GET', 'POST'])
 # def api():
