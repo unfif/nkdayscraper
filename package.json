@@ -1,6 +1,6 @@
 {
   "name": "nkdayscraper",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": true,
   "scripts": {
     "serve-prod": "vue-cli-service serve",
@@ -11,13 +11,14 @@
     "lint": "vue-cli-service lint --mode development",
     "jrr": "scrapy crawl jrarecords -o data/json/jrarecords.json",
     "nkd": "scrapy crawl nkday -o data/json/nkday.json",
+    "cmd": "python3 commands.py",
     "flask": "python3 app.py",
     "flask-dev": "SQLALCHEMY_WARN_20=1 python3 -W always::DeprecationWarning app.py",
     "scrape": "npm run jrr && npm run nkd",
     "app": "npm run build && npm run flask",
     "deploy": "npm run nkd && npm run app",
     "zip": "python3 nkdayscraper/utils/ziptools.py data/json",
-    "all": "npm run scrape && npm run zip && npm run app"
+    "all": "npm run scrape && npm run app"
   },
   "dependencies": {
     "@popperjs/core": "^2.6.0",
