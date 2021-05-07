@@ -5,7 +5,7 @@ from flask_cors import CORS
 from scrapy.crawler import CrawlerRunner#, CrawlerProcess
 # from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
-from nkdayscraper.models import HorseResult#, engine, create_tables
+from nkdayscraper.models import HorseResult#, Base, engine
 from nkdayscraper.spiders.nkday import getTargetDate, NkdaySpider
 from twisted.internet import reactor
 
@@ -22,8 +22,7 @@ logging.basicConfig(
     level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S'
 )
 
-# import pandas as pd
-# pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
+# from pandas import set_option; set_option('display.max_columns', 100); set_option('display.max_rows', 500)
 
 def getArgs():
     parser = ArgumentParser()
@@ -63,11 +62,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
-# create_tables(engine)
+# Base.metadata.create_all(engine)
 # %%
 horseResult = HorseResult()
 date = getTargetDate()
-data = horseResult.getRaceResults(date)
+data = horseResult.getRecords(date)
+
 # data['records'].to_json('data/json/raceresults.json', orient='table', force_ascii=False)
 # data['records'].to_csv('data/csv/raceresults.csv', index=False, quoting=csv.QUOTE_ALL)
 
@@ -108,7 +108,7 @@ def getall():
 @app.route('/api/<string:date>/', methods=['GET'])
 def api(date):
     date = dt.date(*[int(str) for str in date.split('-')])
-    data = horseResult.getRaceResults(date)
+    data = horseResult.getRecords(date)
     return data['json']
 
 # @app.route('/api/<string:key>/', methods=['GET'])

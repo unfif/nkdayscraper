@@ -53,6 +53,8 @@ html header {
     font-size: 1.5rem;
     color: #fff;
     background: #343a40;
+    border-width: 0;
+    border-radius: 0;
   }
 }
 </style>
