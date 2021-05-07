@@ -1,6 +1,6 @@
 # %%
 if __name__ == '__main__':
-    from nkdayscraper.models import engine, Base, Racecourses, create_tables, drop_tables, drop_race_tables
+    from nkdayscraper.models import engine, Base, Racecourses, drop_race_related_tables, drop_race_tables
     from sys import argv
 
     def recreate_racecourses():
@@ -62,11 +62,11 @@ if __name__ == '__main__':
         with Session(engine) as session:
             result = session.execute(query)
 
-        print('------------------------------[ exists_records ]------------------------------')
+        print('----------------------------------[ exists_records ]----------------------------------')
         for row in result.fetchall():
             print(row[0].strftime('%Y-%m-%d'))
 
-        print('------------------------------------------------------------------------------')
+        print('--------------------------------------------------------------------------------------')
 
     def getQueryForDatesOfExistsRecords():
         from sqlalchemy.future import select
@@ -76,18 +76,18 @@ if __name__ == '__main__':
         return query
 
     if argv[1] == 'help':
-        print('-------------------------------[ command_list ]-------------------------------')
-        print('create_tables: this command creates all tables in model.')
-        print('drop_tables: this command drops some tables.')
-        print('drop_race_tables: this command drops tables related race.')
-        print('recreate_racecourses: this command drops and creates Racecourses table.')
-        print('check_records: this command checks incomplate records and displays race date.')
-        print('exists_records: this command checks exists records and displays race date.')
-        print('------------------------------------------------------------------------------')
+        print('-----------------------------------[ command_list ]-----------------------------------')
+        print('create_tables:            this command creates all tables in model.')
+        print('drop_race_related_tables: this command drops all tables related race.')
+        print('drop_race_tables:         this command drops tables of race.')
+        print('recreate_racecourses:     this command drops and creates Racecourses table.')
+        print('check_records:            this command checks incomplate records and displays race date.')
+        print('exists_records:           this command checks exists records and displays race date.')
+        print('--------------------------------------------------------------------------------------')
     elif argv[1] == 'create_tables':
-        create_tables(engine)
-    elif argv[1] == 'drop_tables':
-        drop_tables(engine)
+        Base.metadata.create_all(engine)
+    elif argv[1] == 'drop_race_related_tables':
+        drop_race_related_tables(engine)
     elif argv[1] == 'drop_race_tables':
         drop_race_tables(engine)
     elif argv[1] == 'recreate_racecourses':

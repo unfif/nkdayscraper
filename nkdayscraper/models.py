@@ -24,6 +24,38 @@ class RBase():
         ])
         return f'<{self.__class__.__name__}({columns})>'
 
+    @staticmethod
+    def makeCommentsQuery():
+        schema = 'public'
+        query = "SELECT psat.relname as table_name, pa.attname as column_name, pd.description as column_comment "
+        query += "FROM pg_stat_all_tables psat "
+        query += "JOIN pg_description pd ON psat.relid = pd.objoid "
+        query += "JOIN pg_attribute pa ON pd.objoid = pa.attrelid AND pd.objsubid = pa.attnum "
+        query += f"WHERE psat.schemaname = '{schema}' AND pd.objsubid != 0 "
+        query += f"AND psat.relname IN (select relname from pg_stat_user_tables where schemaname = '{schema}') "
+        query += "ORDER BY pd.objsubid"
+
+        return query
+
+    @staticmethod
+    def makeJpLabels(comments):
+        jpLabels = {}
+        for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
+            jpLabels.update({comment[1].column_name: comment[1].column_comment})
+
+        jpLabels.update({'record': 'レコード'})
+
+        return jpLabels
+
+    @staticmethod
+    def makeJsonDict(data):
+        jsonDict = {}
+        for key, df in data.items():
+            jsonDict[key] = df.to_json(orient='table', force_ascii=False)
+            # jsonDict[key] = df.to_dict(orient='records')
+
+        return jsonDict
+
 Base = declarative_base(cls=RBase)
 
 def mongo_connect(url=MONGO_URL, query=None):
@@ -37,15 +69,12 @@ def mongo_connect(url=MONGO_URL, query=None):
     client = MongoClient(url)
     return client
 
-def create_tables(engine):
-    Base.metadata.create_all(engine)
-
 def drop_race_tables(engine):
     if engine.has_table('paybacks'): Payback.__table__.drop(engine)
     if engine.has_table('horseresults'): HorseResult.__table__.drop(engine)
     if engine.has_table('races'): Race.__table__.drop(engine)
 
-def drop_tables(engine):
+def drop_race_related_tables(engine):
     drop_race_tables(engine)
     if engine.has_table('jrarecords'): Jrarecord.__table__.drop(engine)
 
@@ -79,6 +108,48 @@ class Race(Base):
     requrl = Column(Text, comment='結果URL')
 
     jrarecord = relationship('Jrarecord')
+
+    def getRecords(self, date=None):
+        # if not date: date = getTargetDate()
+        # elif type(date) == 'str': date = dt.date(*[int(str) for str in date.split('-')])
+        with engine.connect() as conn:
+            records = pd.read_sql(self.makeRecordsQuery(date), conn)
+            comments = pd.read_sql(self.makeCommentsQuery(), conn)
+
+        jpLabels = self.makeJpLabels(comments)
+        # records = self.makeRecords(records)
+        data = {
+            # 'jockeys': self.makeJockeys(records),
+            'records': records.rename(columns=jpLabels).copy(deep=True),
+            # 'racesinfo': pd.DataFrame({'date': records.date[0], 'places': [records.place.unique()]})
+        }
+        # data['results'] = self.makeResults(data['records'])
+        data['json'] = self.makeJsonDict(data)
+
+        return data
+
+    def makeRecordsQuery(self, date=None):
+        # hrs = aliased(HorseResult, name='hrs')
+        # jrr = aliased(Jrarecord, name='jrr')
+        # pay = aliased(Payback, name='pay')
+        # rac = aliased(Race, name='rac')
+        # filterQuery = ~exists().where(rac.date > Race.date)
+        filterQuery = Race.date == date if date else True
+        query = select(Race)\
+        .filter(filterQuery)\
+        .order_by(Race.date, Race.place, Race.racenum)
+        # query = select(
+        #     Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
+        #     hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
+        #     pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
+        # )\
+        # .join(hrs)\
+        # .outerjoin(pay)\
+        # .outerjoin(jrr)\
+        # .filter(filterQuery)\
+        # .order_by(Race.place, Race.racenum, hrs.ranking)
+
+        return query
 
 class Payback(Base):
     __tablename__ = 'paybacks'
@@ -183,7 +254,7 @@ class HorseResult(Base):
 
     race = relationship('Race')
 
-    def getRaceResults(self, date = None):
+    def getRecords(self, date=None):
         if not date: date = getTargetDate()
         elif type(date) == 'str': date = dt.date(*[int(str) for str in date.split('-')])
         with engine.connect() as conn:
@@ -199,10 +270,10 @@ class HorseResult(Base):
         }
         data['results'] = self.makeResults(data['records'])
         data['json'] = self.makeJsonDict(data)
-        
+
         return data
 
-    def makeRecordsQuery(self, date = None):
+    def makeRecordsQuery(self, date=None):
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
@@ -221,25 +292,6 @@ class HorseResult(Base):
         .order_by(Race.place, Race.racenum, hrs.ranking)
 
         return query
-
-    def makeCommentsQuery(self):
-        query = "SELECT psat.relname as TABLE_NAME, pa.attname as COLUMN_NAME, pd.description as COLUMN_COMMENT "
-        query += "FROM pg_stat_all_tables psat, pg_description pd, pg_attribute pa "
-        query += "WHERE psat.schemaname = (select schemaname from pg_stat_user_tables where relname = 'horseresults') "
-        query += "AND psat.relname IN ('races', 'horseresults', 'jrarecords', 'paybacks') AND psat.relid=pd.objoid "
-        query += "AND pd.objsubid != 0 AND pd.objoid=pa.attrelid AND pd.objsubid=pa.attnum "
-        query += "ORDER BY pd.objsubid"
-
-        return query
-
-    def makeJpLabels(self, comments):
-        jpLabels = {}
-        for comment in comments.loc[:, 'column_name':'column_comment'].iterrows():
-            jpLabels.update({comment[1].column_name: comment[1].column_comment})
-
-        jpLabels.update({'record': 'レコード'})
-
-        return jpLabels
 
     def makeRecords(self, records):
         records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
@@ -308,14 +360,6 @@ class HorseResult(Base):
         results.R2 = results.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
 
         return results[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
-
-    def makeJsonDict(self, data):
-        jsonDict = {}
-        for key, df in data.items():
-            jsonDict[key] = df.to_json(orient='table', force_ascii=False)
-            # jsonDict[key] = df.to_dict(orient='records')
-
-        return jsonDict
 
 class Racecourses(Base):
     __tablename__ = 'racecourses'

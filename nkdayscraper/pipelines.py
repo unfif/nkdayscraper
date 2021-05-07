@@ -6,7 +6,7 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 from sqlalchemy.orm import sessionmaker
-from .models import HorseResult, Jrarecord, Race, Payback, engine, create_tables, drop_tables, drop_race_tables, mongo_connect
+from .models import HorseResult, Jrarecord, Race, Payback, engine, mongo_connect
 from .items import HorseResultItem, PaybackItem, RaceItem#, JrarecordItem
 import copy as cp
 
@@ -16,22 +16,7 @@ class NkdayscraperPipeline():
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.engine = engine
-        # if self.engine.has_table('horseresults'): HorseResult.__table__.drop(self.engine)
-        # drop_race_tables(self.engine)
-        # create_tables(self.engine)
         self.Session = sessionmaker(bind=self.engine, future=True)
-        # session = self.Session()
-        # try:
-        #     session.query(Payback).delete()
-        #     session.query(HorseResult).delete()
-        #     session.query(Race).delete()
-        #     # session.query(Jrarecord).delete()
-        #     session.commit()
-        # except:
-        #     session.rollback()
-        #     raise
-        # finally:
-        #     session.close()
 
         self.has_mongoerr = False
         self.mongo = mongo_connect(query={'serverSelectionTimeoutMS': 3000})
@@ -42,9 +27,6 @@ class NkdayscraperPipeline():
         except: self.has_mongoerr = True
 
     def open_spider(self, spider):
-        # DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
-        # self.conn = psycopg2.connect(DATABASE_URL)
-        pass
         self.time_start = perf_counter()
 
     def close_spider(self, spider):
@@ -56,7 +38,7 @@ class NkdayscraperPipeline():
         if self.engine.name not in ['postgresql', 'mongodb']:
             for columnName in ['addedmoneylist', 'passageratelist']:
                 item[columnName] = str(item[columnName])
-        
+
         if isinstance(item, RaceItem):
             record = Race(**item)
         elif isinstance(item, PaybackItem):
@@ -85,23 +67,7 @@ class JrarecordsscraperPipeline():
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.engine = engine
-        # if self.engine.has_table('jrarecords'): Jrarecord.__table__.drop(self.engine)
-        # Jrarecord.__table__.create(self.engine)
-        # drop_tables(self.engine)
-        # create_tables(self.engine)
         self.Session = sessionmaker(bind=self.engine, future=True)
-        # with self.Session() as session:
-        #     session.query(Jrarecord.__table__).delete()
-
-        # session = self.Session()
-        # try:
-        #     session.query(Jrarecord).delete()
-        #     session.commit()
-        # except:
-        #     session.rollback()
-        #     raise
-        # finally:
-        #     session.close()
 
         self.has_mongoerr = False
         self.mongo = mongo_connect(query={'serverSelectionTimeoutMS': 3000})
@@ -112,8 +78,6 @@ class JrarecordsscraperPipeline():
         except: self.has_mongoerr = True
 
     def open_spider(self, spider):
-        # DATABASE_URL = nkdayscraper.settings.get('DATABASE_URL')
-        # self.conn = psycopg2.connect(DATABASE_URL)
         pass
 
     def close_spider(self, spider):

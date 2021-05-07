@@ -1,7 +1,7 @@
 # NkDayScraper
 ## Getting Started
 1. git clone https://github.com/unfif/nkdayscraper.git
-1. (Debug -> python3 app.py) -> create_table(engine)
+1. (Debug -> python3 app.py) -> Base.metadata.create_all(engine)
 1. npm run all
 
 ## etc...
