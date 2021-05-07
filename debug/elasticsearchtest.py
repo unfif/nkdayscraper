@@ -1,6 +1,8 @@
 # %%
+import sys
+sys.path.append('../nkdayscraper')
 from elasticsearch import Elasticsearch
-import settings
+from nkdayscraper import settings
 import logging
 
 logging.basicConfig(
@@ -22,7 +24,7 @@ indices = es.cat.indices(index='*', h='index').splitlines()
 for index in indices:
     logging.info(f'{index=}')
 
-logging.info(es.indices.get_mapping(index=".kibana-event-log-7.11.2-000001"))
+logging.info(es.indices.get_mapping(index=".kibana-event-log-7.12.1-000001"))
 
 # クエリ
 query = {
@@ -32,14 +34,14 @@ query = {
 }
 
 # ドキュメントを検索
-result = es.search(index=".kibana-event-log-7.11.2-000001", body=query, size=3)
+result = es.search(index=".kibana-event-log-7.12.1-000001", body=query, size=3)
 # 検索結果からドキュメントの内容のみ表示
 for document in result["hits"]["hits"]:
     logging.info(document["_source"])
 
-logging.info(es.get_source(index=".kibana-event-log-7.11.2-000001", id="q5yYJXgBhEZYJc86DPOw"))
+# logging.info(es.get_source(index=".kibana-event-log-7.12.1-000001", id="q5yYJXgBhEZYJc86DPOw"))
 
-logging.info(es.count(index=".kibana-event-log-7.11.2-000001"))
+logging.info(es.count(index=".kibana-event-log-7.12.1-000001"))
 
 # es.indices.create(index='nkday')
 # student = {

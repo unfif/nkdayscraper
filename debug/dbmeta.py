@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, select, and_, or_, not_
+from sqlalchemy import MetaData, create_engine, select, and_, or_, not_
 from scrapy.utils.project import get_project_settings
 import pandas as pd
 
