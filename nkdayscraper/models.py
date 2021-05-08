@@ -261,15 +261,17 @@ class HorseResult(Base):
             records = pd.read_sql(self.makeRecordsQuery(date), conn)
             comments = pd.read_sql(self.makeCommentsQuery(), conn)
 
-        jpLabels = self.makeJpLabels(comments)
-        records = self.makeRecords(records)
-        data = {
-            'jockeys': self.makeJockeys(records),
-            'records': records.rename(columns=jpLabels).copy(deep=True),
-            'racesinfo': pd.DataFrame({'date': records.date[0], 'places': [records.place.unique()]})
-        }
-        data['results'] = self.makeResults(data['records'])
-        data['json'] = self.makeJsonDict(data)
+        data = {'json': ''}
+        if not records.empty:
+            jpLabels = self.makeJpLabels(comments)
+            records = self.makeRecords(records)
+            data = {
+                'jockeys': self.makeJockeys(records),
+                'records': records.rename(columns=jpLabels).copy(deep=True),
+                'racesinfo': pd.DataFrame({'date': records.date[0], 'places': [records.place.unique()]})
+            }
+            data['results'] = self.makeResults(data['records'])
+            data['json'] = self.makeJsonDict(data)
 
         return data
 

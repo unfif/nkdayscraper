@@ -59,12 +59,14 @@ export default {
       if(date) url += `${date}/`;
       axios.get(url)
       .then((response)=>{
-        const racesinfo = JSON.parse(response.data.racesinfo);
-        data.date = new Date(racesinfo.data[0].date);
-        data.places = racesinfo.data[0].places;
-        data.records = JSON.parse(response.data.records);
-        data.results = JSON.parse(response.data.results);
-        data.jockeys = JSON.parse(response.data.jockeys);
+        if(response.data){
+          const racesinfo = JSON.parse(response.data.racesinfo);
+          data.date = new Date(racesinfo.data[0].date);
+          data.places = racesinfo.data[0].places;
+          data.records = JSON.parse(response.data.records);
+          data.results = JSON.parse(response.data.results);
+          data.jockeys = JSON.parse(response.data.jockeys);
+        }
       })
       .catch((err)=>{console.log('err:', err)})
       .finally(()=>{data.is_raceLoading = false})
