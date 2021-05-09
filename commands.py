@@ -44,11 +44,11 @@ if __name__ == '__main__':
         with Session(engine) as session:
             result = session.execute(query)
 
-        print('----------------------------[ incomplete_records ]----------------------------')
+        print('----------------------------------------[ incomplete_records ]----------------------------------------')
         for row in result.fetchall():
             print(row[0].strftime('%Y-%m-%d'))
 
-        print('------------------------------------------------------------------------------')
+        print('------------------------------------------------------------------------------------------------------')
 
     def exists_records():
         from nkdayscraper.models import Race, HorseResult
@@ -62,11 +62,11 @@ if __name__ == '__main__':
         with Session(engine) as session:
             result = session.execute(query)
 
-        print('----------------------------------[ exists_records ]----------------------------------')
+        print('------------------------------------------[ exists_records ]------------------------------------------')
         for row in result.fetchall():
             print(row[0].strftime('%Y-%m-%d'))
 
-        print('--------------------------------------------------------------------------------------')
+        print('------------------------------------------------------------------------------------------------------')
 
     def getQueryForDatesOfExistsRecords():
         from sqlalchemy.future import select
@@ -75,15 +75,19 @@ if __name__ == '__main__':
         .filter(HorseResult.margin.notin_((('除外', '中止', '取消'))))
         return query
 
-    if argv[1] == 'help':
-        print('-----------------------------------[ command_list ]-----------------------------------')
+    def display_help():
+        print('-------------------------------------------[ command_list ]-------------------------------------------')
         print('create_tables:            this command creates all tables in model.')
         print('drop_race_related_tables: this command drops all tables related race.')
         print('drop_race_tables:         this command drops tables of race.')
         print('recreate_racecourses:     this command drops and creates Racecourses table.')
         print('check_records:            this command checks incomplate records and displays race date.')
         print('exists_records:           this command checks exists records and displays race date.')
-        print('--------------------------------------------------------------------------------------')
+        print('get_annual_schedule_json: this command downloads race schedules of JRA by JSON. (argv[2]: year)')
+        print('------------------------------------------------------------------------------------------------------')
+
+    if argv[1] == 'help':
+        display_help()
     elif argv[1] == 'create_tables':
         Base.metadata.create_all(engine)
     elif argv[1] == 'drop_race_related_tables':
@@ -96,8 +100,13 @@ if __name__ == '__main__':
         check_records()
     elif argv[1] == 'exists_records':
         exists_records()
+    elif argv[1] == 'get_annual_schedule_json':
+        from nkdayscraper.utils.jracalender import JraCalendar
+        jraCalendar = JraCalendar()
+        jraCalendar.get_json()
     else:
         print(f"'{argv[1]}' is not found in prepared commands.")
+        display_help()
 
     print('done...')
 
