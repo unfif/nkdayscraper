@@ -13,11 +13,15 @@ node_modules
 *.un~
 *~
 
+/test.py
 /data/tmp
 /data/pickle/tmp
 /nkdayviewer
 /data/json/*.json
 /data/json/*.zip
+/data/json/calendar/*.json
+/data/json/calendar/static
+/data/json/calendar/html
 
 # vue-cli
 /dist
