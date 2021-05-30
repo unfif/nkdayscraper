@@ -72,7 +72,7 @@ nav.navbar.dispplacerace{
     }
   }
   h5 > span.bg-secondary{
-    width: 80px;
+    width: 5rem;
     line-height: unset;
   }
   button{

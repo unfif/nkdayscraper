@@ -18,7 +18,6 @@ flask-sqlalchemy = "*"
 pandas = "*"
 flask-sqlalchemy-session = "*"
 flask-cors = "*"
-elasticsearch-dbapi = "*"
 
 [requires]
 python_version = "3.9"
