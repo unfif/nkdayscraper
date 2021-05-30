@@ -1,5 +1,6 @@
 # %%
-from sqlalchemy import create_engine, Column, Integer, Float, Text, Date, DateTime, Time, Boolean, ForeignKeyConstraint, exists#, and_, ForeignKey, UniqueConstraint, outerjoin, LargeBinary, SmallInteger
+from sqlalchemy import create_engine, Column, ForeignKeyConstraint#, exists, and_, ForeignKey, UniqueConstraint, outerjoin, LargeBinary
+from sqlalchemy.types import Integer, SmallInteger, Float, Text, Date, DateTime, Time, Boolean
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import declarative_base, relationship, aliased
@@ -367,3 +368,12 @@ class Racecourses(Base):
     __tablename__ = 'racecourses'
     id = Column(Text, primary_key=True, comment='コースID')
     name = Column(Text, primary_key=True, comment='コース名')
+
+class Racedates(Base):
+    __tablename__ = 'racedates'
+    date = Column(Date, primary_key=True, comment='日程')
+    weekday = Column(SmallInteger, comment='曜日')
+    is_holiday = Column(Boolean, comment='祝日')
+    gradeRace = Column(pg.ARRAY(pg.JSONB), comment='レース')
+    option = Column(pg.ARRAY(pg.JSONB), comment='option')
+    race = Column(pg.ARRAY(pg.JSONB), comment='開催')

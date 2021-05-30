@@ -1,6 +1,6 @@
 # %%
 if __name__ == '__main__':
-    from nkdayscraper.models import engine, Base, Racecourses, drop_race_related_tables, drop_race_tables
+    from nkdayscraper.models import engine, Base, Racecourses, Racedates, drop_race_related_tables, drop_race_tables
     from sys import argv
 
     def recreate_racecourses():
@@ -30,6 +30,10 @@ if __name__ == '__main__':
             except:
                 session.rollback()
                 raise
+
+    def recreate_racedates():
+        Base.metadata.drop_all(engine, tables=[Racedates.__table__])
+        Base.metadata.create_all(engine, tables=[Racedates.__table__])
 
     def check_records():
         from nkdayscraper.models import Race, HorseResult
@@ -81,6 +85,7 @@ if __name__ == '__main__':
         print('drop_race_related_tables: this command drops all tables related race.')
         print('drop_race_tables:         this command drops tables of race.')
         print('recreate_racecourses:     this command drops and creates Racecourses table.')
+        print('recreate_racedates        this command drops and creates Racedates table.')
         print('check_records:            this command checks incomplate records and displays race date.')
         print('exists_records:           this command checks exists records and displays race date.')
         print('get_annual_schedule_json: this command downloads race schedules of JRA by JSON. (argv[2]: year)')
@@ -96,6 +101,8 @@ if __name__ == '__main__':
         drop_race_tables(engine)
     elif argv[1] == 'recreate_racecourses':
         recreate_racecourses()
+    elif argv[1] == 'recreate_racedates':
+        recreate_racedates()
     elif argv[1] == 'check_records':
         check_records()
     elif argv[1] == 'exists_records':
