@@ -103,7 +103,7 @@ const getPedigreeFromHorseId = async (horse_id)=>{
   const sire_name = sire_tds[0].querySelector('a').innerText.split('\n')[0];
   const mare_name = sire_tds[sire_td_rowspan * 2 - 1].querySelector('a').innerText.split('\n')[0];
   const broodmare_sire_name = sire_tds[sire_td_rowspan * 2].querySelector('a').innerText.split('\n')[0];
-  return `父：${sire_name}、母：${mare_name}、母父：${broodmare_sire_name}`;
+  return `父：${sire_name}、母父：${broodmare_sire_name}、母：${mare_name}`;
 }
 
 const getRaceInfoFromRaceId = async (race_id)=>{
