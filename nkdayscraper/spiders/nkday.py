@@ -38,7 +38,7 @@ class NkdaySpider(CrawlSpider):
         super(NkdaySpider, self).__init__(*args, **kwargs)
         baseurl = 'https://race.netkeiba.com/top/race_list_sub.html?kaisai_date='
         if not date: date = f'{getTargetDate():%Y%m%d}'
-        self.start_urls = [baseurl + date]
+        self.start_urls = [f'{baseurl}{date}']
 
     # def start_requests(self):
     #     url = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id=c' + cdate
@@ -66,13 +66,13 @@ class NkdaySpider(CrawlSpider):
 
         item['weather'] = courseinfo[2].split('天候:')[1]
         item['condition'] = raceinfo.css('.RaceData01 [class^="Item"]::text').get().split('馬場:')[1]
-        raceyear = item['year'] + '年'
+        raceyear = f"{item['year']}年"
         racedate = raceinfo.css('.RaceList_Date dd.Active a::text').get()
         if not racedate.endswith('日'): racedate = racedate.replace('/', '月') + '日'
         racetime = racelist_namebox.css('.RaceData01::text').get().strip().split('発走')[0]
-        item['datetime'] = dt.datetime.strptime(raceyear + racedate + ' ' + racetime + ':00+09:00', '%Y年%m月%d日 %H:%M:%S%z')
-        item['date'] = dt.datetime.strptime(raceyear + racedate + '+09:00', '%Y年%m月%d日%z')
-        item['posttime'] = dt.datetime.strptime(racetime + '+09:00', '%H:%M%z').timetz()
+        item['datetime'] = dt.datetime.strptime(f'{raceyear}{racedate} {racetime}:00+09:00', '%Y年%m月%d日 %H:%M:%S%z')
+        item['date'] = dt.datetime.strptime(f'{raceyear}{racedate}+09:00', '%Y年%m月%d日%z')
+        item['posttime'] = dt.datetime.strptime(f'{racetime}+09:00', '%H:%M%z').timetz()
         racedata02 = racelist_namebox.css('.RaceData02 span::text').getall()
         item['generation'] = '2歳' if int(racedata02[3].split('歳')[0][-1]) == 2 else '3歳以上'
         item['racegrade'] = racedata02[3:7]
@@ -95,6 +95,9 @@ class NkdaySpider(CrawlSpider):
 
             item['generation'] = '障害' + item['generation']
 
+        for target in ['year', 'racenum', 'distance', 'starters']:
+            if item[target] is not None: item[target] = int(item[target])
+
         yield item
 
         item = PaybackItem()
@@ -104,8 +107,8 @@ class NkdaySpider(CrawlSpider):
         for pooltype in ['tansho', 'fukusho', 'wakuren', 'umaren', 'wide', 'umatan', 'fuku3', 'tan3']:
             pooltr = paybacktbldiv.css('table tbody tr.' + pooltype.capitalize())
             item[pooltype] = [int(text) for text in pooltr.css('.Result ::text').getall() if text != '\n']
-            item[pooltype + 'pay'] = [int(text.rstrip('円').replace(',', '')) for text in pooltr.css('.Payout ::text').getall() if text != '\n']
-            item[pooltype + 'fav'] = [int(text.rstrip('人気').replace(',', '')) for text in pooltr.css('.Ninki ::text').getall() if text != '\n']
+            item[f'{pooltype}pay'] = [int(text.rstrip('円').replace(',', '')) for text in pooltr.css('.Payout ::text').getall() if text != '\n']
+            item[f'{pooltype}fav'] = [int(text.rstrip('人気').replace(',', '')) for text in pooltr.css('.Ninki ::text').getall() if text != '\n']
 
         yield item
 
@@ -163,5 +166,11 @@ class NkdaySpider(CrawlSpider):
             #     if item[intkey] is not None: item[intkey] = int(item[intkey])
             # for floatkey in ['jockeyweight', 'odds', 'last3f']:
             #     if item[floatkey] is not None: item[floatkey] = float(item[floatkey])
+
+            for target in ['ranking', 'postnum', 'horsenum', 'age', 'fav']:
+                if item[target] is not None: item[target] = int(item[target])
+
+            for target in ['jockeyweight', 'odds', 'last3f', 'horseweight', 'horseweightdiff']:
+                if item[target] is not None: item[target] = float(item[target])
 
             yield item

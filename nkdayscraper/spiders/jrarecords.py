@@ -3,6 +3,9 @@ import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from nkdayscraper.items import JrarecordItem
+import datetime as dt
+
+jst = dt.timezone(dt.timedelta(hours=9))
 
 class JrarecordSpider(CrawlSpider):
     name = 'jrarecords'
@@ -75,10 +78,18 @@ class JrarecordSpider(CrawlSpider):
                 item['jockeyweight'] = texts[7]
                 item['jockey'] = texts[8].split('\u3000')[0]
                 item['jockeyfullname'] = texts[8].replace('\u3000', '')
-                item['date'] = texts[9].split('年')[0] + '-' + texts[10].split('月')[0].zfill(2) + '-' + re.split(r'[月日]', texts[10])[1].zfill(2)
-                condition = re.sub(r'[（）]', '', texts[11]).split('・')
+                # item['date'] = texts[9].split('年')[0] + '-' + texts[10].split('月')[0].zfill(2) + '-' + re.split(r'[月日]', texts[10])[1].zfill(2)
+                item['date'] = dt.date(int(texts[9].split('年')[0]), int(texts[10].split('月')[0]), int(re.split(r'[月日]', texts[10])[1]))
+                # item['date'] = dt.datetime.strptime(texts[9]+texts[10], '%Y年%m月%d日').astimezone(jst)
+                condition = re.sub(r'[（）]', '', texts[11]).split('・');
                 item['weather'] = condition[0]
                 item['condition'] = condition[1]
                 item['reference'] = True if '基準' in racerow.css('::text').getall() else False
+
+                for target in ['distance', 'age', 'distance']:
+                    if item[target] is not None: item[target] = int(item[target])
+
+                for target in ['jockeyweight']:
+                    if item[target] is not None: item[target] = float(item[target])
 
                 yield item
