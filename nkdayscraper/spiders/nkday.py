@@ -2,17 +2,9 @@
 import re, datetime as dt#, scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from ..items import HorseResultItem, PaybackItem, RaceItem
+from nkdayscraper.items import HorseResultItem, PaybackItem, RaceItem
+from nkdayscraper.utils.functions import getTargetDate
 # from scrapy.shell import inspect_response
-
-def getTargetDate():
-    today = dt.date.today()
-    if today.weekday() in [5, 6]:
-        targetDate = today
-    else:
-        targetDate = today - dt.timedelta((today.weekday() + 1) % 7)
-
-    return targetDate
 
 class NkdaySpider(CrawlSpider):
     name = 'nkday'

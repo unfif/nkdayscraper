@@ -3,7 +3,7 @@ import sys
 sys.path.append('../nkdayscraper')
 sys.path.append('/Users/pathz/Documents/scrapy/nkdayscraper')
 from nkdayscraper.models import HorseResult
-from nkdayscraper.spiders.nkday import getTargetDate
+from nkdayscraper.utils.functions import getTargetDate
 import logging
 
 logging.basicConfig(
