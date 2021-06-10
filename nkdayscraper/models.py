@@ -4,7 +4,7 @@ from sqlalchemy.types import Integer, SmallInteger, Float, Text, Date, DateTime,
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import declarative_base, relationship, aliased
-from .spiders.nkday import getTargetDate
+from nkdayscraper.utils.functions import getTargetDate
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
 import datetime as dt

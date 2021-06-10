@@ -6,7 +6,8 @@ from scrapy.crawler import CrawlerRunner#, CrawlerProcess
 # from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
 from nkdayscraper.models import HorseResult#, Base, engine
-from nkdayscraper.spiders.nkday import getTargetDate, NkdaySpider
+from nkdayscraper.spiders.nkday import NkdaySpider
+from nkdayscraper.utils.functions import getTargetDate
 from twisted.internet import reactor
 
 from argparse import ArgumentParser
