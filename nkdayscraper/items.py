@@ -6,8 +6,10 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+from nkdayscraper.models import Race, Payback, Jrarecord, HorseResult
 
 class RaceItem(scrapy.Item):
+    model = Race
     raceid = scrapy.Field()
 
     year = scrapy.Field()
@@ -30,6 +32,7 @@ class RaceItem(scrapy.Item):
     requrl = scrapy.Field()
 
 class PaybackItem(scrapy.Item):
+    model = Payback
     raceid = scrapy.Field()
 
     tansho = scrapy.Field()
@@ -58,6 +61,7 @@ class PaybackItem(scrapy.Item):
     tan3fav = scrapy.Field()
 
 class HorseResultItem(scrapy.Item):
+    model = HorseResult
     raceid = scrapy.Field()
 
     ranking = scrapy.Field()
@@ -84,6 +88,8 @@ class HorseResultItem(scrapy.Item):
     horseweightdiff = scrapy.Field()
 
 class JrarecordItem(scrapy.Item):
+    model = Jrarecord
+
     place = scrapy.Field()
     coursetype = scrapy.Field()
     generation = scrapy.Field()
