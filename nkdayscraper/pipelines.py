@@ -7,12 +7,13 @@
 
 from sqlalchemy.orm import sessionmaker
 from nkdayscraper.models import engine, mongo_connect
-from nkdayscraper.items import HorseResultItem, RaceItem
+from nkdayscraper.items import RaceItem, PaybackItem, HorseResultItem
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 import copy as cp
 import datetime as dt
 from time import perf_counter
+from functools import singledispatch
 
 jst = dt.timezone(dt.timedelta(hours=9))
 
@@ -21,17 +22,19 @@ class NkdayscraperPipeline():
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.schema = 'nkday'
         self.tables = ['races', 'paybacks', 'horseresults']
-        # self.indices = [f'{self.schema}.{table}' for table in self.tables]
         self.records = []
+        self.nkdayDict = {}
         self.engine = engine
         self.Session = sessionmaker(bind=self.engine, future=True)
+        self.es = Elasticsearch(http_compress = True)
+
+        if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.delete(index=f'{self.schema}.{self.schema}')
 
         self.mongo = Mongo(
             conn=mongo_connect(query={'serverSelectionTimeoutMS': 3000}),
             db=self.schema,
             has_error=False
         )
-        self.es = Elasticsearch(http_compress = True)
 
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
@@ -44,10 +47,8 @@ class NkdayscraperPipeline():
 
     def close_spider(self, spider):
         self.mongo.conn.close()
-        bulk(self.es, makeEsRecords(self.records))
-        for table in self.tables:
-            index = f'{self.schema}.{table}'
-            self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
+        bulk(self.es, makeEsRecords(self.nkdayDict))
+        self.es.indices.put_settings(index=f'{self.schema}.{self.schema}', body={"number_of_replicas": 0})
 
         self.es.close()
         print(f'【spider_time: {str(perf_counter() - self.open_time)}】')
@@ -77,8 +78,22 @@ class NkdayscraperPipeline():
             getattr(self.mongo.db, table).insert_one(makeMongoRecord(dict(copyItem)))
 
         esRecord = dict(copyItem)
-        esRecord['_index'] = f'{self.schema}.{table}'
-        if esRecord['_index'] is not None: self.records.append(esRecord)
+        for target in ['date', 'datetime']:
+            if target in esRecord: esRecord[target] = esRecord[target].isoformat()
+
+        raceid = esRecord['raceid']
+        if isinstance(item, (RaceItem, PaybackItem)):
+            esRecord['_index'] = f'{self.schema}.{self.schema}'
+            if not raceid in self.nkdayDict: self.nkdayDict[raceid] = {}
+            self.nkdayDict[raceid].update(esRecord)
+
+        elif isinstance(item, (HorseResultItem)):
+            if not raceid in self.nkdayDict:
+                self.nkdayDict[raceid] = {'_index': f'{self.schema}.{self.schema}', 'results': []}
+            else:
+                if not 'results' in self.nkdayDict[raceid]: self.nkdayDict[raceid]['results'] = []
+
+            self.nkdayDict[raceid]['results'].append(esRecord)
 
         return item
 
@@ -87,17 +102,16 @@ class JrarecordsscraperPipeline():
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.schema = 'nkday'
         self.tables = ['jrarecords']
-        # self.indices = [f'{self.schema}.{table}' for table in self.tables]
         self.records = []
         self.engine = engine
         self.Session = sessionmaker(bind=self.engine, future=True)
+        self.es = Elasticsearch(http_compress = True)
 
         self.mongo = Mongo(
             conn=mongo_connect(query={'serverSelectionTimeoutMS': 3000}),
             db=self.schema,
             has_error=False
         )
-        self.es = Elasticsearch(http_compress = True)
 
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
@@ -142,12 +156,22 @@ class JrarecordsscraperPipeline():
 
         return item
 
-def makeEsRecords(records):
+@singledispatch
+def makeEsRecords():
+    yield None
+
+@makeEsRecords.register(list)
+def _(records):
     for record in records:
         yield record
 
+@makeEsRecords.register(dict)
+def _(records):
+    for key in records:
+        yield records[key]
+
 def makeMongoRecord(item):
-    for key in item.keys():
+    for key in item:
         if type(item[key]) == dt.date:
             item[key] = dt.datetime.combine(item[key], dt.time()).astimezone(jst)
 
