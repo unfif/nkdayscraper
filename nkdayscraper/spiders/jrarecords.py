@@ -69,7 +69,7 @@ class JrarecordSpider(CrawlSpider):
                 item['courseinfo1'] = courseinfo[0]
                 item['courseinfo2'] = courseinfo[1] if len(courseinfo) > 1 else ''
 
-                item['time'] = ('00:0' if ':' in texts[2] else '00:00:') + texts[2]
+                item['time'] = dt.datetime.strptime(('00:0' if ':' in texts[2] else '00:00:') + texts[2], '%H:%M:%S.%f').time()
                 item['horsename'] = texts[3]
                 item['sire'] = texts[4].split('：')[1]
                 item['dam'] = texts[5].split('：')[1]

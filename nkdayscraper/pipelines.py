@@ -70,8 +70,8 @@ class NkdayscraperPipeline():
 
         table = item.model.__table__.name
         copyItem = cp.deepcopy(item)
-        if isinstance(copyItem, RaceItem): copyItem['posttime'] = str(copyItem['posttime'])
-        if isinstance(copyItem, HorseResultItem): copyItem['time'] = str(copyItem['time'])
+        if isinstance(item, RaceItem): copyItem['posttime'] = copyItem['posttime'].isoformat()
+        if isinstance(item, HorseResultItem): copyItem['time'] = copyItem['time'].isoformat()
 
         if not self.mongo.has_error:
             getattr(self.mongo.db, table).insert_one(makeMongoRecord(dict(copyItem)))
@@ -132,6 +132,7 @@ class JrarecordsscraperPipeline():
 
         table = item.model.__table__.name
         copyItem = cp.deepcopy(item)
+        copyItem['time'] = copyItem['time'].isoformat()
         if not self.mongo.has_error:
             getattr(self.mongo.db, table).insert_one(makeMongoRecord(dict(copyItem)))
 
