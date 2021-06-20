@@ -71,15 +71,15 @@ class NkdayscraperPipeline():
 
         table = item.model.__table__.name
         copyItem = cp.deepcopy(item)
-        if isinstance(item, RaceItem): copyItem['posttime'] = copyItem['posttime'].isoformat()
-        if isinstance(item, HorseResultItem): copyItem['time'] = copyItem['time'].isoformat()
+        if isinstance(item, RaceItem) and copyItem['posttime'] is not None: copyItem['posttime'] = copyItem['posttime'].isoformat()
+        if isinstance(item, HorseResultItem) and copyItem['time'] is not None: copyItem['time'] = copyItem['time'].isoformat()
 
         if not self.mongo.has_error:
             getattr(self.mongo.db, table).insert_one(makeMongoRecord(dict(copyItem)))
 
         esRecord = dict(copyItem)
         for target in ['date', 'datetime']:
-            if target in esRecord: esRecord[target] = esRecord[target].isoformat()
+            if target in esRecord and esRecord[target] is not None: esRecord[target] = esRecord[target].isoformat()
 
         raceid = esRecord['raceid']
         if isinstance(item, (RaceItem, PaybackItem)):
@@ -146,7 +146,7 @@ class JrarecordsscraperPipeline():
 
         table = item.model.__table__.name
         copyItem = cp.deepcopy(item)
-        copyItem['time'] = copyItem['time'].isoformat()
+        if copyItem['time'] is not None: copyItem['time'] = copyItem['time'].isoformat()
         if not self.mongo.has_error:
             getattr(self.mongo.db, table).insert_one(makeMongoRecord(dict(copyItem)))
 
