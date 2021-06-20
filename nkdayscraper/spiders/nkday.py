@@ -98,9 +98,9 @@ class NkdaySpider(CrawlSpider):
         item['raceid'] = raceid
         for pooltype in ['tansho', 'fukusho', 'wakuren', 'umaren', 'wide', 'umatan', 'fuku3', 'tan3']:
             pooltr = paybacktbldiv.css('table tbody tr.' + pooltype.capitalize())
-            item[pooltype] = [int(text) for text in pooltr.css('.Result ::text').getall() if text != '\n']
-            item[f'{pooltype}pay'] = [int(text.rstrip('円').replace(',', '')) for text in pooltr.css('.Payout ::text').getall() if text != '\n']
-            item[f'{pooltype}fav'] = [int(text.rstrip('人気').replace(',', '')) for text in pooltr.css('.Ninki ::text').getall() if text != '\n']
+            item[pooltype] = [int(text) for text in pooltr.css('.Result ::text').getall() if '\n' not in text]
+            item[f'{pooltype}pay'] = [int(text.rstrip('円').replace(',', '')) for text in pooltr.css('.Payout ::text').getall() if '\n' not in text]
+            item[f'{pooltype}fav'] = [int(text.rstrip('人気').replace(',', '')) for text in pooltr.css('.Ninki ::text').getall() if '\n' not in text]
 
         yield item
 
