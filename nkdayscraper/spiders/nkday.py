@@ -125,7 +125,8 @@ class NkdaySpider(CrawlSpider):
             item['trainerurl'] = tr.css('td')[13].css('a::attr(href)').get()
 
             if item['ranking'] not in ['取消', '除外']:
-                item['time'] = dt.datetime.strptime(tr.css('td')[7].css('.RaceTime::text').get(), '%M:%S.%f').time() if item['ranking'] != '中止' else None
+                racetime = tr.css('td')[7].css('.RaceTime::text').get()
+                item['time'] = dt.datetime.strptime(racetime, '%M:%S.%f').time() if racetime is not None and item['ranking'] != '中止' else None
                 margin = tr.css('td')[8].css('.RaceTime::text').get()
                 item['margin'] = (margin if margin is not None else '0') if item['ranking'] != '中止' else item['ranking']
                 item['fav'] = tr.css('td')[9].css('span::text').get()
