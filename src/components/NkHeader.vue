@@ -1,6 +1,5 @@
 <template>
   <header>
-    <!-- <h2>{{ dateFormated }}</h2> -->
     <input type="date" :value="dateFormated" @change="emitRaceDate($event)">
     <h4 v-for="place in places" :key="place">{{ place }}</h4>
   </header>
@@ -21,7 +20,6 @@ export default {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
-        // weekday : 'short'
       };
       return props.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-');
     });

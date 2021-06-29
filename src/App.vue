@@ -2,8 +2,6 @@
   <div id="app">
     <NkHeader :date="data.date" :places="data.places" @change-race-date="changeRaceDate($event)"/>
     <main>
-      <!-- <button @click="getData">getData</button>
-      <button @click="clearData">clearData</button> -->
       <NkRaces :places="data.places" :cols="data.cols" :records="data.records" :is_raceLoading="data.is_raceLoading"/>
       <NkResults :results="data.results"/>
       <NkJockeys :jockeys="data.jockeys" :places="data.places"/>
@@ -38,21 +36,6 @@ export default {
       is_raceLoading: true
     })
 
-    // const getRecords = ()=>{
-    //   axios.get("/api/racesinfo/")
-    //   .then((response)=>{
-    //     const racesinfo = response.data;
-    //     data.date = new Date(racesinfo.data[0].date);
-    //     data.places = racesinfo.data[0].places;
-    //   })
-    //   .catch(err => console.log('err:', err));
-    //   ['records', 'results', 'jockeys'].forEach((value)=>{
-    //     axios.get(`/api/${value}/`)
-    //     .then((response)=>{data[value] = response.data;})
-    //     .catch(err => console.log('err:', err));
-    //   })
-    // }
-
     const getData = (date = null)=>{
       data.is_raceLoading = true;
       let url = '/api/';
@@ -72,32 +55,20 @@ export default {
       .finally(()=>{data.is_raceLoading = false})
     }
 
-    // const clearData = ()=>{
-    //   data.date = new Date();
-    //   data.places = [];
-    //   data.records = {schema: {fields: null}, data: []};
-    //   data.results = {schema: {fields: null}, data: []};
-    //   data.jockeys = {schema: {fields: null}, data: []};
-    // }
-
     const changeRaceDate = (event)=>{
       data.date = new Date(event.date);
       const options = {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
-        // weekday : 'short'
       };
       getData(data.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-'));
     }
 
-    // getRecords();
     getData();
 
     return {
       data,
-      // getRecords,
-      // clearData,
       getData,
       changeRaceDate
     }
@@ -122,9 +93,6 @@ main{
   margin: 0 auto;
   padding: 1rem;
   background: #EEE;
-}
-.flex{
-  display: flex;
 }
 .scrollable{
   overflow: auto;

@@ -1,5 +1,5 @@
 <template>
-  <div class="jockeysrank flex scrollable">
+  <div class="jockeysrank d-flex scrollable">
     <table class="racejockeys table table-sm table-striped table-hover"
       v-for="place in places"
       :key="place"
@@ -91,7 +91,7 @@ export default {
 .table-sm td{
   white-space: nowrap;
 }
-div.jockeysrank.flex{
+div.jockeysrank.d-flex{
   table.table{
     margin: 0 1rem 1rem 0
   }
