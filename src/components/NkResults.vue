@@ -4,24 +4,19 @@
       <thead class="table-dark">
         <tr>
           <th
-            v-for="column in results.schema.fields"
+            v-for="column in results.schema.fields" :key="column.name"
             v-show="column.name !== '形式'"
-            :key="column.name"
           >{{ column.name }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="courcedetails in results.data"
-          :key="courcedetails.場所 + courcedetails.形式"
-        >
+        <tr v-for="courcedetails in results.data" :key="courcedetails.場所 + courcedetails.形式">
           <th class="table-secondary">
             {{ courcedetails.場所 + courcedetails.形式 }}
           </th>
           <td
-            v-for="(courcedetail, key) in courcedetails"
+            v-for="(courcedetail, key) in courcedetails" :key="courcedetail"
             v-show="!(['場所', '形式'].includes(key))"
-            :key="courcedetail"
           >{{ courcedetail }}</td>
         </tr>
       </tbody>
@@ -48,19 +43,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table.sticky{
-  thead th:nth-child(1){
+table.sticky {
+  thead th:nth-child(1) {
     background-color: #454d55;
   }
   thead th:nth-child(1),
-  tbody th:nth-child(1){
+  tbody th:nth-child(1) {
     position: sticky;
     left: 0;
   }
 }
-.table-sm{
+.table-sm {
   th,
-  td{
+  td {
     white-space: nowrap;
   }
 }
