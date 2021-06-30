@@ -1,5 +1,5 @@
 <template>
-  <nav v-bind="$attrs" class="dispplacerace navbar">
+  <nav v-bind="$attrs" class="dispplacerace">
     <NkShowTargets class="dispplace" :inner-text="'場所'"
       :display-targets="places"
       :display-params="{place: 'param', coursetype: 'all', racenum: 'all'}"
@@ -70,8 +70,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-nav.navbar.dispplacerace{
-  padding: 0;
-  margin-bottom: 1rem;
+nav.dispplacerace {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  margin-bottom: 2px;
 }
 </style>
