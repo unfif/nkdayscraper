@@ -77,70 +77,70 @@ export default {
 </script>
 
 <style>
-html body{
+html body {
   padding: 0px;
   background: #666;
   font-size: 12px;
 }
-h1, h2, h3, h4, h5, h6{
+h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
 }
-h2, h3{
+h2, h3 {
   margin: 0 8px;
 }
-main{
-  margin: 0 auto;
-  padding: 1rem;
+main {
+  /* padding: 1rem; */
   background: #EEE;
 }
-.scrollable{
+.scrollable {
   overflow: auto;
   white-space: nowrap;
 }
 
-.postnum_1{
+.postnum_1 {
   background: #ffffff !important;
   color: #000000 !important;
 }
-.postnum_2{
+.postnum_2 {
   background: #444444 !important;
   color: #ffffff !important;
 }
-.postnum_3{
+.postnum_3 {
   background: #e95556 !important;
   color: #ffffff !important;
 }
-.postnum_4{
+.postnum_4 {
   background: #416cba !important;
   color: #ffffff !important;
 }
-.postnum_5{
+.postnum_5 {
   background: #e7c52c !important;
   color: #ffffff !important;
 }
-.postnum_6{
+.postnum_6 {
   background: #45af4c !important;
   color: #ffffff !important;
 }
-.postnum_7{
+.postnum_7 {
   background: #ee9738 !important;
   color: #ffffff !important;
 }
-.postnum_8{
+.postnum_8 {
   background: #ef8fa0 !important;
   color: #ffffff !important;
 }
+
 .BgYellow,
-.rank_1{
+.rank_1 {
   background: #fff080 !important;
 }
 .BgBlue02,
-.rank_2{
+.rank_2 {
   background: #ccdfff !important;
 }
 .BgOrange,
-.rank_3{
+.rank_3 {
   background: #f0c8a0 !important;
 }
 </style>
