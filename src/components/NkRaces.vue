@@ -1,23 +1,21 @@
 <template>
-  <NkNav class="testclass" :places="places" @click-nav-button="handleNavEvent($event)"/>
+  <NkNav :places="places" @click-nav-button="handleNavEvent($event)"/>
   <div class="dispraceresults scrollable">
     <table class="raceresults table table-sm table-hover table-striped-inactive">
       <thead class="table-dark">
         <tr>
-          <th v-for="col in cols" :class="`col_${col}`" :key="col">{{ col }}</th>
+          <th v-for="col in cols" :key="col" :class="`col_${col}`">{{ col }}</th>
         </tr>
       </thead>
       <tbody v-if="!is_raceLoading">
-        <tr v-for="record in records.data"
+        <tr v-for="record in records.data" :key="record.index"
           v-show="showTargetByRecordMap(record, [{place: '場所'}, {racenum: 'R'}, {coursetype: '形式'}]) && showTargetByRankInfo(record.rankinfo)"
           :class="makeClassesFromRecord(record, ['場所', '形式', 'R', '着順', 'index', 'rankinfo'])"
           @click="flipDisplayTargets($event, record)"
-          :key="record.index"
         >
-          <td v-for="(col, index) in cols"
+          <td v-for="(col, index) in cols" :key="`${record.index}_${col}`"
             :class="[`col_${col}`, makeClass(col, record), !Boolean(index % 2) ? 'x-odd' : 'x-even']"
             :style="makeDistanceStyle(col, record)"
-            :key="`${record.index}_${col}`"
           >
             <NkRaceTd :text="String(record[col])" :record="record" :displaymode="getDisplayMode(col)"/>
           </td>

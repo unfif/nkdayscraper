@@ -1,13 +1,10 @@
 <template>
-  <div>
-    <h5><span class="badge bg-secondary">{{ innerText }}</span></h5>
-    <div class="btn-group">
-      <button v-for="param in ['all'].concat(displayTargets)"
-        class="btn btn-outline-secondary btn-sm"
-        @click="showTargets($event, param, displayParams)"
-        :key="param"
-      >{{ param.toUpperCase() }}</button>
-    </div>
+  <h5><span class="badge bg-secondary">{{ innerText }}</span></h5>
+  <div class="btn-group">
+    <button v-for="param in ['all'].concat(displayTargets)" :key="param"
+      class="btn btn-outline-secondary btn-sm"
+      @click="showTargets($event, param, displayParams)"
+    >{{ param.toUpperCase() }}</button>
   </div>
 </template>
 
@@ -63,20 +60,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-nav.navbar.dispplacerace{
-  > div{
-    display: flex;
-    align-items: center;
-    > h5{
-      margin: 0 4px 0 0;
-    }
-  }
-  h5 > span.bg-secondary{
-    width: 5rem;
+nav.dispplacerace {
+  h5 {
+    margin: 0;
     line-height: unset;
   }
-  button{
-    width: 4.3em;
+  h5 > span.bg-secondary,
+  button {
+    width: 3.7rem;
+    padding: 4px 8px;
+    line-height: unset;
+    border: 1.111px solid;
   }
 }
 </style>
