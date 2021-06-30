@@ -1,16 +1,16 @@
 <template>
   <nav v-bind="$attrs" class="dispplacerace">
-    <NkShowTargets class="dispplace" :inner-text="'場所'"
+    <NkShowTargets :inner-text="'場所'"
       :display-targets="places"
       :display-params="{place: 'param', coursetype: 'all', racenum: 'all'}"
       @click-nav-button="handleNavEvent($event)"
     />
-    <NkShowTargets class="dispcoursetype" :inner-text="'コース'"
+    <NkShowTargets :inner-text="'コース'"
       :display-targets="['芝', 'ダート']"
       :display-params="{place: 'all', coursetype: 'param', racenum: 'all'}"
       @click-nav-button="handleNavEvent($event)"
     />
-    <NkShowTargets class="dispracenum" :inner-text="'レース'"
+    <NkShowTargets :inner-text="'レース'"
       :display-targets="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']"
       :display-params="{place: 'all', coursetype: 'all', racenum: 'param'}"
       @click-nav-button="handleNavEvent($event)"
