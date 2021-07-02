@@ -1,7 +1,7 @@
 <template>
-  <h5><span class="badge bg-secondary">{{ innerText }}</span></h5>
-  <div class="btn-group">
-    <button v-for="param in ['all'].concat(displayTargets)" :key="param"
+  <!-- <h5 v-if="innerText"><span class="badge bg-secondary">{{ innerText }}</span></h5> -->
+  <div class="btn-group btn-group-sm">
+    <button v-for="param in displayTargets" :key="param"
       class="btn btn-outline-secondary btn-sm"
       @click="showTargets($event, param, displayParams)"
     >{{ param.toUpperCase() }}</button>
@@ -17,7 +17,7 @@ export default {
   props: {
     innerText: {
       type: String,
-      default: 'Title'
+      default: ''
     },
     displayTargets: {
       type: Array,
@@ -68,9 +68,13 @@ nav.dispplacerace {
   h5 > span.bg-secondary,
   button {
     width: 3.7rem;
-    padding: 4px 8px;
+    // padding: 4px 8px;
     line-height: unset;
-    border: 1.111px solid;
+    // border: 1.111px solid;
   }
 }
+// .btn-group > .btn:not(.dropdown-toggle),
+// .btn-group > .btn-group > .btn {
+//   border-radius: 0;
+// }
 </style>
