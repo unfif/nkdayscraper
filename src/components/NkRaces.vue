@@ -227,9 +227,9 @@ const getModal = (url, params)=>{
 </script>
 
 <style lang="scss" scoped>
-.table-sm{
+.table-sm {
   th,
-  td{
+  td {
     white-space: nowrap;
   }
 }
@@ -241,50 +241,50 @@ th.col_馬番,
 th.col_枠番,
 th.col_人気,
 th.col_所属,
-th.col_増減{
+th.col_増減 {
   width: 2.25em;
 }
 th.col_タイトル,
-th.col_馬名{
+th.col_馬名 {
   width: 13em;
 }
 th.col_形式,
 th.col_レコード,
-th.col_タイム{
+th.col_タイム {
   width: 4.5em;
 }
 th.col_距離,
 th.col_天候,
 th.col_状態,
 th.col_斤量,
-th.col_上り{
+th.col_上り {
   width: 2.5em;
 }
 th.col_時刻,
-th.col_オッズ{
+th.col_オッズ {
   width: 3.5em;
 }
 th.col_情報1,
-th.col_情報2{
+th.col_情報2 {
   width: 2.75em;
 }
 th.col_性,
-th.col_齢{
+th.col_齢 {
   width: 1.25em;
 }
 th.col_騎手,
 th.col_調教師,
-th.col_着差{
+th.col_着差 {
   width: 4em;
 }
-th.col_通過{
+th.col_通過 {
   width: 6.25em;
 }
-th.col_馬体重{
+th.col_馬体重 {
   width: 3.25em;
 }
 
-.raceresults tbody td.x-even{
+.raceresults tbody td.x-even {
   background: #ddd;
 }
 td.col_場所,
@@ -295,7 +295,7 @@ td.col_着順,
 td.col_枠番,
 td.col_馬番,
 td.col_人気,
-td.col_所属{
+td.col_所属 {
   text-align: center;
 }
 
@@ -311,16 +311,16 @@ td.col_2着,
 td.col_3着,
 td.col_単勝率,
 td.col_連対率,
-td.col_複勝率{
+td.col_複勝率 {
   text-align: right;
 }
 
-table.raceresults tbody{
+table.raceresults tbody {
   tr.rankinfo_initdisp_top,
-  tr.rankinfo_initdisp_topend{
+  tr.rankinfo_initdisp_topend {
     border-top: 3px solid #999;
   }
-  tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend){
+  tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) {
     .col_場所,
     .col_R,
     .col_タイトル,
@@ -331,7 +331,7 @@ table.raceresults tbody{
     .col_レコード,
     .col_天候,
     .col_状態,
-    .col_時刻{
+    .col_時刻 {
       text-indent: 500%;
       white-space: nowrap;
       overflow: hidden;
@@ -339,12 +339,12 @@ table.raceresults tbody{
   }
 }
 
-tr.rankinfo_initdisp_top{
-  td.coursetype_芝{
+tr.rankinfo_initdisp_top {
+  td.coursetype_芝 {
     background: #45af4c !important;
     color: #ffffff;
   }
-  td.coursetype_ダート{
+  td.coursetype_ダート {
     background: #ee9738 !important;
     color: #ffffff;
   }

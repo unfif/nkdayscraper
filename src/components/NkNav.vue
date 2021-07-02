@@ -1,5 +1,10 @@
 <template>
-  <nav v-bind="$attrs" class="dispplacerace">
+  <nav v-bind="$attrs" class="dispplacerace btn-toolbar">
+    <NkShowTargets :inner-text="''"
+      :display-targets="['all']"
+      :display-params="{place: 'all', coursetype: 'all', racenum: 'all'}"
+      @click-nav-button="handleNavEvent($event)"
+    />
     <NkShowTargets :inner-text="'場所'"
       :display-targets="places"
       :display-params="{place: 'param', coursetype: 'all', racenum: 'all'}"
@@ -75,6 +80,6 @@ nav.dispplacerace {
   flex-wrap: wrap;
   align-items: center;
   gap: 2px 4px;
-  margin-bottom: 2px;
+  // margin-bottom: 2px;
 }
 </style>
