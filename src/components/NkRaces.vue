@@ -1,5 +1,5 @@
 <template>
-  <NkNav :places="places" @click-nav-button="handleNavEvent($event)"/>
+  <NkNav :places="places" @click-nav-button="showTargets($event)"/>
   <div class="dispraceresults scrollable">
     <table class="raceresults table table-sm table-hover table-striped-inactive">
       <thead class="table-dark">
@@ -83,12 +83,11 @@ export default {
       return response;
     })
 
-    const showTargets = (event, place, coursetype, racenum)=>{
-      data.place = place;
-      data.coursetype = coursetype;
-      data.racenum = racenum;
-      data.is_show_all_ranks = false;
-      flipDisplayForSameRoundRaces(event);
+    const showTargets = (event)=>{
+      data.place = event.data.place;
+      data.coursetype = event.data.coursetype;
+      data.racenum = event.data.racenum;
+      data.is_show_all_ranks = event.data.is_show_all_ranks;
     }
 
     const showTargetByRecordMap = computed(()=>(record, map)=>{
@@ -136,10 +135,6 @@ export default {
       }
     }
 
-    const handleNavEvent = computed(()=>(event)=>{
-      showTargets(event.event, event.data.place, event.data.coursetype, event.data.racenum);
-    })
-
     return {
       data,
       getDisplayMode,
@@ -150,8 +145,7 @@ export default {
       flipDisplayForSameRoundRaces,
       makeClass,
       makeClassesFromRecord,
-      makeDistanceStyle,
-      handleNavEvent
+      makeDistanceStyle
     }
   }
 };
