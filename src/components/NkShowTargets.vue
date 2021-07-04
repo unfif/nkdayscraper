@@ -3,14 +3,12 @@
   <div class="btn-group btn-group-sm">
     <button v-for="param in displayTargets" :key="param"
       class="btn btn-outline-secondary btn-sm"
-      @click="showTargets($event, param, displayParams)"
+      @click="showTargets(param, displayParams)"
     >{{ param.toUpperCase() }}</button>
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
-
 export default {
   name: 'NkShowTargets',
   emits: ['click-nav-button'],
@@ -25,35 +23,29 @@ export default {
     },
     displayParams: {
       type: Object,
-      default: ()=>({place: 'all', coursetype: 'all', racenum: 'all'})
+      default: ()=>({
+        place: 'all',
+        coursetype: 'all',
+        racenum: 'all',
+        is_show_all_ranks: false
+      })
     }
   },
   setup(props, { emit } ){
-    const data = reactive({
-      place: 'all',
-      coursetype: 'all',
-      racenum: 11,
-      is_show_all_ranks: false
-    })
-    const showTargets = (event, param, displayParams)=>{
+    const showTargets = (param, displayParams)=>{
       const displayParams_copy = Object.assign({}, displayParams);
       for(let key in displayParams_copy){
         if(displayParams_copy[key] === 'param') displayParams_copy[key] = param;
       }
+      const data = {};
       data.place = displayParams_copy.place;
       data.coursetype = displayParams_copy.coursetype;
       data.racenum = displayParams_copy.racenum;
-      data.is_show_all_ranks = false;
-      flipDisplayForSameRoundRaces(event);
-      emit('click-nav-button', {event, data});
-    }
-    const flipDisplayForSameRoundRaces = (event)=>{
-      if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
+      data.is_show_all_ranks = displayParams_copy.is_show_all_ranks;
+      emit('click-nav-button', {data});
     }
     return {
-      data,
-      showTargets,
-      flipDisplayForSameRoundRaces
+      showTargets
     }
   }
 }
