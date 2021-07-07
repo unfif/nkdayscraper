@@ -1,8 +1,15 @@
 <template>
   <div id="app">
-    <NkHeader :date="data.date" :places="data.places" @change-race-date="changeRaceDate($event)"/>
+    <NkHeader
+      :date="data.date" :places="data.places"
+      @change-race-date="changeRaceDate($event)"
+      @click-nav-button="showTargets($event)"
+    />
     <main>
-      <NkRaces :places="data.places" :cols="data.cols" :records="data.records" :is_raceLoading="data.is_raceLoading"/>
+      <NkRaces
+        :places="data.places" :cols="data.cols" :records="data.records" :is_raceLoading="data.is_raceLoading"
+        :place="data.place" :coursetype="data.coursetype" :racenum="data.racenum" :is_show_all_ranks="data.is_show_all_ranks"
+      />
       <NkResults :results="data.results"/>
       <NkJockeys :jockeys="data.jockeys" :places="data.places"/>
     </main>
@@ -33,7 +40,12 @@ export default {
       records: {schema: {fields: null}, data: []},
       results: {schema: {fields: null}, data: []},
       jockeys: {schema: {fields: null}, data: []},
-      is_raceLoading: true
+      is_raceLoading: true,
+
+      place: 'all',
+      coursetype: 'all',
+      racenum: '11',
+      is_show_all_ranks: false
     })
 
     const getData = (date = null)=>{
@@ -65,12 +77,20 @@ export default {
       getData(data.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-'));
     }
 
+    const showTargets = (event)=>{
+      data.place = event.data.place;
+      data.coursetype = event.data.coursetype;
+      data.racenum = event.data.racenum;
+      data.is_show_all_ranks = false;
+    }
+
     getData();
 
     return {
       data,
       getData,
-      changeRaceDate
+      changeRaceDate,
+      showTargets
     }
   }
 }
