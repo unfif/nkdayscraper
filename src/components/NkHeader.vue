@@ -1,15 +1,20 @@
 <template>
   <header>
     <input type="date" :value="dateFormated" @change="emitRaceDate($event)">
-    <h4 v-for="place in places" :key="place">{{ place }}</h4>
+    <NkNav :places="places" @click-nav-button="throughEvent($event)"/>
   </header>
 </template>
 
 <script>
 import { computed } from 'vue'
+import NkNav from './NkNav.vue'
 
 export default {
   name: "NkHeader",
+  emits: ['change-race-date', 'click-nav-button'],
+  components: {
+    NkNav
+  },
   props: {
     date: {type: Date},
     places: {type: Array}
@@ -29,9 +34,15 @@ export default {
       emit('change-race-date', {date});
     }
 
+    const throughEvent = (event)=>{
+      const data = event.data;
+      emit('click-nav-button', {data});
+    }
+
     return {
       dateFormated,
-      emitRaceDate
+      emitRaceDate,
+      throughEvent
     }
   }
 };
@@ -47,8 +58,8 @@ html header {
     margin: 0.5rem;
   }
   input[type="date"] {
-    width: 12rem;
-    font-size: 1.5rem;
+    width: 9rem;
+    font-size: 1.1rem;
     color: #fff;
     background: #343a40;
     border-width: 0;
