@@ -1,5 +1,4 @@
 <template>
-  <NkNav :places="places" @click-nav-button="showTargets($event)"/>
   <div class="dispraceresults scrollable">
     <table class="raceresults table table-sm table-hover table-striped-inactive">
       <thead class="table-dark">
@@ -30,8 +29,7 @@
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
-import NkNav from './NkNav.vue'
+import { reactive, computed, watchEffect } from 'vue'
 import NkRaceTd from './NkRaceTd.vue'
 import GeneralDialog from './GeneralDialog.vue'
 import axios from 'axios'
@@ -39,15 +37,10 @@ import axios from 'axios'
 export default {
   name: 'NkRaces',
   components: {
-    NkNav,
     NkRaceTd,
     GeneralDialog
   },
   props: {
-    places: {
-      type: Array,
-      default: ()=>[]
-    },
     cols: {
       type: Array,
       default: ()=>[]
@@ -64,15 +57,39 @@ export default {
     is_raceLoading: {
       type: Boolean,
       default: true
+    },
+
+    place: {
+      type: String,
+      default: 'all'
+    },
+    coursetype: {
+      type: String,
+      default: 'all'
+    },
+    racenum: {
+      type: String,
+      default: '11'
+    },
+    is_show_all_ranks: {
+      type: Boolean,
+      default: false
     }
   },
-  setup(){
+  setup(props){
     const data = reactive({
-      place: 'all',
-      coursetype: 'all',
-      racenum: 11,
+      place: props.place,
+      coursetype: props.coursetype,
+      racenum: props.racenum,
       is_show_all_ranks: false
     })
+
+    watchEffect(() => {
+      data.place = props.place;
+      data.coursetype = props.coursetype;
+      data.racenum = props.racenum;
+      data.is_show_all_ranks = false;
+    });
 
     const getDisplayMode = computed(()=>(col)=>{
       let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
@@ -82,13 +99,6 @@ export default {
       else if(col === '調教師') response = {hasBtn: false, hasLink: true, urlinfo: '調教師URL', callback: null, params: null};
       return response;
     })
-
-    const showTargets = (event)=>{
-      data.place = event.data.place;
-      data.coursetype = event.data.coursetype;
-      data.racenum = event.data.racenum;
-      data.is_show_all_ranks = event.data.is_show_all_ranks;
-    }
 
     const showTargetByRecordMap = computed(()=>(record, map)=>{
       return map.reduce((acc, cur)=>{
@@ -138,7 +148,6 @@ export default {
     return {
       data,
       getDisplayMode,
-      showTargets,
       showTargetByRecordMap,
       showTargetByRankInfo,
       flipDisplayTargets,

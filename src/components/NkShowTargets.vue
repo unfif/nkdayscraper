@@ -1,8 +1,8 @@
 <template>
-  <!-- <h5 v-if="innerText"><span class="badge bg-secondary">{{ innerText }}</span></h5> -->
+  <!-- <h5 v-if="innerText"><span class="badge bg-primary">{{ innerText }}</span></h5> -->
   <div class="btn-group btn-group-sm">
     <button v-for="param in displayTargets" :key="param"
-      class="btn btn-outline-secondary btn-sm"
+      class="btn btn-outline-primary btn-sm"
       @click="showTargets(param, displayParams)"
     >{{ param.toUpperCase() }}</button>
   </div>
@@ -41,7 +41,7 @@ export default {
       data.place = displayParams_copy.place;
       data.coursetype = displayParams_copy.coursetype;
       data.racenum = displayParams_copy.racenum;
-      data.is_show_all_ranks = displayParams_copy.is_show_all_ranks;
+      data.is_show_all_ranks = false;
       emit('click-nav-button', {data});
     }
     return {
@@ -53,11 +53,11 @@ export default {
 
 <style lang="scss" scoped>
 nav.dispplacerace {
-  h5 {
-    margin: 0;
-    line-height: unset;
-  }
-  h5 > span.bg-secondary,
+  // h5 {
+  //   margin: 0;
+  //   line-height: unset;
+  // }
+  // h5 > span.bg-primary,
   button {
     width: 3.7rem;
     // padding: 4px 8px;
