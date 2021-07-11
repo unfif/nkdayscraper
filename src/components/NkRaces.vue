@@ -24,12 +24,13 @@
         <tr v-for="index in 9" :key="index"><td>&nbsp;</td></tr>
       </tbody>
     </table>
+    <GeneralDialog/>
   </div>
-  <GeneralDialog/>
 </template>
 
 <script>
 import { reactive, computed, watchEffect } from 'vue'
+import { useStore } from 'vuex'
 import NkRaceTd from './NkRaceTd.vue'
 import GeneralDialog from './GeneralDialog.vue'
 import axios from 'axios'
@@ -77,6 +78,8 @@ export default {
     }
   },
   setup(props){
+    const store = useStore()
+
     const data = reactive({
       place: props.place,
       coursetype: props.coursetype,
@@ -85,11 +88,11 @@ export default {
     })
 
     watchEffect(() => {
-      data.place = props.place;
-      data.coursetype = props.coursetype;
-      data.racenum = props.racenum;
-      data.is_show_all_ranks = false;
-    });
+      data.place = store.state.place;
+      data.coursetype = store.state.coursetype;
+      data.racenum = store.state.racenum;
+      data.is_show_all_ranks = store.state.is_show_all_ranks;
+    })
 
     const getDisplayMode = computed(()=>(col)=>{
       let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};

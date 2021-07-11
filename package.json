@@ -26,7 +26,8 @@
     "bootstrap": "^5.0.0-beta1",
     "core-js": "^3.11.1",
     "typescript": "^3.9.7",
-    "vue": "^3.1.2"
+    "vue": "^3.1.2",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.9",
