@@ -11,5 +11,8 @@ module.exports = {
             entry: 'src/main.js',
             title: 'NKDayRaces'
         }
+    },
+    configureWebpack: {
+        devtool: 'eval-source-map'
     }
 };
