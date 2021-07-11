@@ -1,5 +1,4 @@
 <template>
-  <!-- <h5 v-if="innerText"><span class="badge bg-primary">{{ innerText }}</span></h5> -->
   <div class="btn-group btn-group-sm">
     <button v-for="param in displayTargets" :key="param"
       class="btn btn-outline-primary btn-sm"
@@ -9,9 +8,10 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+
 export default {
   name: 'NkShowTargets',
-  emits: ['click-nav-button'],
   props: {
     innerText: {
       type: String,
@@ -31,18 +31,20 @@ export default {
       })
     }
   },
-  setup(props, { emit } ){
+  setup(){
+    const store = useStore()
+
     const showTargets = (param, displayParams)=>{
       const displayParams_copy = Object.assign({}, displayParams);
       for(let key in displayParams_copy){
         if(displayParams_copy[key] === 'param') displayParams_copy[key] = param;
       }
-      const data = {};
-      data.place = displayParams_copy.place;
-      data.coursetype = displayParams_copy.coursetype;
-      data.racenum = displayParams_copy.racenum;
-      data.is_show_all_ranks = false;
-      emit('click-nav-button', {data});
+      store.commit('updateDisplayParams', {
+        place: displayParams_copy.place,
+        coursetype: displayParams_copy.coursetype,
+        racenum: displayParams_copy.racenum,
+        is_show_all_ranks: false
+      })
     }
     return {
       showTargets
@@ -53,20 +55,9 @@ export default {
 
 <style lang="scss" scoped>
 nav.dispplacerace {
-  // h5 {
-  //   margin: 0;
-  //   line-height: unset;
-  // }
-  // h5 > span.bg-primary,
   button {
     width: 3.7rem;
-    // padding: 4px 8px;
     line-height: unset;
-    // border: 1.111px solid;
   }
 }
-// .btn-group > .btn:not(.dropdown-toggle),
-// .btn-group > .btn-group > .btn {
-//   border-radius: 0;
-// }
 </style>
