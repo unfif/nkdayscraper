@@ -9,12 +9,8 @@
       {{ text }}
     </span>
     <span v-else>
-      <a
-        :href="record[displaymode.urlinfo]"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-describedby="tooltip"
-        ref="ref_target"
+      <a :href="record[displaymode.urlinfo]" ref="ref_target"
+        target="_blank" rel="noopener noreferrer" aria-describedby="tooltip"
       >
         {{ text }}
       </a>

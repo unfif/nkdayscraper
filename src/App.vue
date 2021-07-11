@@ -1,19 +1,17 @@
 <template>
-  <div id="app">
-    <NkHeader
-      :date="data.date" :places="data.places"
-      @change-race-date="changeRaceDate($event)"
-      @click-nav-button="showTargets($event)"
+  <NkHeader
+    :date="data.date" :places="data.places"
+    @change-race-date="changeRaceDate($event)"
+    @click-nav-button="showTargets($event)"
+  />
+  <main>
+    <NkRaces
+      :cols="data.cols" :records="data.records" :is_raceLoading="data.is_raceLoading"
+      :place="data.place" :coursetype="data.coursetype" :racenum="data.racenum" :is_show_all_ranks="data.is_show_all_ranks"
     />
-    <main>
-      <NkRaces
-        :places="data.places" :cols="data.cols" :records="data.records" :is_raceLoading="data.is_raceLoading"
-        :place="data.place" :coursetype="data.coursetype" :racenum="data.racenum" :is_show_all_ranks="data.is_show_all_ranks"
-      />
-      <NkResults :results="data.results"/>
-      <NkJockeys :jockeys="data.jockeys" :places="data.places"/>
-    </main>
-  </div>
+    <NkResults :results="data.results"/>
+    <NkJockeys :jockeys="data.jockeys" :places="data.places"/>
+  </main>
 </template>
 
 <script>
