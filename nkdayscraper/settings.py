@@ -106,6 +106,7 @@ FEED_EXPORT_ENCODING = 'utf-8'
 # USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
 
 DATABASE_URL = env.get('DATABASE_URL')
+if DATABASE_URL.startswith('postgres://'): DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 SQLITE_URL = env.get('SQLITE_URL')
 MONGO_URL = env.get('MONGO_URL')
 ES_USERID = env.get('ES_USERID')
