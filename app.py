@@ -41,6 +41,7 @@ def getArgs():
 args = getArgs()
 env = os.environ
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
+if DATABASE_URL.startswith('postgres://'): DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 
 if platform.system() == 'Windows':
     user = getpass.getuser()
