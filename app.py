@@ -54,7 +54,7 @@ if platform.system() == 'Windows':
     ])
 
 app = Flask(__name__) if args.orig else Flask(
-    __name__, static_folder = './dist', template_folder = './dist'
+    __name__, static_folder = 'dist', template_folder = 'dist'
 )
 app.jinja_env.add_extension('jinja2.ext.do')
 app.jinja_env.variable_start_string = '{@'
