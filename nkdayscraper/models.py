@@ -352,17 +352,27 @@ class HorseResult(Base):
 
     def makeResults(self, records):
         racesgp = records
-        racesgp['R2'] = racesgp.R
+        from pprint import pprint
+        racesgp['R_2'] = racesgp.R
+        racesgp['距離_2'] = racesgp.距離
+        racesgp['天候_2'] = racesgp.天候
+        racesgp['状態_2'] = racesgp.状態
+        racesgp['時刻_2'] = racesgp.時刻
         racesgp[['グレード', '賞金', '通過']] = racesgp[['グレード', '賞金', '通過']].applymap(str)
         racesgp = racesgp.query('着順 < 4').groupby(['場所','R','レースID','タイトル','形式','距離','天候','状態','情報1','日時','日程','時刻','グレード','頭数','賞金'])
         results = racesgp.agg(list)
-        results.R2 = results.R2.apply(set)
-        results = results.applymap(lambda x: '(' + ', '.join(map(str, x)) + ')')
-        results = results.groupby(['場所','形式']).agg(list).applymap(lambda x: '[' + ', '.join(map(str, x)) + ']')
-        results = results.applymap(lambda x: x.strip('['']'))
-        results.R2 = results.R2.apply(lambda x: x.replace('(', '').replace(')', ''))
+        results.R_2 = results.R_2.apply(set).apply(list)
+        results.距離_2 = results.距離_2.apply(set).apply(list)
+        results.天候_2 = results.天候_2.apply(set).apply(list)
+        results.状態_2 = results.状態_2.apply(set).apply(list)
+        results.時刻_2 = results.時刻_2.apply(set).apply(list)
+        results = results.groupby(['場所', '形式']).agg(list)
 
-        return results[['R2','枠番','馬番','人気','騎手']].rename(columns={'R2':'R'})
+        return results[
+            ['R_2', '距離_2', '天候_2', '状態_2', '時刻_2', '枠番', '馬番', '人気', '騎手']
+        ].rename(columns={
+            'R_2': 'R', '距離_2': '距離', '天候_2': '天候', '状態_2': '状態', '時刻_2': '時刻'
+        })
 
 class Racecourses(Base):
     __tablename__ = 'racecourses'
