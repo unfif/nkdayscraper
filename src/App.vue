@@ -108,12 +108,15 @@ h2, h3 {
   margin: 0 8px;
 }
 main {
-  /* padding: 1rem; */
   background: #EEE;
 }
 .scrollable {
   overflow: auto;
   white-space: nowrap;
+}
+
+table.table-sm {
+  margin-bottom: 0.5rem;
 }
 
 .postnum_1 {
@@ -160,5 +163,16 @@ main {
 .BgOrange,
 .rank_3 {
   background: #f0c8a0 !important;
+}
+.BgGrey,
+.rank_6, .rank_7, .rank_8, .rank_9, .rank_10, .rank_11, .rank_12, .rank_13, .rank_14, .rank_15, .rank_16, .rank_17, .rank_18, .rank_19, .rank_20 {
+  background: #ccc !important;
+}
+
+.short-distance {
+  background: linear-gradient(transparent 80%, #ee9738) 20%;
+}
+.long-distance {
+  background: linear-gradient(transparent 80%, #45af4c) 20%;
 }
 </style>
