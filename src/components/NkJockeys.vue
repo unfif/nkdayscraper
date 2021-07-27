@@ -1,6 +1,6 @@
 <template>
   <div class="jockeysrank scrollable">
-    <table class="racejockeys table table-sm table-striped table-hover"
+    <table class="racejockeys table table-sm table-hover"
       v-for="place in places" :key="place"
     >
       <thead class="table-dark">
