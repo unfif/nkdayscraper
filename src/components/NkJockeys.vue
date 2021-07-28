@@ -90,5 +90,6 @@ export default {
 div.jockeysrank {
   display: flex;
   gap: 0 0.5rem;
+  align-items: flex-start;
 }
 </style>
