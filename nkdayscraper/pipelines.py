@@ -28,14 +28,13 @@ class NkdayscraperPipeline():
         self.Session = sessionmaker(bind=self.engine, future=True)
         self.es = Elasticsearch(http_compress = True)
 
-        if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.delete(index=f'{self.schema}.{self.schema}')
-
         self.mongo = Mongo(
             conn=mongo_connect(query={'serverSelectionTimeoutMS': 3000}),
             db=self.schema,
             has_error=False
         )
 
+        if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.delete(index=f'{self.schema}.{self.schema}')
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
             except: self.mongo.has_error = True
@@ -49,6 +48,12 @@ class NkdayscraperPipeline():
         self.mongo.conn.close()
         bulk(self.es, makeEsRecords(self.nkdayDict))
         self.es.indices.put_settings(index=f'{self.schema}.{self.schema}', body={"number_of_replicas": 0})
+        bulk(self.es, makeEsRecords(self.records))
+        for table in self.tables:
+            index = f'{self.schema}.{table}'
+            self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
+            alias = f'analysis-index-{index}'
+            self.es.indices.put_alias(index=index, name=alias)
 
         self.es.close()
         print(f'【spider_time: {str(perf_counter() - self.open_time)}】')
@@ -82,8 +87,9 @@ class NkdayscraperPipeline():
             if target in esRecord and esRecord[target] is not None: esRecord[target] = esRecord[target].isoformat()
 
         raceid = esRecord['raceid']
+
+        esRecord['_index'] = f'{self.schema}.{self.schema}'
         if isinstance(item, (RaceItem, PaybackItem)):
-            esRecord['_index'] = f'{self.schema}.{self.schema}'
             if not raceid in self.nkdayDict: self.nkdayDict[raceid] = {}
             self.nkdayDict[raceid].update(esRecord)
 
@@ -95,6 +101,9 @@ class NkdayscraperPipeline():
 
             self.nkdayDict[raceid]['results'].append(esRecord)
 
+        esRecord['_index'] = f'{self.schema}.{table}'
+        if esRecord['_index'] is not None: self.records.append(esRecord)
+
         return item
 
 class JrarecordsscraperPipeline():
@@ -103,6 +112,7 @@ class JrarecordsscraperPipeline():
         self.schema = 'nkday'
         self.tables = ['jrarecords']
         self.records = []
+
         self.engine = engine
         self.Session = sessionmaker(bind=self.engine, future=True)
         self.es = Elasticsearch(http_compress = True)
@@ -112,6 +122,7 @@ class JrarecordsscraperPipeline():
             db=self.schema,
             has_error=False
         )
+
 
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
@@ -125,15 +136,23 @@ class JrarecordsscraperPipeline():
     def close_spider(self, spider):
         self.mongo.conn.close()
         bulk(self.es, makeEsRecords(self.records))
+
+
         for table in self.tables:
             index = f'{self.schema}.{table}'
             self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
+
+
 
         self.es.close()
         print(f'【spider_time: {str(perf_counter() - self.open_time)}】')
 
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
+
+
+
+
         record = item.model(**item)
 
         with self.Session() as session:
@@ -147,6 +166,8 @@ class JrarecordsscraperPipeline():
         table = item.model.__table__.name
         copyItem = cp.deepcopy(item)
         if copyItem['time'] is not None: copyItem['time'] = copyItem['time'].isoformat()
+
+
         if not self.mongo.has_error:
             getattr(self.mongo.db, table).insert_one(makeMongoRecord(dict(copyItem)))
 
