@@ -58,7 +58,7 @@ class NkdayscraperPipeline():
             self.es.indices.put_alias(index=index, name=alias)
 
         self.es.close()
-        print(f'【spider_time: {str(perf_counter() - self.open_time)}】')
+        print(f'【spider_processing_time: {str(perf_counter() - self.open_time)}】')
 
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
@@ -101,7 +101,9 @@ class NkdayscraperPipeline():
             else:
                 if not 'results' in self.nkdayDict[raceid]: self.nkdayDict[raceid]['results'] = []
 
-            self.nkdayDict[raceid]['results'].append(esRecord)
+            result = cp.copy(esRecord)
+            del result['_index']
+            self.nkdayDict[raceid]['results'].append(result)
 
         esRecord['_index'] = f'{self.schema}.{table}'
         if esRecord['_index'] is not None: self.records.append(esRecord)
@@ -149,7 +151,7 @@ class JrarecordsscraperPipeline():
 
 
         self.es.close()
-        print(f'【spider_time: {str(perf_counter() - self.open_time)}】')
+        print(f'【spider_processing_time: {str(perf_counter() - self.open_time)}】')
 
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
