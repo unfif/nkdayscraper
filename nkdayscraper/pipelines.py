@@ -35,6 +35,7 @@ class NkdayscraperPipeline():
         )
 
         if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.delete(index=f'{self.schema}.{self.schema}')
+        if self.es.indices.exists(index=f'{self.schema}.results'): self.es.indices.delete(index=f'{self.schema}.results')
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
             except: self.mongo.has_error = True
@@ -48,6 +49,7 @@ class NkdayscraperPipeline():
         self.mongo.conn.close()
         bulk(self.es, makeEsRecords(self.nkdayDict))
         self.es.indices.put_settings(index=f'{self.schema}.{self.schema}', body={"number_of_replicas": 0})
+        self.es.indices.put_settings(index=f'{self.schema}.results', body={"number_of_replicas": 0})
         bulk(self.es, makeEsRecords(self.records))
         for table in self.tables:
             index = f'{self.schema}.{table}'
@@ -124,6 +126,7 @@ class JrarecordsscraperPipeline():
         )
 
 
+
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
             except: self.mongo.has_error = True
@@ -135,9 +138,10 @@ class JrarecordsscraperPipeline():
 
     def close_spider(self, spider):
         self.mongo.conn.close()
+
+
+
         bulk(self.es, makeEsRecords(self.records))
-
-
         for table in self.tables:
             index = f'{self.schema}.{table}'
             self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
@@ -190,6 +194,12 @@ def _(records):
 def _(records):
     for key in records:
         yield records[key]
+
+        raceRecord = cp.deepcopy(records[key])
+        for result in raceRecord.pop('results'):
+            raceRecord.update(result)
+            raceRecord['_index'] = 'nkday.results'
+            yield raceRecord
 
 def makeMongoRecord(item):
     for key in item:
