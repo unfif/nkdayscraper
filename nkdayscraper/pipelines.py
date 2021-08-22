@@ -197,11 +197,12 @@ def _(records):
     for key in records:
         yield records[key]
 
-        raceRecord = cp.deepcopy(records[key])
-        for result in raceRecord.pop('results'):
-            raceRecord.update(result)
-            raceRecord['_index'] = 'nkday.results'
-            yield raceRecord
+        if 'results' in records[key]:
+            raceRecord = cp.deepcopy(records[key])
+            for result in raceRecord.pop('results'):
+                raceRecord.update(result)
+                raceRecord['_index'] = 'nkday.results'
+                yield raceRecord
 
 def makeMongoRecord(item):
     for key in item:
