@@ -26,7 +26,7 @@ class NkdayscraperPipeline():
         self.nkdayDict = {}
         self.engine = engine
         self.Session = sessionmaker(bind=self.engine, future=True)
-        self.es = Elasticsearch(http_compress = True)
+        self.es = Elasticsearch(http_compress = True, timeout=30)
 
         self.mongo = Mongo(
             conn=mongo_connect(query={'serverSelectionTimeoutMS': 3000}),
@@ -119,7 +119,7 @@ class JrarecordsscraperPipeline():
 
         self.engine = engine
         self.Session = sessionmaker(bind=self.engine, future=True)
-        self.es = Elasticsearch(http_compress = True)
+        self.es = Elasticsearch(http_compress = True, timeout=30)
 
         self.mongo = Mongo(
             conn=mongo_connect(query={'serverSelectionTimeoutMS': 3000}),
