@@ -9,7 +9,7 @@ from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
 import datetime as dt
 import pandas as pd
-# pd.set_option('display.max_columns', 100);pd.set_option('display.max_rows', 500)
+# pd.set_option('display.max_columns', 100); pd.set_option('display.max_rows', 500)
 
 DATABASE_URL = get_project_settings().get('DATABASE_URL')
 MONGO_URL = get_project_settings().get('MONGO_URL')
@@ -53,7 +53,6 @@ class RBase():
         jsonDict = {}
         for key, df in data.items():
             jsonDict[key] = df.to_json(orient='table', force_ascii=False)
-            # jsonDict[key] = df.to_dict(orient='records')
 
         return jsonDict
 
@@ -111,44 +110,23 @@ class Race(Base):
     jrarecord = relationship('Jrarecord')
 
     def getRecords(self, date=None):
-        # if not date: date = getTargetDate()
-        # elif type(date) == 'str': date = dt.date(*[int(str) for str in date.split('-')])
         with engine.connect() as conn:
             records = pd.read_sql(self.makeRecordsQuery(date), conn)
             comments = pd.read_sql(self.makeCommentsQuery(), conn)
 
         jpLabels = self.makeJpLabels(comments)
-        # records = self.makeRecords(records)
         data = {
-            # 'jockeys': self.makeJockeys(records),
             'records': records.rename(columns=jpLabels).copy(deep=True),
-            # 'racesinfo': pd.DataFrame({'date': records.date[0], 'places': [records.place.unique()]})
         }
-        # data['results'] = self.makeResults(data['records'])
         data['json'] = self.makeJsonDict(data)
 
         return data
 
     def makeRecordsQuery(self, date=None):
-        # hrs = aliased(HorseResult, name='hrs')
-        # jrr = aliased(Jrarecord, name='jrr')
-        # pay = aliased(Payback, name='pay')
-        # rac = aliased(Race, name='rac')
-        # filterQuery = ~exists().where(rac.date > Race.date)
         filterQuery = Race.date == date if date else True
         query = select(Race)\
         .filter(filterQuery)\
         .order_by(Race.date, Race.place, Race.racenum)
-        # query = select(
-        #     Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
-        #     hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
-        #     pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
-        # )\
-        # .join(hrs)\
-        # .outerjoin(pay)\
-        # .outerjoin(jrr)\
-        # .filter(filterQuery)\
-        # .order_by(Race.place, Race.racenum, hrs.ranking)
 
         return query
 
@@ -280,8 +258,6 @@ class HorseResult(Base):
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
-        # rac = aliased(Race, name='rac')
-        # filterQuery = ~exists().where(rac.date > Race.date)
         filterQuery = Race.date == date if date else True
         query = select(
             Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
