@@ -32,10 +32,6 @@ class NkdaySpider(CrawlSpider):
         if not date: date = f'{getTargetDate():%Y%m%d}'
         self.start_urls = [f'{baseurl}{date}']
 
-    # def start_requests(self):
-    #     url = 'http://oldrace.netkeiba.com/?pid=race_list_sub&id=c' + cdate
-    #     yield scrapy.Request(url, callback=self.parse_races)
-
     def parse_races(self, response):
         raceinfo = response.css('#page')
         raceplaceurl = response.request.url
@@ -78,7 +74,6 @@ class NkdaySpider(CrawlSpider):
                 item['courseinfo1'] = 'ダート'
             else:
                 item['coursetype'] = item['courseinfo1']
-                # if item['courseinfo1'] == '芝': item['courseinfo1'] = item['courseinfo2']
                 if item['place'] == '中山' and item['distance'] in ['3350', '4250'] and item['generation'] == '3歳以上' and item['courseinfo1'] == '芝' and item['courseinfo2'] == '外':
                     item['courseinfo1'] = '外'
 
@@ -148,17 +143,6 @@ class NkdaySpider(CrawlSpider):
                 item['horseweightdiff'] = None
 
             if item['ranking'] in ['中止', '取消', '除外']: item['ranking'] = None
-
-            # intkeys = []
-            # itemkeys = list(item.keys())
-            # for itemkey in itemkeys:
-            #     if itemkey.endswith('num'): intkeys.append(itemkey)
-
-            # intkeys.extend(['distance', 'starters', 'age', 'fav', 'horseweight', 'horseweightdiff'])
-            # for intkey in intkeys:
-            #     if item[intkey] is not None: item[intkey] = int(item[intkey])
-            # for floatkey in ['jockeyweight', 'odds', 'last3f']:
-            #     if item[floatkey] is not None: item[floatkey] = float(item[floatkey])
 
             for target in ['ranking', 'postnum', 'horsenum', 'age', 'fav']:
                 if item[target] is not None: item[target] = int(item[target])
