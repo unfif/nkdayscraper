@@ -56,7 +56,7 @@ export default {
 <style lang="scss" scoped>
 nav.dispplacerace {
   button {
-    width: 3.7rem;
+    width: 3.8rem;
     line-height: unset;
   }
 }
