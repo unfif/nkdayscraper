@@ -121,3 +121,10 @@ if DATABASE_URL is None:
         DATABASE_URL = SQLITE_URL
 
 # TELNETCONSOLE_PORT = env.get('TELNETCONSOLE_PORT')
+
+# DOWNLOAD_HANDLERS = {
+#     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+#     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+# }
+
+# TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
