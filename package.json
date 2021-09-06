@@ -18,7 +18,7 @@
     "app": "npm run build && npm run flask",
     "deploy": "npm run nkd && npm run app",
     "zip": "python3 nkdayscraper/utils/ziptools.py data/json",
-    "all": "npm run nkd && npm run app"
+    "all": "npm run scrape && npm run app"
   },
   "dependencies": {
     "@popperjs/core": "^2.6.0",

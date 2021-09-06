@@ -1,22 +1,23 @@
 # -*- coding: utf-8 -*-
-import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+from scrapy import FormRequest
 from nkdayscraper.items import JrarecordItem
+import re
 import datetime as dt
 
 jst = dt.timezone(dt.timedelta(hours=9))
 
-class JrarecordSpider(CrawlSpider):
+class JrarecordsSpider(CrawlSpider):
     name = 'jrarecords'
     allowed_domains = ['jra.jp']
-    start_urls = ['https://jra.jp/datafile/record/']
+    # start_urls = ['https://jra.jp/datafile/record/']
 
     rules = (
         Rule(
             LinkExtractor(
-                allow = ['jra.jp/datafile/record', '127.0.0.1'],
-                deny = [
+                allow=['jra.jp/JRADB'],
+                deny=[
                     # 'https://jra.jp/datafile/record/sapporo.html',
                     # 'https://jra.jp/datafile/record/hakodate.html',
                     # 'https://jra.jp/datafile/record/fukushima.html',
@@ -28,9 +29,9 @@ class JrarecordSpider(CrawlSpider):
                     # 'https://jra.jp/datafile/record/hanshin.html',
                     # 'https://jra.jp/datafile/record/kokura.html'
                 ],
-                restrict_css = ['ul.link_list.multi.div5']
+                # restrict_css = ['ul.link_list.multi.div5']
             ),
-            callback = 'parse_records', follow = True
+            follow=True
         ),
     )
 
@@ -38,19 +39,46 @@ class JrarecordSpider(CrawlSpider):
         'ITEM_PIPELINES': {'nkdayscraper.pipelines.JrarecordsscraperPipeline': 300}
     }
 
+    def start_requests(self):
+        yield FormRequest(
+            url='https://jra.jp/JRADB/accessW.html',
+            formdata={'cname': 'pr13rli00/8E'},
+            # meta={'playwright': True, 'playwright_include_page': True},
+            callback=self.parse_racecourse_url
+        )
+
+    # async
+    def parse_racecourse_url(self, response):
+        # page = response.meta['playwright_page']
+        re_expr = re.compile("return doAction\('(.*?)', '(.*?)'\);")
+        # a_list = await page.query_selector_all('ul.link_list.div5 > li > a')
+        a_list = response.css('ul.link_list.div5 > li > a')
+        for a in a_list:
+            # onclick = await a.get_attribute('onclick')
+            onclick = a.css('::attr(onclick)').get()
+            match = re.match(re_expr, onclick)
+            yield FormRequest(
+                url='https://jra.jp/JRADB/accessW.html',
+                formdata={'cname': match.groups()[1]},
+                callback=self.parse_records
+            )
+
+        # await page.close()
+
+    # async
     def parse_records(self, response):
         item = JrarecordItem()
         contentsBody = response.css('#contentsBody')
-        item['place'] = response.css('#contents .content li.current a::text').get().split('競馬場')[0]
+        item['place'] = re.sub(r'<h2>中央競馬レコードタイム　|競馬場</h2>', '', response.css('div.main h2').get())
         h3list = contentsBody.css('h3')
-        headings = [[x for x in h3.css('span::text').getall() if x not in ['\n', '\r\n', 'コース']] for h3 in h3list]
+        headings = [[x for x in h3.css('span::text').getall() if not re.search(r'\n|\r\n|コース', x)] for h3 in h3list]
         tbodys = contentsBody.css('table.place tbody')
         for racetype in zip(headings, tbodys):
             item['coursetype'] = racetype[0][0]
 
             item['generation'] = racetype[0][1]
             for racerow in racetype[1].css('tr'):
-                texts = [x for x in racerow.css('::text').getall() if x not in ['\n', '\r\n', '基準']]
+                texts = [x for x in racerow.css('::text').getall() if not re.search(r'\n|\r\n|基準', x)]
                 item['distance'] = texts[0].replace(',', '')
                 courseinfo = texts[1].split('・')
 

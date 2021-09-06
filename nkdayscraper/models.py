@@ -76,15 +76,15 @@ def drop_race_tables(engine):
 
 def drop_race_related_tables(engine):
     drop_race_tables(engine)
-    # if engine.has_table('jrarecords'): Jrarecord.__table__.drop(engine)# jra_omit
+    if engine.has_table('jrarecords'): Jrarecord.__table__.drop(engine)
 
 class Race(Base):
     __tablename__ = 'races'
-    # __table_args__ = (ForeignKeyConstraint(# jra_omit
-    #     ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
-    #     ['jrarecords.place', 'jrarecords.coursetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courseinfo1', 'jrarecords.courseinfo2']),
-    #     {}
-    # )
+    __table_args__ = (ForeignKeyConstraint(
+        ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
+        ['jrarecords.place', 'jrarecords.coursetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courseinfo1', 'jrarecords.courseinfo2']),
+        {}
+    )
     raceid = Column(Text, primary_key=True, comment='レースID')
     year = Column(Integer, comment='年')
     place = Column(Text, comment='場所')
@@ -107,7 +107,7 @@ class Race(Base):
     else: addedmoneylist = Column(Text, comment='賞金')
     requrl = Column(Text, comment='結果URL')
 
-    # jrarecord = relationship('Jrarecord')# jra_omit
+    jrarecord = relationship('Jrarecord')
 
     def getRecords(self, date=None):
         with engine.connect() as conn:
@@ -260,18 +260,15 @@ class HorseResult(Base):
         pay = aliased(Payback, name='pay')
         filterQuery = Race.date == date if date else True
         query = select(
-            Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, \
-            # jrr.time.label('record'),
-            Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
+            Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
             hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
         )\
         .join(hrs)\
         .outerjoin(pay)\
+        .outerjoin(jrr)\
         .filter(filterQuery)\
         .order_by(Race.place, Race.racenum, hrs.ranking)
-
-        # .outerjoin(jrr)\# jra_omit
 
         return query
 
@@ -279,7 +276,7 @@ class HorseResult(Base):
         records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
         records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
         records.time = records.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
-        # records.record = records.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
+        records.record = records.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
         records.fav = records.fav.fillna(99).astype(int)
         records.horseweight = records.horseweight.fillna(0).astype(int)
         records.horseweightdiff = records.horseweightdiff.fillna(0).astype(int)
