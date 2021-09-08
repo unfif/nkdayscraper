@@ -122,7 +122,8 @@ class Race(Base):
 
         return data
 
-    def makeRecordsQuery(self, date=None):
+    @staticmethod
+    def makeRecordsQuery(date=None):
         filterQuery = Race.date == date if date else True
         query = select(Race)\
         .filter(filterQuery)\
@@ -234,7 +235,7 @@ class HorseResult(Base):
     race = relationship('Race')
 
     def getRecords(self, date=None):
-        if not date: date = getTargetDate()
+        if date is None: date = getTargetDate()
         elif type(date) == 'str': date = dt.date(*[int(str) for str in date.split('-')])
         with engine.connect() as conn:
             records = pd.read_sql(self.makeRecordsQuery(date), conn)
@@ -254,7 +255,8 @@ class HorseResult(Base):
 
         return data
 
-    def makeRecordsQuery(self, date=None):
+    @staticmethod
+    def makeRecordsQuery(date=None):
         hrs = aliased(HorseResult, name='hrs')
         jrr = aliased(Jrarecord, name='jrr')
         pay = aliased(Payback, name='pay')
@@ -272,7 +274,8 @@ class HorseResult(Base):
 
         return query
 
-    def makeRecords(self, records):
+    @staticmethod
+    def makeRecords(records):
         records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
         records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
         records.time = records.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
@@ -291,7 +294,8 @@ class HorseResult(Base):
 
         return records
 
-    def makeJockeys(self, records):
+    @staticmethod
+    def makeJockeys(records):
         jockeyct = pd.crosstab([records.place, records.jockey], records.ranking, margins=True)
         jockeyct.columns = [int(x) if type(x) is float else x for x in jockeyct.columns]
         ranges = [list(range(1, x+1)) for x in range(1, 4)]
@@ -326,7 +330,8 @@ class HorseResult(Base):
 
         return jockeys
 
-    def makeResults(self, records):
+    @staticmethod
+    def makeResults(records):
         agg_groups = records.query('着順 < 4')[['場所', '形式', 'R', '距離', '天候', '状態', '時刻', '枠番', '馬番', '人気', '騎手']].groupby(['場所', '形式', 'R', '距離', '天候', '状態', '時刻'], as_index=False).agg(list)
         count_groups = agg_groups.groupby(['場所', '形式'], as_index=False)
         agg_groups = agg_groups.merge(count_groups.size(), on=['場所', '形式'])
