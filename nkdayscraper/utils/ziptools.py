@@ -3,7 +3,8 @@ from concurrent.futures import ThreadPoolExecutor
 import logging
 
 class ZipTools:
-    def zipWithInfo(self, zipPath, filePath):
+    @staticmethod
+    def zipWithInfo(zipPath, filePath):
         logging.info(f'making {zipPath=}')
         with ZipFile(zipPath, 'w', ZIP_DEFLATED) as zip:
             zip.write(filePath, filePath.name)
@@ -28,4 +29,3 @@ if __name__ == '__main__':
         zipTools.zipEachFilesInDir(zipDir)
     else:
         logging.info('No file was Zipped.')
-        
