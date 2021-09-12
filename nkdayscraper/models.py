@@ -88,6 +88,8 @@ class Race(Base):
     raceid = Column(Text, primary_key=True, comment='レースID')
     year = Column(Integer, comment='年')
     place = Column(Text, comment='場所')
+    holdtimesnum = Column(Integer, comment='開催回数')
+    holddaysnum = Column(Integer, comment='開催日数')
     racenum = Column(Integer, comment='R')
     title = Column(Text, comment='タイトル')
     coursetype = Column(Text, comment='形式')
