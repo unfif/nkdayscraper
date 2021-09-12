@@ -63,7 +63,7 @@ class NkdayscraperPipeline():
     def process_item(self, item, spider):
         """Save deals in the database. This method is called for every item pipeline component."""
         if self.engine.name not in ['postgresql', 'mongodb']:
-            for columnName in ['addedmoneylist', 'passageratelist']:
+            for columnName in ['passageratelist']:
                 item[columnName] = str(item[columnName])
 
         record = item.model(**item)
