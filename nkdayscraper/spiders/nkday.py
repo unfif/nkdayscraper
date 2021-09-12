@@ -138,10 +138,10 @@ class NkdaySpider(CrawlSpider):
                 item['last3f'] = last3f if last3f and item['ranking'] != '中止' else None
                 passageratetext = tr.css('td')[12].css('::text').get().strip()
                 item['passageratelist'] = [int(x) for x in passageratetext.split('-')] if passageratetext != '' else None
-                item['passagerate_1st'] = item['passageratelist'][0] if item['passageratelist'] is not None else None
-                item['passagerate_2nd'] = item['passageratelist'][1] if item['passageratelist'] is not None else None
-                item['passagerate_3rd'] = item['passageratelist'][2] if item['passageratelist'] is not None else None
-                item['passagerate_4th'] = item['passageratelist'][3] if item['passageratelist'] is not None else None
+                item['passagerate_1st'] = item['passageratelist'][0] if item['passageratelist'] is not None and item['passageratelist'][0:1] else None
+                item['passagerate_2nd'] = item['passageratelist'][1] if item['passageratelist'] is not None and item['passageratelist'][1:2] else None
+                item['passagerate_3rd'] = item['passageratelist'][2] if item['passageratelist'] is not None and item['passageratelist'][2:3] else None
+                item['passagerate_4th'] = item['passageratelist'][3] if item['passageratelist'] is not None and item['passageratelist'][3:4] else None
                 item['horseweight'] = tr.css('td')[14].css('::text').get().strip()
                 item['horseweightdiff'] = re.split('[()+]', tr.css('td')[14].css('small::text').get() or '(-0)')[-2]
             else:
