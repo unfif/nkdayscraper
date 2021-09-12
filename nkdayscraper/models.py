@@ -94,17 +94,22 @@ class Race(Base):
     distance = Column(Integer, comment='距離')
     courseinfo1 = Column(Text, comment='情報1')
     courseinfo2 = Column(Text, comment='情報2')
+    agecondition = Column(Text, comment='馬齢条件')
+    classcondition = Column(Text, comment='クラス')
+    racecondition = Column(Text, comment='条件')
+    weight = Column(Text, comment='重量')
     weather = Column(Text, comment='天候')
-    condition = Column(Text, comment='状態')
+    coursecondition = Column(Text, comment='状態')
     datetime = Column(DateTime(timezone=True), comment='日時')
     date = Column(Date, comment='日程')
     posttime = Column(Time(timezone=True), comment='時刻')
     generation = Column(Text, comment='世代')
-    if engine.name in ['postgresql', 'mongodb']: racegrade = Column(pg.ARRAY(Text), comment='グレード')
-    else: racegrade = Column(Text, comment='グレード')
     starters = Column(Integer, comment='頭数')
-    if engine.name in ['postgresql', 'mongodb']: addedmoneylist = Column(pg.ARRAY(Integer), comment='賞金')
-    else: addedmoneylist = Column(Text, comment='賞金')
+    addedmoney_1st = Column(Integer, comment='1着賞金')
+    addedmoney_2nd = Column(Integer, comment='2着賞金')
+    addedmoney_3rd = Column(Integer, comment='3着賞金')
+    addedmoney_4th = Column(Integer, comment='4着賞金')
+    addedmoney_5th = Column(Integer, comment='5着賞金')
     requrl = Column(Text, comment='結果URL')
 
     jrarecord = relationship('Jrarecord')
@@ -194,7 +199,7 @@ class Jrarecord(Base):
     jockeyfullname = Column(Text, comment='騎手姓名')
     date = Column(Date, comment='日程')
     weather = Column(Text, comment='天候')
-    condition = Column(Text, comment='状態')
+    coursecondition = Column(Text, comment='状態')
     reference = Column(Boolean, comment='基準')
 
     # race = relationship('Race')
@@ -226,6 +231,11 @@ class HorseResult(Base):
     last3f = Column(Float, comment='上り')
     if engine.name in ['postgresql', 'mongodb']: passageratelist = Column(pg.ARRAY(Integer), comment='通過')
     else: passageratelist = Column(Text, comment='通過')
+    passageratelist = Column(Text, comment='通過')
+    passagerate_1st = Column(Integer, comment='通過1')
+    passagerate_2nd = Column(Integer, comment='通過2')
+    passagerate_3rd = Column(Integer, comment='通過3')
+    passagerate_4th = Column(Integer, comment='通過4')
     affiliate = Column(Text, comment='所属')
     trainer = Column(Text, comment='調教師')
     trainerurl = Column(Text, comment='調教師URL')
@@ -262,7 +272,7 @@ class HorseResult(Base):
         pay = aliased(Payback, name='pay')
         filterQuery = Race.date == date if date else True
         query = select(
-            Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.condition, Race.datetime, Race.date, Race.posttime, Race.racegrade, Race.starters, Race.addedmoneylist, Race.requrl,
+            Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.coursecondition, Race.datetime, Race.date, Race.posttime, Race.starters, Race.requrl,
             hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
         )\

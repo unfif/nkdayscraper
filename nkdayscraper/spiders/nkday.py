@@ -51,9 +51,13 @@ class NkdaySpider(CrawlSpider):
         courseinfo = re.split('[()]', racedetail)
         item['courseinfo1'] = courseinfo[1][0]
         item['courseinfo2'] = (courseinfo[1][1:].strip().replace('-', '') or '') if item['courseinfo1'] != '直' else ''
-
+        racedata02 = racelist_namebox.css('.RaceData02 span::text').getall()
+        item['agecondition'] = racedata02[3]
+        item['classcondition'] = racedata02[4]
+        item['racecondition'] = racedata02[5]
+        item['weight'] = racedata02[6]
         item['weather'] = courseinfo[2].split('天候:')[1]
-        item['condition'] = raceinfo.css('.RaceData01 [class^="Item"]::text').get().split('馬場:')[1]
+        item['coursecondition'] = raceinfo.css('.RaceData01 [class^="Item"]::text').get().split('馬場:')[1]
         raceyear = f"{item['year']}年"
         racedate = raceinfo.css('.RaceList_Date dd.Active a::text').get()
         if not racedate.endswith('日'): racedate = racedate.replace('/', '月') + '日'
@@ -61,11 +65,15 @@ class NkdaySpider(CrawlSpider):
         item['datetime'] = dt.datetime.strptime(f'{raceyear}{racedate} {racetime}:00+09:00', '%Y年%m月%d日 %H:%M:%S%z')
         item['date'] = dt.datetime.strptime(f'{raceyear}{racedate}+09:00', '%Y年%m月%d日%z')
         item['posttime'] = dt.datetime.strptime(f'{racetime}+09:00', '%H:%M%z').timetz()
-        racedata02 = racelist_namebox.css('.RaceData02 span::text').getall()
+
         item['generation'] = '2歳' if int(racedata02[3].split('歳')[0][-1]) == 2 else '3歳以上'
-        item['racegrade'] = racedata02[3:7]
         item['starters'] = racedata02[7].split('頭')[0]
-        item['addedmoneylist'] = [int(x) * 1000 for x in racedata02[8].split('本賞金:')[1].split('万円')[0].split(',')]
+        addedmoney_list = [int(x) * 1000 for x in racedata02[8].split('本賞金:')[1].split('万円')[0].split(',')]
+        item['addedmoney_1st'] = addedmoney_list[0]
+        item['addedmoney_2nd'] = addedmoney_list[1]
+        item['addedmoney_3rd'] = addedmoney_list[2]
+        item['addedmoney_4th'] = addedmoney_list[3]
+        item['addedmoney_5th'] = addedmoney_list[4]
         item['requrl'] = response.request.url
 
         if item['coursetype'] == '障害':
@@ -130,6 +138,10 @@ class NkdaySpider(CrawlSpider):
                 item['last3f'] = last3f if last3f and item['ranking'] != '中止' else None
                 passageratetext = tr.css('td')[12].css('::text').get().strip()
                 item['passageratelist'] = [int(x) for x in passageratetext.split('-')] if passageratetext != '' else None
+                item['passagerate_1st'] = item['passageratelist'][0] if item['passageratelist'] is not None else None
+                item['passagerate_2nd'] = item['passageratelist'][1] if item['passageratelist'] is not None else None
+                item['passagerate_3rd'] = item['passageratelist'][2] if item['passageratelist'] is not None else None
+                item['passagerate_4th'] = item['passageratelist'][3] if item['passageratelist'] is not None else None
                 item['horseweight'] = tr.css('td')[14].css('::text').get().strip()
                 item['horseweightdiff'] = re.split('[()+]', tr.css('td')[14].css('small::text').get() or '(-0)')[-2]
             else:
