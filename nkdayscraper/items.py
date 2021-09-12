@@ -14,6 +14,8 @@ class RaceItem(scrapy.Item):
 
     year = scrapy.Field()
     place = scrapy.Field()
+    holdtimesnum = scrapy.Field()
+    holddaysnum = scrapy.Field()
     racenum = scrapy.Field()
     title = scrapy.Field()
     coursetype = scrapy.Field()

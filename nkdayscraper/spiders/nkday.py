@@ -40,8 +40,11 @@ class NkdaySpider(CrawlSpider):
         item = RaceItem()
         item['raceid'] = raceid
         item['year'] = item['raceid'][0:4]
-        item['place'] = raceinfo.css('.RaceKaisaiWrap li.Active a::text').get()
         racelist_namebox = raceinfo.css('.RaceList_NameBox')
+        racedata02 = racelist_namebox.css('.RaceData02 span::text').getall()
+        item['place'] = racedata02[1]
+        item['holdtimesnum'] = racedata02[0].split('回')[0]
+        item['holddaysnum'] = racedata02[2].split('日目')[0]
         item['racenum'] = racelist_namebox.css('.RaceList_Item01 .RaceNum::text').get().split('R')[0]
         item['title'] = racelist_namebox.css('.RaceName::text').get().strip()
         coursetype = re.split('(\d+)|m', racelist_namebox.css('.RaceData01 span::text').get().strip())
@@ -51,7 +54,6 @@ class NkdaySpider(CrawlSpider):
         courseinfo = re.split('[()]', racedetail)
         item['courseinfo1'] = courseinfo[1][0]
         item['courseinfo2'] = (courseinfo[1][1:].strip().replace('-', '') or '') if item['courseinfo1'] != '直' else ''
-        racedata02 = racelist_namebox.css('.RaceData02 span::text').getall()
         item['agecondition'] = racedata02[3]
         item['classcondition'] = racedata02[4]
         item['racecondition'] = racedata02[5]
