@@ -48,14 +48,15 @@ class NkdayscraperPipeline():
     def close_spider(self, spider):
         self.mongo.conn.close()
         bulk(self.es, makeEsRecords(self.nkdayDict))
-        self.es.indices.put_settings(index=f'{self.schema}.{self.schema}', body={"number_of_replicas": 0})
-        self.es.indices.put_settings(index=f'{self.schema}.results', body={"number_of_replicas": 0})
+        if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.put_settings(index=f'{self.schema}.{self.schema}', body={"number_of_replicas": 0})
+        if self.es.indices.exists(index=f'{self.schema}.results'): self.es.indices.put_settings(index=f'{self.schema}.results', body={"number_of_replicas": 0})
         bulk(self.es, makeEsRecords(self.records))
         for table in self.tables:
             index = f'{self.schema}.{table}'
-            self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
+            exists_index = self.es.indices.exists(index=index)
+            if exists_index: self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
             alias = f'analysis-index-{index}'
-            self.es.indices.put_alias(index=index, name=alias)
+            if exists_index: self.es.indices.put_alias(index=index, name=alias)
 
         self.es.close()
         print(f'【spider_processing_time: {str(perf_counter() - self.open_time)}】')

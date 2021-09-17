@@ -58,8 +58,10 @@ class NkdaySpider(CrawlSpider):
         item['classcondition'] = racedata02[4]
         item['racecondition'] = racedata02[5]
         item['weight'] = racedata02[6]
-        item['weather'] = courseinfo[2].split('天候:')[1]
-        item['coursecondition'] = raceinfo.css('.RaceData01 [class^="Item"]::text').get().split('馬場:')[1]
+        conditions01 = courseinfo[2].split('天候:')
+        item['weather'] = conditions01[1] if conditions01[1:2] else None
+        conditions02 = raceinfo.css('.RaceData01 [class^="Item"]::text').get()
+        item['coursecondition'] = conditions02.split('馬場:')[1] if conditions02 is not None else None
         raceyear = f"{item['year']}年"
         racedate = raceinfo.css('.RaceList_Date dd.Active a::text').get()
         if not racedate.endswith('日'): racedate = racedate.replace('/', '月') + '日'
