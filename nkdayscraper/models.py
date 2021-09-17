@@ -274,8 +274,8 @@ class HorseResult(Base):
         pay = aliased(Payback, name='pay')
         filterQuery = Race.date == date if date else True
         query = select(
-            Race.raceid, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.coursecondition, Race.datetime, Race.date, Race.posttime, Race.starters, Race.requrl,
-            hrs.ranking, hrs.postnum, hrs.horsenum, hrs.horsename, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.horseweight, hrs.horseweightdiff, hrs.horseurl, hrs.jockeyurl, hrs.trainerurl,
+            Race.raceid, Race.year, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.coursecondition, Race.datetime, Race.date, Race.posttime, Race.generation, Race.starters, Race.requrl, Race.agecondition, Race.classcondition, Race.racecondition, Race.weight, Race.addedmoney_1st, Race.addedmoney_2nd, Race.addedmoney_3rd, Race.addedmoney_4th, Race.addedmoney_5th, Race.holdtimesnum, Race.holddaysnum,
+            hrs.ranking, hrs.postnum, hrs.horseid, hrs.horsenum, hrs.horsename, hrs.horseurl, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.jockeyurl, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.trainerurl, hrs.horseweight, hrs.horseweightdiff, hrs.passagerate_1st, hrs.passagerate_2nd, hrs.passagerate_3rd, hrs.passagerate_4th,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
         )\
         .join(hrs)\
