@@ -14,6 +14,7 @@ node_modules
 *~
 
 /test.py
+/test_*.py
 /data/tmp
 /data/pickle/tmp
 /nkdayviewer
