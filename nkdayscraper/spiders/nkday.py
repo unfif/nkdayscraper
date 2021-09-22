@@ -53,7 +53,7 @@ class NkdaySpider(CrawlSpider):
         racedetail = racelist_namebox.css('.RaceData01::text')[1].get().strip()
         courseinfo = re.split('[()]', racedetail)
         item['courseinfo1'] = courseinfo[1][0]
-        item['courseinfo2'] = (courseinfo[1][1:].strip().replace('-', '') or '') if item['courseinfo1'] != '直' else ''
+        item['courseinfo2'] = (re.sub('[-周]', '', courseinfo[1][1:].strip()) or '') if item['courseinfo1'] != '直' else ''
         item['agecondition'] = racedata02[3]
         item['classcondition'] = racedata02[4]
         item['racecondition'] = racedata02[5]
