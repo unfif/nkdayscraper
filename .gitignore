@@ -12,6 +12,7 @@ node_modules
 *.tmp
 *.un~
 *~
+Tree.gv*
 
 /test.py
 /test_*.py
