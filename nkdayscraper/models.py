@@ -1,5 +1,5 @@
 # %%
-from sqlalchemy import create_engine, Column, ForeignKeyConstraint#, exists, and_, ForeignKey, UniqueConstraint, outerjoin, LargeBinary
+from sqlalchemy import create_engine, Column, ForeignKeyConstraint, func#, exists, and_, ForeignKey, UniqueConstraint, outerjoin, LargeBinary
 from sqlalchemy.types import Integer, SmallInteger, Float, Text, Date, DateTime, Time, Boolean
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
@@ -352,6 +352,15 @@ class HorseResult(Base):
         agg_groups.loc[agg_groups['cumcount_inc'] == agg_groups['size'], 'display_bottom'] = True
         agg_groups = agg_groups.drop(columns=['cumcount_inc'])
         return agg_groups
+
+    @staticmethod
+    def countResults():
+        return {
+            'count': {
+                'Race': [row[0] for row in engine.execute(select(func.count('*')).select_from(Race))][0],
+                'HorseResult': [row[0] for row in engine.execute(select(func.count('*')).select_from(HorseResult))][0]
+            }
+        }
 
 class Racecourses(Base):
     __tablename__ = 'racecourses'

@@ -79,6 +79,10 @@ if __name__ == '__main__':
         .filter(HorseResult.margin.notin_((('除外', '中止', '取消'))))
         return query
 
+    def count_records():
+        from nkdayscraper.models import HorseResult
+        print(HorseResult.countResults())
+
     def display_help():
         print('-------------------------------------------[ command_list ]-------------------------------------------')
         print('create_tables:            this command creates all tables in model.')
@@ -88,6 +92,7 @@ if __name__ == '__main__':
         print('recreate_racedates        this command drops and creates Racedates table.')
         print('check_records:            this command checks incomplate records and displays race date.')
         print('exists_records:           this command checks exists records and displays race date.')
+        print('count_records:            this command count for Race and HorseResult')
         print('get_annual_schedule_json: this command downloads race schedules of JRA by JSON. (argv[2]: year)')
         print('------------------------------------------------------------------------------------------------------')
 
@@ -107,6 +112,8 @@ if __name__ == '__main__':
         check_records()
     elif argv[1] == 'exists_records':
         exists_records()
+    elif argv[1] == 'count_records':
+        count_records()
     elif argv[1] == 'get_annual_schedule_json':
         from nkdayscraper.utils.jracalender import JraCalendar
         jraCalendar = JraCalendar()
