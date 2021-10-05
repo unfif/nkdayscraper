@@ -1,5 +1,5 @@
 # %%
-from sqlalchemy import create_engine, Column, ForeignKeyConstraint, func#, exists, and_, ForeignKey, UniqueConstraint, outerjoin, LargeBinary
+from sqlalchemy import create_engine, Column, ForeignKeyConstraint, func, text
 from sqlalchemy.types import Integer, SmallInteger, Float, Text, Date, DateTime, Time, Boolean
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
@@ -15,7 +15,7 @@ DATABASE_URL = get_project_settings().get('DATABASE_URL')
 MONGO_URL = get_project_settings().get('MONGO_URL')
 # ES_URL = get_project_settings().get('ES_URL')
 # SQLITE_URL = get_project_settings().get('SQLITE_URL')
-engine = create_engine(DATABASE_URL, echo=False, future=False)
+engine = create_engine(DATABASE_URL, echo=False, future=True)
 
 class RBase():
     def __repr__(self):
@@ -36,7 +36,7 @@ class RBase():
         query += f"AND psat.relname IN (select relname from pg_stat_user_tables where schemaname = '{schema}') "
         query += "ORDER BY pd.objsubid"
 
-        return query
+        return text(query)
 
     @staticmethod
     def makeJpLabels(comments):
