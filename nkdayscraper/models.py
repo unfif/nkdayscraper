@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, Column, ForeignKeyConstraint, func, text
 from sqlalchemy.types import Integer, SmallInteger, Float, Text, Date, DateTime, Time, Boolean
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
-from sqlalchemy.orm import declarative_base, relationship, aliased
+from sqlalchemy.orm import declarative_base, aliased, relationship
 from nkdayscraper.utils.functions import getTargetDate
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
@@ -355,12 +355,14 @@ class HorseResult(Base):
 
     @staticmethod
     def countResults():
-        return {
-            'count': {
-                'Race': [row[0] for row in engine.execute(select(func.count('*')).select_from(Race))][0],
-                'HorseResult': [row[0] for row in engine.execute(select(func.count('*')).select_from(HorseResult))][0]
+        with engine.connect() as conn:
+            counts = {
+                'count': {
+                    'Race': [row[0] for row in conn.execute(select(func.count('*')).select_from(Race))][0],
+                    'HorseResult': [row[0] for row in conn.execute(select(func.count('*')).select_from(HorseResult))][0]
+                }
             }
-        }
+        return counts
 
 class Racecourses(Base):
     __tablename__ = 'racecourses'
