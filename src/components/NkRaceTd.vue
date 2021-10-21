@@ -6,13 +6,13 @@
     >
     </button>
     <span v-if="!displaymode.hasLink">
-      {{ text }}
+      {{ text !== 'null' ? text : '' }}
     </span>
     <span v-else>
       <a :href="record[displaymode.urlinfo]" ref="ref_target"
         target="_blank" rel="noopener noreferrer" aria-describedby="tooltip"
       >
-        {{ text }}
+        {{ text !== 'null' ? text : '' }}
       </a>
       <GeneralTooltip v-if="['結果URL', '馬URL'].includes(displaymode.urlinfo)"
         :target="ref_target"
