@@ -15,7 +15,7 @@ import subprocess as sp
 import shlex as se
 
 import requests as rq
-import uvicorn, os, sys, platform, getpass, csv#, json
+import uvicorn, os, sys, platform, getpass, csv
 import datetime as dt
 import logging
 

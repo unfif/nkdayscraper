@@ -56,8 +56,8 @@ class NkdaySpider(CrawlSpider):
         item['courseinfo2'] = (re.sub('[-周]', '', courseinfo[1][1:].strip()) or '') if item['courseinfo1'] != '直' else ''
         item['agecondition'] = racedata02[3]
         item['classcondition'] = racedata02[4]
-        item['racecondition'] = racedata02[5]
-        item['weight'] = racedata02[6]
+        item['racecondition'] = racedata02[5] if racedata02[5:6] else None
+        item['weight'] = racedata02[6] if racedata02[6:7] else None
         conditions01 = courseinfo[2].split('天候:')
         item['weather'] = conditions01[1] if conditions01[1:2] else None
         conditions02 = raceinfo.css('.RaceData01 [class^="Item"]::text').get()
