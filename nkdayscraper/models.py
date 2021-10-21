@@ -278,7 +278,7 @@ class HorseResult(Base):
             hrs.ranking, hrs.postnum, hrs.horseid, hrs.horsenum, hrs.horsename, hrs.horseurl, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.jockeyurl, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.trainerurl, hrs.horseweight, hrs.horseweightdiff, hrs.passagerate_1st, hrs.passagerate_2nd, hrs.passagerate_3rd, hrs.passagerate_4th,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
         )\
-        .join(hrs)\
+        .outerjoin(hrs)\
         .outerjoin(pay)\
         .outerjoin(jrr)\
         .filter(filterQuery)\
@@ -308,8 +308,11 @@ class HorseResult(Base):
 
     @staticmethod
     def makeJockeys(records):
-        jockeyct = pd.crosstab([records.place, records.jockey], records.ranking, margins=True)
+        jockeyct = pd.crosstab([records.place, records.jockey.fillna('未確定')], records.ranking, margins=True)
         jockeyct.columns = [int(x) if type(x) is float else x for x in jockeyct.columns]
+        for x in [1, 2, 3]:
+            if x not in jockeyct.columns: jockeyct[x] = 0
+
         ranges = [list(range(1, x+1)) for x in range(1, 4)]
         jockeyct['単勝率'], jockeyct['連対率'], jockeyct['複勝率'] = [round(100 * jockeyct[ranknum].sum(axis=1) / jockeyct.All, 1) for ranknum in ranges]
 
@@ -356,12 +359,10 @@ class HorseResult(Base):
     @staticmethod
     def countResults():
         with engine.connect() as conn:
-            counts = {
-                'count': {
-                    'Race': [row[0] for row in conn.execute(select(func.count('*')).select_from(Race))][0],
-                    'HorseResult': [row[0] for row in conn.execute(select(func.count('*')).select_from(HorseResult))][0]
-                }
-            }
+            race = [row[0] for row in conn.execute(select(func.count('*')).select_from(Race))][0]
+            horse_results = [row[0] for row in conn.execute(select(func.count('*')).select_from(HorseResult))][0]
+
+        counts = {'count': {'Race': race, 'HorseResult': horse_results}}
         return counts
 
 class Racecourses(Base):

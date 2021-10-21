@@ -53,17 +53,19 @@ export default {
         const values = []
         if(key === '枠番') wakuLists = [];
         raceDetail.forEach((value, index)=>{
-          span.innerText = value;
-          if(key === '枠番'){
-            wakuLists.push(value);
-            span.className = `postnum_${value}`
-          }else if(key === '馬番'){
-            span.className = `postnum_${wakuLists[index]}`;
-          }else if(key === '人気'){
-            span.className = `rank_${value}`;
+          if(value != 99){
+            span.innerText = value;
+            if(key === '枠番'){
+              wakuLists.push(value);
+              span.className = `postnum_${value}`
+            }else if(key === '馬番'){
+              span.className = `postnum_${wakuLists[index]}`;
+            }else if(key === '人気'){
+              span.className = `rank_${value}`;
+            }
+            span.classList.add(key);
+            values.push(span.outerHTML);
           }
-          span.classList.add(key);
-          values.push(span.outerHTML);
         })
         return values.join('');
       }
