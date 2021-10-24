@@ -308,7 +308,7 @@ class HorseResult(Base):
 
     @staticmethod
     def makeJockeys(records):
-        jockeyct = pd.crosstab([records.place, records.jockey.fillna('未確定')], records.ranking, margins=True)
+        jockeyct = pd.crosstab([records.place, records.jockey.dropna()], records.ranking, margins=True)
         jockeyct.columns = [int(x) if type(x) is float else x for x in jockeyct.columns]
         for x in [1, 2, 3]:
             if x not in jockeyct.columns: jockeyct[x] = 0
