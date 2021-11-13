@@ -15,7 +15,7 @@ node_modules
 Tree.gv*
 
 /test.py
-/test_*.py
+/tmp_*.py
 /data/tmp
 /data/pickle/tmp
 /nkdayviewer

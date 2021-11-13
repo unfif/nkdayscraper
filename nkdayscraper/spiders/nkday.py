@@ -66,9 +66,9 @@ class NkdaySpider(CrawlSpider):
         racedate = raceinfo.css('.RaceList_Date dd.Active a::text').get()
         if not racedate.endswith('日'): racedate = racedate.replace('/', '月') + '日'
         racetime = racelist_namebox.css('.RaceData01::text').get().strip().split('発走')[0]
-        item['datetime'] = dt.datetime.strptime(f'{raceyear}{racedate} {racetime}:00+09:00', '%Y年%m月%d日 %H:%M:%S%z')
         item['date'] = dt.datetime.strptime(f'{raceyear}{racedate}+09:00', '%Y年%m月%d日%z')
-        item['posttime'] = dt.datetime.strptime(f'{racetime}+09:00', '%H:%M%z').timetz()
+        item['datetime'] = dt.datetime.strptime(f'{raceyear}{racedate} {racetime}:00+09:00', '%Y年%m月%d日 %H:%M:%S%z') if racetime != '' else None
+        item['posttime'] = dt.datetime.strptime(f'{racetime}+09:00', '%H:%M%z').timetz() if racetime != '' else None
 
         item['generation'] = '2歳' if int(racedata02[3].split('歳')[0][-1]) == 2 else '3歳以上'
         item['starters'] = racedata02[7].split('頭')[0]
