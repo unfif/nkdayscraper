@@ -102,8 +102,8 @@ class Race(Base):
     weight = Column(Text, comment='重量')
     weather = Column(Text, comment='天候')
     coursecondition = Column(Text, comment='状態')
-    datetime = Column(DateTime(timezone=True), comment='日時')
     date = Column(Date, comment='日程')
+    datetime = Column(DateTime(timezone=True), comment='日時')
     posttime = Column(Time(timezone=True), comment='時刻')
     generation = Column(Text, comment='世代')
     starters = Column(Integer, comment='頭数')
@@ -274,7 +274,7 @@ class HorseResult(Base):
         pay = aliased(Payback, name='pay')
         filterQuery = Race.date == date if date else True
         query = select(
-            Race.raceid, Race.year, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.coursecondition, Race.datetime, Race.date, Race.posttime, Race.generation, Race.starters, Race.requrl, Race.agecondition, Race.classcondition, Race.racecondition, Race.weight, Race.addedmoney_1st, Race.addedmoney_2nd, Race.addedmoney_3rd, Race.addedmoney_4th, Race.addedmoney_5th, Race.holdtimesnum, Race.holddaysnum,
+            Race.raceid, Race.year, Race.place, Race.racenum, Race.title, Race.coursetype, Race.distance, Race.courseinfo1, Race.courseinfo2, jrr.time.label('record'), Race.weather, Race.coursecondition, Race.date, Race.datetime, Race.posttime, Race.generation, Race.starters, Race.requrl, Race.agecondition, Race.classcondition, Race.racecondition, Race.weight, Race.addedmoney_1st, Race.addedmoney_2nd, Race.addedmoney_3rd, Race.addedmoney_4th, Race.addedmoney_5th, Race.holdtimesnum, Race.holddaysnum,
             hrs.ranking, hrs.postnum, hrs.horseid, hrs.horsenum, hrs.horsename, hrs.horseurl, hrs.sex, hrs.age, hrs.jockeyweight, hrs.jockey, hrs.jockeyurl, hrs.time, hrs.margin, hrs.fav, hrs.odds, hrs.last3f, hrs.passageratelist, hrs.affiliate, hrs.trainer, hrs.trainerurl, hrs.horseweight, hrs.horseweightdiff, hrs.passagerate_1st, hrs.passagerate_2nd, hrs.passagerate_3rd, hrs.passagerate_4th,
             pay.tansho, pay.tanshopay, pay.tanshofav, pay.fukusho, pay.fukushopay, pay.fukushofav, pay.wakuren, pay.wakurenpay, pay.wakurenfav, pay.umaren, pay.umarenpay, pay.umarenfav, pay.wide, pay.widepay, pay.widefav, pay.umatan, pay.umatanpay, pay.umatanfav, pay.fuku3, pay.fuku3pay, pay.fuku3fav, pay.tan3, pay.tan3pay, pay.tan3fav
         )\
@@ -289,7 +289,7 @@ class HorseResult(Base):
     @staticmethod
     def makeRecords(records):
         records.title = records.title.apply(lambda x: x.rstrip('タイトル'))
-        records.posttime = records.posttime.apply(lambda x: x.strftime('%H:%M'))
+        records.posttime = records.posttime.fillna(dt.datetime(1900, 1, 1, hour=0, minute=0)).apply(lambda x: x.strftime('%H:%M'))
         records.time = records.time.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0') if x is not None else None)
         records.record = records.record.apply(lambda x: x.strftime('%M:%S %f')[1:].rstrip('0'))
         records.fav = records.fav.fillna(99).astype(int)
@@ -308,6 +308,7 @@ class HorseResult(Base):
 
     @staticmethod
     def makeJockeys(records):
+        if records.jockey.dropna().empty: records.jockey = pd.Series(['未確定'] * records.shape[0])
         jockeyct = pd.crosstab([records.place, records.jockey.dropna()], records.ranking, margins=True)
         jockeyct.columns = [int(x) if type(x) is float else x for x in jockeyct.columns]
         for x in [1, 2, 3]:
@@ -347,13 +348,16 @@ class HorseResult(Base):
 
     @staticmethod
     def makeResults(records):
-        agg_groups = records.query('着順 < 4')[['場所', '形式', 'R', '距離', '天候', '状態', '時刻', '枠番', '馬番', '人気', '騎手']].groupby(['場所', '形式', 'R', '距離', '天候', '状態', '時刻'], as_index=False).agg(list)
+        agg_groups = records.query('着順 < 4')[['場所', '形式', 'R', '距離', '天候', '状態', '時刻', '枠番', '馬番', '人気', '騎手']].groupby(['場所', '形式', 'R', '距離', '天候', '状態', '時刻'], as_index=False).agg(list).reset_index(drop=True)
         count_groups = agg_groups.groupby(['場所', '形式'], as_index=False)
         agg_groups = agg_groups.merge(count_groups.size(), on=['場所', '形式'])
-        agg_groups['cumcount_inc'] = count_groups.cumcount().apply(lambda x: x + 1)
-        agg_groups.loc[agg_groups['cumcount_inc'] == 1, 'display_top'] = True
-        agg_groups.loc[agg_groups['cumcount_inc'] == agg_groups['size'], 'display_bottom'] = True
-        agg_groups = agg_groups.drop(columns=['cumcount_inc'])
+        if not agg_groups.empty:
+            agg_groups['cumcount_inc'] = None
+            agg_groups['cumcount_inc'] = count_groups.cumcount().apply(lambda x: x + 1)
+            agg_groups.loc[agg_groups['cumcount_inc'] == 1, 'display_top'] = True
+            agg_groups.loc[agg_groups['cumcount_inc'] == agg_groups['size'], 'display_bottom'] = True
+            agg_groups = agg_groups.drop(columns=['cumcount_inc'])
+
         return agg_groups
 
     @staticmethod
