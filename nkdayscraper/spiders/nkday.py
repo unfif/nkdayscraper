@@ -70,7 +70,11 @@ class NkdaySpider(CrawlSpider):
         item['datetime'] = dt.datetime.strptime(f'{raceyear}{racedate} {racetime}:00+09:00', '%Y年%m月%d日 %H:%M:%S%z') if racetime != '' else None
         item['posttime'] = dt.datetime.strptime(f'{racetime}+09:00', '%H:%M%z').timetz() if racetime != '' else None
 
-        item['generation'] = '2歳' if int(racedata02[3].split('歳')[0][-1]) == 2 else '3歳以上'
+        if(list(filter(lambda x: '歳' in x, racedata02)) != []):
+            item['generation'] = '2歳' if int(racedata02[3].split('歳')[0][-1]) == 2 else '3歳以上'
+        else:
+            item['generation'] = None
+
         item['starters'] = racedata02[7].split('頭')[0]
         addedmoney_list = [int(x) * 1000 for x in racedata02[8].split('本賞金:')[1].split('万円')[0].split(',')]
         item['addedmoney_1st'] = addedmoney_list[0]
