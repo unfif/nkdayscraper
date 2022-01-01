@@ -5,41 +5,30 @@
   </header>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue'
 import NkNav from './NkNav.vue'
 
-export default {
-  name: "NkHeader",
-  emits: ['change-race-date'],
-  components: {
-    NkNav
-  },
-  props: {
-    date: {type: Date},
-    places: {type: Array}
-  },
-  setup(props, { emit }){
-    const dateFormated = computed(()=>{
-      const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      };
-      return props.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-');
-    });
+const props = defineProps({
+  date: {type: Date},
+  places: {type: Array}
+})
 
-    const emitRaceDate = (event)=>{
-      const date = event.target.value;
-      emit('change-race-date', {date});
-    }
+const emit = defineEmits(['change-race-date'])
 
-    return {
-      dateFormated,
-      emitRaceDate
-    }
-  }
-};
+const dateFormated = computed(()=>{
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+  return props.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-');
+})
+
+const emitRaceDate = (event)=>{
+  const date = event.target.value;
+  emit('change-race-date', {date});
+}
 </script>
 
 <style lang="scss" scoped>

@@ -20,12 +20,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import '@popperjs/core'
 import 'bootstrap'
-export default {
-  name: 'GeneralDialog'
-};
 </script>
 
 <style scoped>
