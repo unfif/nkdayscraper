@@ -14,7 +14,7 @@
   </main>
 </template>
 
-<script>
+<script setup>
 import { reactive } from 'vue'
 import NkHeader from './components/NkHeader.vue'
 import NkRaces from './components/NkRaces.vue'
@@ -22,76 +22,58 @@ import NkResults from './components/NkResults.vue'
 import NkJockeys from './components/NkJockeys.vue'
 import axios from 'axios'
 
-export default {
-  name: 'App',
-  components: {
-    NkHeader,
-    NkRaces,
-    NkResults,
-    NkJockeys
-  },
-  setup(){
-    const data = reactive({
-      date: new Date(),
-      places: [],
-      cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
-      records: {schema: {fields: null}, data: []},
-      results: {schema: {fields: null}, data: []},
-      jockeys: {schema: {fields: null}, data: []},
-      is_raceLoading: true,
+const data = reactive({
+  date: new Date(),
+  places: [],
+  cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
+  records: {schema: {fields: null}, data: []},
+  results: {schema: {fields: null}, data: []},
+  jockeys: {schema: {fields: null}, data: []},
+  is_raceLoading: true,
 
-      place: 'all',
-      coursetype: 'all',
-      racenum: '11',
-      is_show_all_ranks: false
-    })
+  place: 'all',
+  coursetype: 'all',
+  racenum: '11',
+  is_show_all_ranks: false
+})
 
-    const getData = (date = null)=>{
-      data.is_raceLoading = true;
-      let url = '/api/';
-      if(date) url += `${date}/`;
-      axios.get(url)
-      .then((response)=>{
-        if(response.data){
-          const racesinfo = JSON.parse(response.data.racesinfo);
-          data.date = new Date(racesinfo.data[0].date);
-          data.places = racesinfo.data[0].places;
-          data.records = JSON.parse(response.data.records);
-          data.results = JSON.parse(response.data.results);
-          data.jockeys = JSON.parse(response.data.jockeys);
-        }
-      })
-      .catch((err)=>{console.log('err:', err)})
-      .finally(()=>{data.is_raceLoading = false})
+const getData = (date = null)=>{
+  data.is_raceLoading = true;
+  let url = '/api/';
+  if(date) url += `${date}/`;
+  axios.get(url)
+  .then((response)=>{
+    if(response.data){
+      const racesinfo = JSON.parse(response.data.racesinfo);
+      data.date = new Date(racesinfo.data[0].date);
+      data.places = racesinfo.data[0].places;
+      data.records = JSON.parse(response.data.records);
+      data.results = JSON.parse(response.data.results);
+      data.jockeys = JSON.parse(response.data.jockeys);
     }
-
-    const changeRaceDate = (event)=>{
-      data.date = new Date(event.date);
-      const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      };
-      getData(data.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-'));
-    }
-
-    const showTargets = (event)=>{
-      data.place = event.data.place;
-      data.coursetype = event.data.coursetype;
-      data.racenum = event.data.racenum;
-      data.is_show_all_ranks = false;
-    }
-
-    getData();
-
-    return {
-      data,
-      getData,
-      changeRaceDate,
-      showTargets
-    }
-  }
+  })
+  .catch((err)=>{console.log('err:', err)})
+  .finally(()=>{data.is_raceLoading = false})
 }
+
+const changeRaceDate = (event)=>{
+  data.date = new Date(event.date);
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+  getData(data.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-'));
+}
+
+const showTargets = (event)=>{
+  data.place = event.data.place;
+  data.coursetype = event.data.coursetype;
+  data.racenum = event.data.racenum;
+  data.is_show_all_ranks = false;
+}
+
+getData();
 </script>
 
 <style>

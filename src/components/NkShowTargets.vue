@@ -7,49 +7,42 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useStore } from 'vuex'
 
-export default {
-  name: 'NkShowTargets',
-  props: {
-    innerText: {
-      type: String,
-      default: ''
-    },
-    displayTargets: {
-      type: Array,
-      default: ()=>[]
-    },
-    displayParams: {
-      type: Object,
-      default: ()=>({
-        place: 'all',
-        coursetype: 'all',
-        racenum: 'all',
-        is_show_all_ranks: false
-      })
-    }
+const props = defineProps({
+  innerText: {
+    type: String,
+    default: ''
   },
-  setup(){
-    const store = useStore()
-
-    const showTargets = (param, displayParams)=>{
-      const displayParams_copy = Object.assign({}, displayParams);
-      for(let key in displayParams_copy){
-        if(displayParams_copy[key] === 'param') displayParams_copy[key] = param;
-      }
-      store.commit('updateDisplayParams', {
-        place: displayParams_copy.place,
-        coursetype: displayParams_copy.coursetype,
-        racenum: displayParams_copy.racenum,
-        is_show_all_ranks: false
-      })
-    }
-    return {
-      showTargets
-    }
+  displayTargets: {
+    type: Array,
+    default: ()=>[]
+  },
+  displayParams: {
+    type: Object,
+    default: ()=>({
+      place: 'all',
+      coursetype: 'all',
+      racenum: 'all',
+      is_show_all_ranks: false
+    })
   }
+})
+
+const store = useStore()
+
+const showTargets = (param, displayParams)=>{
+  const displayParams_copy = Object.assign({}, displayParams);
+  for(let key in displayParams_copy){
+    if(displayParams_copy[key] === 'param') displayParams_copy[key] = param;
+  }
+  store.commit('updateDisplayParams', {
+    place: displayParams_copy.place,
+    coursetype: displayParams_copy.coursetype,
+    racenum: displayParams_copy.racenum,
+    is_show_all_ranks: false
+  })
 }
 </script>
 
