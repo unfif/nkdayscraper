@@ -32,53 +32,47 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { reactive } from 'vue'
-export default {
-  name: 'NkJockeys',
-  props: {
-    jockeys: {
-      type: Object
-    },
-    places: {
-      type: Array,
-      default: ()=>[]
-    }
+
+const props = defineProps({
+  jockeys: {
+    type: Object
   },
-  setup(){
-    const data = reactive({
-      isAllDisp: false
-    })
-    const dispExists = (val)=>{
-      return val == 0 ? '...' : val;
-    }
-    const ffDisp = ()=>{
-      data.isAllDisp = !data.isAllDisp;
-    }
-    const hasRank = (key, record)=>{
-      let response = {};
-      const lastword = key.slice(-1);
-      if(lastword === '着' || lastword === '率'){
-        let rank = record[key + '順'];
-        if(rank <= 3 && record[key] !== 0){
-          response = {['rank_' + rank]: true};
-        }
-      }
-      return response;
-    }
-    const hiddentext = {
-      'text-indent': '500%',
-      'white-space': 'nowrap',
-      'overflow': 'hidden'
-    }
-    return {
-      data,
-      dispExists,
-      ffDisp,
-      hasRank,
-      hiddentext
+  places: {
+    type: Array,
+    default: ()=>[]
+  }
+})
+
+const data = reactive({
+  isAllDisp: false
+})
+
+const dispExists = (val)=>{
+  return val == 0 ? '...' : val;
+}
+
+const ffDisp = ()=>{
+  data.isAllDisp = !data.isAllDisp;
+}
+
+const hasRank = (key, record)=>{
+  let response = {};
+  const lastword = key.slice(-1);
+  if(lastword === '着' || lastword === '率'){
+    let rank = record[key + '順'];
+    if(rank <= 3 && record[key] !== 0){
+      response = {['rank_' + rank]: true};
     }
   }
+  return response;
+}
+
+const hiddentext = {
+  'text-indent': '500%',
+  'white-space': 'nowrap',
+  'overflow': 'hidden'
 }
 </script>
 

@@ -15,21 +15,15 @@
   </nav>
 </template>
 
-<script>
+<script setup>
 import NkShowTargets from './NkShowTargets.vue'
 
-export default {
-  name: 'NkNav',
-  components: {
-    NkShowTargets
-  },
-  props: {
-    places: {
-      type: Array,
-      default: ()=>[]
-    }
+const props = defineProps({
+  places: {
+    type: Array,
+    default: ()=>[]
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

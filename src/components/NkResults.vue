@@ -26,66 +26,57 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { onBeforeUpdate } from 'vue'
-export default {
-  name: 'NkResults',
-  props: {
-    results: {
-      type: Object,
-      default: ()=>{}
-    }
-  },
-  setup(){
-    const data = {
-      is_setRows: {}
-    }
 
-    onBeforeUpdate(()=>{
-      data.is_setRows = {};
-    })
-
-    let wakuLists = [];
-
-    const displayRaceDetail = (raceDetail, key)=>{
-      const span = document.createElement('span');
-      if(Array.isArray(raceDetail)){
-        const values = []
-        if(key === '枠番') wakuLists = [];
-        raceDetail.forEach((value, index)=>{
-          if(value != 99){
-            span.innerText = value;
-            if(key === '枠番'){
-              wakuLists.push(value);
-              span.className = `postnum_${value}`
-            }else if(key === '馬番'){
-              span.className = `postnum_${wakuLists[index]}`;
-            }else if(key === '人気'){
-              span.className = `rank_${value}`;
-            }
-            span.classList.add(key);
-            values.push(span.outerHTML);
-          }
-        })
-        return values.join('');
-      }
-      if(key === '距離') span.className = raceDetail <= 1600 ? 'short-distance' : 'long-distance';
-      span.innerText = raceDetail;
-      return span.outerHTML;
-    }
-
-    const makeRowspan = (raceResult)=>{
-      let rowspan = 0;
-      if(raceResult.display_top) rowspan = raceResult.size
-      return rowspan;
-    }
-
-    return {
-      data,
-      displayRaceDetail,
-      makeRowspan
-    }
+const props = defineProps({
+  results: {
+    type: Object,
+    default: ()=>{}
   }
+})
+
+const data = {
+  is_setRows: {}
+}
+
+onBeforeUpdate(()=>{
+  data.is_setRows = {};
+})
+
+let wakuLists = [];
+
+const displayRaceDetail = (raceDetail, key)=>{
+  const span = document.createElement('span');
+  if(Array.isArray(raceDetail)){
+    const values = []
+    if(key === '枠番') wakuLists = [];
+    raceDetail.forEach((value, index)=>{
+      if(value != 99){
+        span.innerText = value;
+        if(key === '枠番'){
+          wakuLists.push(value);
+          span.className = `postnum_${value}`
+        }else if(key === '馬番'){
+          span.className = `postnum_${wakuLists[index]}`;
+        }else if(key === '人気'){
+          span.className = `rank_${value}`;
+        }
+        span.classList.add(key);
+        values.push(span.outerHTML);
+      }
+    })
+    return values.join('');
+  }
+  if(key === '距離') span.className = raceDetail <= 1600 ? 'short-distance' : 'long-distance';
+  span.innerText = raceDetail;
+  return span.outerHTML;
+}
+
+const makeRowspan = (raceResult)=>{
+  let rowspan = 0;
+  if(raceResult.display_top) rowspan = raceResult.size
+  return rowspan;
 }
 </script>
 

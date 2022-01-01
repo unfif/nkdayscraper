@@ -85,38 +85,38 @@ if(args.zip):
     zipTools.zipEachFilesInDir(jsonDir)
 
 # %%
-# @app.route('/')
+# @app.get('/')
 # def index():
 #     return redirect(url_for('nkday'))
 
-@app.route('/nkday/')
+@app.get('/nkday/')
 def nkday():
     return render_template('index.html', **data)
 
-# @app.route('/nkraces/')
+# @app.get('/nkraces/')
 # def nkraces():
 #     return render_template('nkraces.vue', **data)
 
-# @app.route('/api/', methods=['GET', 'POST'])
+# @app.get('/api/')
 # def api():
 #     # return jsonforapi
 #     return data['json']
 
-@app.route('/api/', methods=['GET'])
+@app.get('/api/')
 def getall():
     return data['json']
 
-@app.route('/api/<string:date>/', methods=['GET'])
+@app.get('/api/<string:date>/')
 def api(date):
     date = dt.date(*[int(str) for str in date.split('-')])
     data = horseResult.getRecords(date)
     return data['json']
 
-# @app.route('/api/<string:key>/', methods=['GET'])
+# @app.get('/api/<string:key>/')
 # def api(key):
 #     return data['json'][key]
 
-@app.route('/crawl', methods=['GET'])
+@app.get('/crawl')
 def crawl():
     # process = CrawlerProcess(get_project_settings())
     # process.crawl(NkdaySpider)
@@ -129,43 +129,43 @@ def crawl():
     reactor.run()
     return jsonify({"status": True})
 
-@app.route('/crawlsp', methods=['GET'])
+@app.get('/crawlsp')
 def crawlsp():
     cmd = 'pwsh -Command nkrun'
     p1 = sp.Popen(se.split(cmd), stderr=sp.PIPE, stdout=sp.PIPE, shell=True, env=env)
     data = {'p1': {'output': [x.decode('cp932') for x in p1.communicate()], 'status': p1.returncode}}
     return jsonify(data)
 
-@app.route('/nkdb/<string:dbtype>/<string:dbid>', methods=['GET'])
+@app.get('/nkdb/<string:dbtype>/<string:dbid>')
 def get_nkdb(dbtype, dbid):
     response = rq.get(f'https://db.netkeiba.com/{dbtype}/{dbid}')
     response.encoding = response.apparent_encoding
     return response.text
 
-@app.route('/nkrace/<string:raceid>', methods=['GET'])
+@app.get('/nkrace/<string:raceid>')
 def get_nkrace(raceid):
     response = rq.get(f'https://race.netkeiba.com/race/result.html?race_id={raceid}&rf=race_list')
     response.encoding = response.apparent_encoding
     return response.text
 
-@app.route('/pedigree/<string:horseid>', methods=['GET'])
+@app.get('/pedigree/<string:horseid>')
 def get_nkpedigree(horseid):
     response = rq.get(f'https://db.netkeiba.com/horse/ped/{horseid}/')
     response.encoding = response.apparent_encoding
     return response.text
 
-@app.route('/redirect/<string:url>', methods=['GET'])
+@app.get('/redirect/<string:url>')
 def get_response(url):
     response = rq.get(url)
     response.encoding = response.apparent_encoding
     return response.text
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.get('/', defaults={'path': ''})
+@app.get('/<path:path>')
 def catch_all(path):
     return render_template("index.html")
 
-@app.route('/now', methods=['GET'])
+@app.get('/now')
 def get_now():
     return dt.datetime.now().isoformat()
 

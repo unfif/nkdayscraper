@@ -28,139 +28,118 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { reactive, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import NkRaceTd from './NkRaceTd.vue'
 import GeneralDialog from './GeneralDialog.vue'
 import axios from 'axios'
 
-export default {
-  name: 'NkRaces',
-  components: {
-    NkRaceTd,
-    GeneralDialog
+const props = defineProps({
+  cols: {
+    type: Array,
+    default: ()=>[]
   },
-  props: {
-    cols: {
-      type: Array,
-      default: ()=>[]
-    },
-    records: {
-      type: Object,
-      default: ()=>{
-        return {
-          schema: {fields: null},
-          data: []
-        }
+  records: {
+    type: Object,
+    default: ()=>{
+      return {
+        schema: {fields: null},
+        data: []
       }
-    },
-    is_raceLoading: {
-      type: Boolean,
-      default: true
-    },
-
-    place: {
-      type: String,
-      default: 'all'
-    },
-    coursetype: {
-      type: String,
-      default: 'all'
-    },
-    racenum: {
-      type: String,
-      default: '11'
-    },
-    is_show_all_ranks: {
-      type: Boolean,
-      default: false
     }
   },
-  setup(props){
-    const store = useStore()
-
-    const data = reactive({
-      place: props.place,
-      coursetype: props.coursetype,
-      racenum: props.racenum,
-      is_show_all_ranks: false
-    })
-
-    watchEffect(() => {
-      data.place = store.state.place;
-      data.coursetype = store.state.coursetype;
-      data.racenum = store.state.racenum;
-      data.is_show_all_ranks = store.state.is_show_all_ranks;
-    })
-
-    const getDisplayMode = computed(()=>(col)=>{
-      let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
-      if(col === 'タイトル') response = {hasBtn: true, hasLink: true, urlinfo: '結果URL', callback: getModal, params: getResults_params};
-      else if(col === '馬名') response = {hasBtn: true, hasLink: true, urlinfo: '馬URL', callback: getModal, params: getHorseInfo_params};
-      else if(col === '騎手') response = {hasBtn: false, hasLink: true, urlinfo: '騎手URL', callback: null, params: null};
-      else if(col === '調教師') response = {hasBtn: false, hasLink: true, urlinfo: '調教師URL', callback: null, params: null};
-      return response;
-    })
-
-    const showTargetByRecordMap = computed(()=>(record, map)=>{
-      return map.reduce((acc, cur)=>{
-        const key = Object.keys(cur)[0];
-        return acc && (data[key] === 'all' ? true : record[cur[key]] == data[key]);
-      }, true)
-    })
-
-    const showTargetByRankInfo = computed(()=>(rankinfo)=>{
-      return data.is_show_all_ranks ? true : rankinfo.startsWith('initdisp_');
-    })
-
-    const flipDisplayTargets = computed(()=>(event, record)=>{
-      if(!['A', 'BUTTON'].includes(event.target.tagName)){
-        data.is_show_all_ranks = !data.is_show_all_ranks
-        data.place = record.場所;
-        data.racenum = record.R;
-        flipDisplayForSameRoundRaces(event);
-      }
-    })
-
-    const flipDisplayForSameRoundRaces = (event)=>{
-      if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
-    }
-
-    const makeClass = computed(()=>(col, record)=>{
-      if(col === '形式') return `coursetype_${record[col]}`;
-      else if(col === '枠番') return `postnum_${record[col]}`;
-      else if(col === '人気') return `rank_${record[col]}`;
-      else if(col === '上り') return `rank_${record['last3frank']}`;
-      else if(col === '所属' && record[col] === '栗東') return 'text-success';
-    })
-
-    const makeClassesFromRecord = (record, prefixes)=>{
-      const classes = prefixes.map((prefix)=>{
-        return `${prefix}_${record[prefix]}`;
-      })
-      return classes;
-    }
-
-    const makeDistanceStyle = (col, record)=>{
-      if(record['rankinfo'] === 'initdisp_top' && col === '距離'){
-        return {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'}
-      }
-    }
-
-    return {
-      data,
-      getDisplayMode,
-      showTargetByRecordMap,
-      showTargetByRankInfo,
-      flipDisplayTargets,
-      flipDisplayForSameRoundRaces,
-      makeClass,
-      makeClassesFromRecord,
-      makeDistanceStyle
-    }
+  is_raceLoading: {
+    type: Boolean,
+    default: true
+  },
+  place: {
+    type: String,
+    default: 'all'
+  },
+  coursetype: {
+    type: String,
+    default: 'all'
+  },
+  racenum: {
+    type: String,
+    default: '11'
+  },
+  is_show_all_ranks: {
+    type: Boolean,
+    default: false
   }
-};
+})
+
+const store = useStore()
+
+const data = reactive({
+  place: props.place,
+  coursetype: props.coursetype,
+  racenum: props.racenum,
+  is_show_all_ranks: false
+})
+
+watchEffect(() => {
+  data.place = store.state.place;
+  data.coursetype = store.state.coursetype;
+  data.racenum = store.state.racenum;
+  data.is_show_all_ranks = store.state.is_show_all_ranks;
+})
+
+const getDisplayMode = computed(()=>(col)=>{
+  let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
+  if(col === 'タイトル') response = {hasBtn: true, hasLink: true, urlinfo: '結果URL', callback: getModal, params: getResults_params};
+  else if(col === '馬名') response = {hasBtn: true, hasLink: true, urlinfo: '馬URL', callback: getModal, params: getHorseInfo_params};
+  else if(col === '騎手') response = {hasBtn: false, hasLink: true, urlinfo: '騎手URL', callback: null, params: null};
+  else if(col === '調教師') response = {hasBtn: false, hasLink: true, urlinfo: '調教師URL', callback: null, params: null};
+  return response;
+})
+
+const showTargetByRecordMap = computed(()=>(record, map)=>{
+  return map.reduce((acc, cur)=>{
+    const key = Object.keys(cur)[0];
+    return acc && (data[key] === 'all' ? true : record[cur[key]] == data[key]);
+  }, true)
+})
+
+const showTargetByRankInfo = computed(()=>(rankinfo)=>{
+  return data.is_show_all_ranks ? true : rankinfo.startsWith('initdisp_');
+})
+
+const flipDisplayTargets = computed(()=>(event, record)=>{
+  if(!['A', 'BUTTON'].includes(event.target.tagName)){
+    data.is_show_all_ranks = !data.is_show_all_ranks
+    data.place = record.場所;
+    data.racenum = record.R;
+    flipDisplayForSameRoundRaces(event);
+  }
+})
+
+const flipDisplayForSameRoundRaces = (event)=>{
+  if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
+}
+
+const makeClass = computed(()=>(col, record)=>{
+  if(col === '形式') return `coursetype_${record[col]}`;
+  else if(col === '枠番') return `postnum_${record[col]}`;
+  else if(col === '人気') return `rank_${record[col]}`;
+  else if(col === '上り') return `rank_${record['last3frank']}`;
+  else if(col === '所属' && record[col] === '栗東') return 'text-success';
+})
+
+const makeClassesFromRecord = (record, prefixes)=>{
+  const classes = prefixes.map((prefix)=>{
+    return `${prefix}_${record[prefix]}`;
+  })
+  return classes;
+}
+
+const makeDistanceStyle = (col, record)=>{
+  if(record['rankinfo'] === 'initdisp_top' && col === '距離'){
+    return {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'}
+  }
+}
 
 const getHorseInfo_params = {
   url_obj: {
