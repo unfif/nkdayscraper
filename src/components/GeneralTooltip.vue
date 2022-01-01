@@ -5,93 +5,83 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref, reactive, onUpdated, computed } from 'vue'
 import { createPopper } from "@popperjs/core"
+
+const props = defineProps({
+  target: {
+    default: ref(null)
+  },
+  placement: {
+    type: String,
+    default: 'bottom'
+  },
+  callback: {
+    type: Function,
+    default: null
+  },
+  callbackParam: {
+    default: null
+  }
+})
+
+const ref_tooltip = ref(null);
+
+const data = reactive({
+  tooltip: ''
+})
+
+const targetEl = computed(()=>{
+  return props.target;
+})
 
 const showEvents = ['mouseenter', 'focus'];
 const hideEvents = ['mouseleave', 'blur'];
 
-export default {
-  name: 'GeneralTooltip',
-  props: {
-    target: {
-      default: ref(null)
-    },
-    placement: {
-      type: String,
-      default: 'bottom'
-    },
-    callback: {
-      type: Function,
-      default: null
-    },
-    callbackParam: {
-      default: null
+onUpdated(()=>{
+  const target = targetEl.value;
+  const tooltip = ref_tooltip.value;
+
+  const popperInstance = createPopper(target, tooltip, {
+    placement: props.placement,
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 8],
+        },
+      },
+    ],
+  })
+
+  const show = async ()=>{
+    if(!data.tooltip){
+      data.tooltip = await props.callback(props.callbackParam);
     }
-  },
-  setup(props){
-    const ref_tooltip = ref(null);
-
-    const data = reactive({
-      tooltip: ''
+    tooltip.setAttribute('data-show', '');
+    popperInstance.setOptions({
+      modifiers: [{ name: 'eventListeners', enabled: true }],
     })
-
-    const targetEl = computed(()=>{
-      return props.target;
-    })
-
-    onUpdated(()=>{
-      const target = targetEl.value;
-      const tooltip = ref_tooltip.value;
-
-      const popperInstance = createPopper(target, tooltip, {
-        placement: props.placement,
-        modifiers: [
-          {
-            name: 'offset',
-            options: {
-              offset: [0, 8],
-            },
-          },
-        ],
-      });
-
-      const show = async ()=>{
-        if(!data.tooltip){
-          data.tooltip = await props.callback(props.callbackParam);
-        }
-        tooltip.setAttribute('data-show', '');
-        popperInstance.setOptions({
-          modifiers: [{ name: 'eventListeners', enabled: true }],
-        });
-        popperInstance.update();
-        setTimeout(hide, 2000);
-      }
-
-      const hide = ()=>{
-        tooltip.removeAttribute('data-show');
-        popperInstance.setOptions({
-          modifiers: [{ name: 'eventListeners', enabled: false }],
-        });
-      }
-      
-      showEvents.forEach(event => {
-        target.addEventListener(event, show);
-      });
-
-      hideEvents.forEach(event => {
-        target.addEventListener(event, hide);
-      });
-    });
-
-    return {
-      data,
-      ref_tooltip,
-      targetEl
-    }
+    popperInstance.update();
+    setTimeout(hide, 2000);
   }
-};
+
+  const hide = ()=>{
+    tooltip.removeAttribute('data-show');
+    popperInstance.setOptions({
+      modifiers: [{ name: 'eventListeners', enabled: false }],
+    })
+  }
+
+  showEvents.forEach(event => {
+    target.addEventListener(event, show);
+  })
+
+  hideEvents.forEach(event => {
+    target.addEventListener(event, hide);
+  })
+})
 </script>
 
 <style scoped>

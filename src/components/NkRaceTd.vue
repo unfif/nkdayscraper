@@ -24,69 +24,56 @@
   </span>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
 import GeneralTooltip from './GeneralTooltip.vue'
 import axios from 'axios'
 
-export default {
-  name: 'NkRaceTd',
-  components: {
-    GeneralTooltip
+const props = defineProps({
+  text: {
+    type: String,
+    default: ''
   },
-  props: {
-    text: {
-      type: String,
-      default: ''
-    },
-    displaymode: {
-      type: Object,
-      default: ()=>({
-        hasBtn: false,
-        hasLink: false,
-        urlinfo: null,
-        callback: ()=>{}
+  displaymode: {
+    type: Object,
+    default: ()=>({
+      hasBtn: false,
+      hasLink: false,
+      urlinfo: null,
+      callback: ()=>{}
+    })
+  },
+  record: {
+    type: Object,
+    default: ()=>({})
+  }
+})
+
+const ref_target = ref(null);
+
+const getCaptionFromEachUrl = (urlType)=>{
+  if(urlType != null){
+    if(urlType === '馬URL') return getPedigreeFromHorseId;
+    else if(urlType === '結果URL') return getRaceInfoFromRaceId;
+  }
+}
+
+const getCallbackParamFromEachUrl = (target, urlType)=>{
+  if(urlType != null && target != null){
+    let param;
+    if(urlType === '馬URL'){
+      const horse_id = target.href.split('/').pop();
+      param = horse_id;
+    }else if(urlType === '結果URL'){
+      let querys = {};
+      const keyvalues = target.href.split('?').pop().split('&');
+      keyvalues.forEach((keyvalue)=>{
+        keyvalue = keyvalue.split('=');
+        querys[keyvalue[0]] = keyvalue[1];
       })
-    },
-    record: {
-      type: Object,
-      default: ()=>({})
+      param = querys.race_id;
     }
-  },
-  setup(){
-    const ref_target = ref(null);
-
-    const getCaptionFromEachUrl = (urlType)=>{
-      if(urlType != null){
-        if(urlType === '馬URL') return getPedigreeFromHorseId;
-        else if(urlType === '結果URL') return getRaceInfoFromRaceId;
-      }
-    }
-
-    const getCallbackParamFromEachUrl = (target, urlType)=>{
-      if(urlType != null && target != null){
-        let param;
-        if(urlType === '馬URL'){
-          const horse_id = target.href.split('/').pop();
-          param = horse_id;
-        }else if(urlType === '結果URL'){
-          let querys = {};
-          const keyvalues = target.href.split('?').pop().split('&');
-          keyvalues.forEach((keyvalue)=>{
-            keyvalue = keyvalue.split('=');
-            querys[keyvalue[0]] = keyvalue[1];
-          })
-          param = querys.race_id;
-        }
-        return param;
-      }
-    }
-
-    return {
-      ref_target,
-      getCaptionFromEachUrl,
-      getCallbackParamFromEachUrl
-    }
+    return param;
   }
 }
 
