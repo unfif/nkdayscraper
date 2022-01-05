@@ -1,5 +1,5 @@
 # %%
-from flask import Flask, render_template, jsonify#, redirect, url_for
+from flask import Flask, render_template, jsonify, send_from_directory#, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from scrapy.crawler import CrawlerRunner#, CrawlerProcess
@@ -168,6 +168,10 @@ def catch_all(path):
 @app.get('/now')
 def get_now():
     return dt.datetime.now().isoformat()
+
+@app.get('/assets/<path:filename>')
+def get_asset(filename):
+    return send_from_directory('./dist/assets/', filename)
 
 # %%
 if __name__ == '__main__':
