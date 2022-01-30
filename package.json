@@ -16,12 +16,13 @@
     "flask-dev": "SQLALCHEMY_WARN_20=1 python3 -W always::DeprecationWarning app.py",
     "scrape": "npm run jrr && npm run nkd",
     "app_orig": "npm run build_dev && npm run flask",
-    "app": "npm run build && npm run flask",
+    "app": "npm run build-dev && npm run flask",
     "deploy": "npm run nkd && npm run app",
     "zip": "python3 nkdayscraper/utils/ziptools.py data/json",
     "all": "npm run scrape && npm run app",
     "dev": "vite",
     "build": "vite build",
+    "build-dev": "vite build --mode development",
     "preview": "vite preview"
   },
   "dependencies": {
