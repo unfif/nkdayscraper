@@ -140,7 +140,9 @@ const makeDistanceStyle = (col, record)=>{
     return {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'}
   }
 }
+</script>
 
+<script>
 const getHorseInfo_params = {
   url_obj: {
     replace: {from: 'https://db.netkeiba.com/', to: '/nkdb/'}

@@ -76,7 +76,9 @@ const getCallbackParamFromEachUrl = (target, urlType)=>{
     return param;
   }
 }
+</script>
 
+<script>
 const getPedigreeFromHorseId = async (horse_id)=>{
   const response = await axios.get(`http://localhost:5000/pedigree/${horse_id}`);
   const parser = new DOMParser();
