@@ -44,8 +44,6 @@ onBeforeUpdate(()=>{
   data.is_setRows = {};
 })
 
-let wakuLists = [];
-
 const displayRaceDetail = (raceDetail, key)=>{
   const span = document.createElement('span');
   if(Array.isArray(raceDetail)){
@@ -78,6 +76,10 @@ const makeRowspan = (raceResult)=>{
   if(raceResult.display_top) rowspan = raceResult.size
   return rowspan;
 }
+</script>
+
+<script>
+let wakuLists = [];
 </script>
 
 <style lang="scss" scoped>
