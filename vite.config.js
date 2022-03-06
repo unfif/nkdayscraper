@@ -26,9 +26,9 @@ export default defineConfig({
   //         "/nkrace/": 'https://race.netkeiba.com'
   //     }
   // },
-  // build: {
-  //   // outDir: "dist"
-  //   // minify: false
-  //   // sourcemap: true
-  // }
+  build: {
+    // outDir: "dist"
+    // minify: false
+    sourcemap: true
+  }
 })
