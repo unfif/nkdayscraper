@@ -85,8 +85,9 @@ if(args.zip):
     zipTools.zipEachFilesInDir(jsonDir)
 
 # %%
-# @app.get('/')
-# def index():
+@app.get('/')
+def index():
+    return render_template('index.html')
 #     return redirect(url_for('nkday'))
 
 @app.get('/nkday/')
