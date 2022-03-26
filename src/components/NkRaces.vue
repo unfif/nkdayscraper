@@ -8,7 +8,9 @@
       </thead>
       <tbody v-if="!is_raceLoading">
         <tr v-for="record in records.data" :key="record.index"
-          v-show="showTargetByRecordMap(record, [{place: '場所'}, {racenum: 'R'}, {coursetype: '形式'}]) && showTargetByRankInfo(record.rankinfo)"
+          v-show="showTargetByRecordMap(record, [
+            {place: '場所'}, {racenum: 'R'}, {coursetype: '形式'}
+          ]) && showTargetByRankInfo(record.rankinfo)"
           :class="makeClassesFromRecord(record, ['場所', '形式', 'R', '着順', 'index', 'rankinfo'])"
           @click="flipDisplayTargets($event, record)"
         >
@@ -29,20 +31,19 @@
 </template>
 
 <script setup>
-import { reactive, computed, watchEffect } from 'vue'
+import { reactive, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import NkRaceTd from './NkRaceTd.vue'
 import GeneralDialog from './GeneralDialog.vue'
-import axios from 'axios'
 
 const props = defineProps({
   cols: {
     type: Array,
-    default: ()=>[]
+    default: () => []
   },
   records: {
     type: Object,
-    default: ()=>{
+    default: () => {
       return {
         schema: {fields: null},
         data: []
@@ -87,62 +88,36 @@ watchEffect(() => {
   data.is_show_all_ranks = store.state.is_show_all_ranks;
 })
 
-const getDisplayMode = computed(()=>(col)=>{
-  let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
-  if(col === 'タイトル') response = {hasBtn: true, hasLink: true, urlinfo: '結果URL', callback: getModal, params: getResults_params};
-  else if(col === '馬名') response = {hasBtn: true, hasLink: true, urlinfo: '馬URL', callback: getModal, params: getHorseInfo_params};
-  else if(col === '騎手') response = {hasBtn: false, hasLink: true, urlinfo: '騎手URL', callback: null, params: null};
-  else if(col === '調教師') response = {hasBtn: false, hasLink: true, urlinfo: '調教師URL', callback: null, params: null};
-  return response;
-})
-
-const showTargetByRecordMap = computed(()=>(record, map)=>{
-  return map.reduce((acc, cur)=>{
+const showTargetByRecordMap = (record, map) => {
+  return map.reduce((acc, cur) => {
     const key = Object.keys(cur)[0];
     return acc && (data[key] === 'all' ? true : record[cur[key]] == data[key]);
   }, true)
-})
+}
 
-const showTargetByRankInfo = computed(()=>(rankinfo)=>{
+const showTargetByRankInfo = (rankinfo) => {
   return data.is_show_all_ranks ? true : rankinfo.startsWith('initdisp_');
-})
+}
 
-const flipDisplayTargets = computed(()=>(event, record)=>{
+const flipDisplayTargets = (event, record)=>{
   if(!['A', 'BUTTON'].includes(event.target.tagName)){
     data.is_show_all_ranks = !data.is_show_all_ranks
     data.place = record.場所;
     data.racenum = record.R;
     flipDisplayForSameRoundRaces(event);
   }
-})
+}
 
-const flipDisplayForSameRoundRaces = (event)=>{
+const flipDisplayForSameRoundRaces = (event) => {
   if(!data.is_show_all_ranks && event.target.tagName === 'TD') data.place = 'all';
 }
 
-const makeClass = computed(()=>(col, record)=>{
-  if(col === '形式') return `coursetype_${record[col]}`;
-  else if(col === '枠番') return `postnum_${record[col]}`;
-  else if(col === '人気') return `rank_${record[col]}`;
-  else if(col === '上り') return `rank_${record['last3frank']}`;
-  else if(col === '所属' && record[col] === '栗東') return 'text-success';
-})
-
-const makeClassesFromRecord = (record, prefixes)=>{
-  const classes = prefixes.map((prefix)=>{
-    return `${prefix}_${record[prefix]}`;
-  })
-  return classes;
-}
-
-const makeDistanceStyle = (col, record)=>{
-  if(record['rankinfo'] === 'initdisp_top' && col === '距離'){
-    return {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'}
-  }
-}
+// await new Promise(resolve => setTimeout(resolve, 3000))
 </script>
 
 <script>
+import axios from 'axios'
+
 const getHorseInfo_params = {
   url_obj: {
     replace: {from: 'https://db.netkeiba.com/', to: '/nkdb/'}
@@ -178,30 +153,30 @@ const getResults_params = {
   ]
 };
 
-const getModal = (url, params)=>{
+const getModal = (url, params) => {
   axios.get(url.replace(params.url_obj.replace.from, params.url_obj.replace.to))
-  .then((response)=>{
+  .then((response) => {
     const htmltext = response.data;
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmltext, 'text/html');
     let modal_body = doc.querySelector(params.body_sel);
     modal_body.parentNode.querySelectorAll('table').forEach(
-      (table)=>{table.classList.add('table', 'table-sm', 'table-hover', 'table-striped', 'col', 'mx-1')}
+      (table) => {table.classList.add('table', 'table-sm', 'table-hover', 'table-striped', 'col', 'mx-1')}
     );
-    params.remove_sel_list.forEach((value)=>{
+    params.remove_sel_list.forEach((value) => {
       if(modal_body.querySelector(value) != null) modal_body.querySelector(value).remove();
     });
     let modal_title = doc.querySelector(params.title_sel).innerText.trim();
     document.querySelector('#modal-title').innerHTML = `<span class="badge bg-primary">${modal_title}</span>`;
     document.querySelector('#modal-wrapper .modal-body').innerHTML = `<div class="scrollable">${modal_body.outerHTML}<div>`;
-    params.replace_obj.forEach((value)=>{
+    params.replace_obj.forEach((value) => {
       document.querySelectorAll(`div.modal ${value.select}`).forEach(
-        (node, index, nodeList)=>{nodeList[index].outerHTML = `${value.replacer.start}${node.innerHTML}${value.replacer.end}`}
+        (node, index, nodeList) => {nodeList[index].outerHTML = `${value.replacer.start}${node.innerHTML}${value.replacer.end}`}
       )
     });
-    params.css_obj.forEach((value)=>{
+    params.css_obj.forEach((value) => {
       document.querySelectorAll(`div.modal ${value.select}`).forEach(
-        (node, index, nodeList)=>{
+        (node, index, nodeList) => {
           for(let property in value.css){
             nodeList[index].style[property] = value.css[property];
           }
@@ -211,6 +186,36 @@ const getModal = (url, params)=>{
     document.querySelector('#display-modal-btn').click();
   })
 };
+
+const makeClassesFromRecord = (record, prefixes) => {
+  const classes = prefixes.map((prefix) => {
+    return `${prefix}_${record[prefix]}`;
+  })
+  return classes;
+}
+
+const makeDistanceStyle = (col, record) => {
+  if(record['rankinfo'] === 'initdisp_top' && col === '距離'){
+    return {background: 'linear-gradient(transparent 80%, ' + (record[col] <= 1600 ? '#ee9738' : '#45af4c') + ' 20%'}
+  }
+}
+
+const getDisplayMode = (col) => {
+  let response = {hasBtn: false, hasLink: false, urlinfo: null, callback: null};
+  if(col === 'タイトル') response = {hasBtn: true, hasLink: true, urlinfo: '結果URL', callback: getModal, params: getResults_params};
+  else if(col === '馬名') response = {hasBtn: true, hasLink: true, urlinfo: '馬URL', callback: getModal, params: getHorseInfo_params};
+  else if(col === '騎手') response = {hasBtn: false, hasLink: true, urlinfo: '騎手URL', callback: null, params: null};
+  else if(col === '調教師') response = {hasBtn: false, hasLink: true, urlinfo: '調教師URL', callback: null, params: null};
+  return response;
+}
+
+const makeClass = (col, record) => {
+  if(col === '形式') return `coursetype_${record[col]}`;
+  else if(col === '枠番') return `postnum_${record[col]}`;
+  else if(col === '人気') return `rank_${record[col]}`;
+  else if(col === '上り') return `rank_${record['last3frank']}`;
+  else if(col === '所属' && record[col] === '栗東') return 'text-success';
+}
 </script>
 
 <style lang="scss" scoped>

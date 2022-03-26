@@ -32,14 +32,14 @@ const data = reactive({
   tooltip: ''
 })
 
-const targetEl = computed(()=>{
+const targetEl = computed(() => {
   return props.target;
 })
 
 const showEvents = ['mouseenter', 'focus'];
 const hideEvents = ['mouseleave', 'blur'];
 
-onUpdated(()=>{
+onUpdated(() => {
   const target = targetEl.value;
   const tooltip = ref_tooltip.value;
 
@@ -55,7 +55,7 @@ onUpdated(()=>{
     ],
   })
 
-  const show = async ()=>{
+  const show = async () => {
     if(!data.tooltip){
       data.tooltip = await props.callback(props.callbackParam);
     }
@@ -67,7 +67,7 @@ onUpdated(()=>{
     setTimeout(hide, 2000);
   }
 
-  const hide = ()=>{
+  const hide = () => {
     tooltip.removeAttribute('data-show');
     popperInstance.setOptions({
       modifiers: [{ name: 'eventListeners', enabled: false }],
