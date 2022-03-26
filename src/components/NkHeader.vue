@@ -16,7 +16,7 @@ const props = defineProps({
 
 const emit = defineEmits(['change-race-date'])
 
-const dateFormated = computed(()=>{
+const dateFormated = computed(() => {
   const options = {
     year: 'numeric',
     month: '2-digit',
@@ -25,7 +25,7 @@ const dateFormated = computed(()=>{
   return props.date.toLocaleDateString('ja-JP', options).replace(/\//g, '-');
 })
 
-const emitRaceDate = (event)=>{
+const emitRaceDate = (event) => {
   const date = event.target.value;
   emit('change-race-date', {date});
 }

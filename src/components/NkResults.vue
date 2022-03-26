@@ -32,7 +32,7 @@ import { onBeforeUpdate } from 'vue'
 const props = defineProps({
   results: {
     type: Object,
-    default: ()=>{}
+    default: () => {}
   }
 })
 
@@ -40,16 +40,16 @@ const data = {
   is_setRows: {}
 }
 
-onBeforeUpdate(()=>{
+onBeforeUpdate(() => {
   data.is_setRows = {};
 })
 
-const displayRaceDetail = (raceDetail, key)=>{
+const displayRaceDetail = (raceDetail, key) => {
   const span = document.createElement('span');
   if(Array.isArray(raceDetail)){
     const values = []
     if(key === '枠番') wakuLists = [];
-    raceDetail.forEach((value, index)=>{
+    raceDetail.forEach((value, index) => {
       if(value != 99){
         span.innerText = value;
         if(key === '枠番'){
@@ -71,7 +71,7 @@ const displayRaceDetail = (raceDetail, key)=>{
   return span.outerHTML;
 }
 
-const makeRowspan = (raceResult)=>{
+const makeRowspan = (raceResult) => {
   let rowspan = 0;
   if(raceResult.display_top) rowspan = raceResult.size
   return rowspan;

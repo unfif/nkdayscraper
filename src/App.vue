@@ -1,18 +1,28 @@
 <template>
   <NkHeader
-    :date="data.date" :places="data.places"
+    :date="data.date"
+    :places="data.places"
     @change-race-date="changeRaceDate($event)"
     @click-nav-button="showTargets($event)"
   />
   <main>
     <NkRaces
-      :cols="data.cols" :records="data.records" :is_raceLoading="data.is_raceLoading"
-      :place="data.place" :coursetype="data.coursetype" :racenum="data.racenum" :is_show_all_ranks="data.is_show_all_ranks"
+      :cols="cols"
+      :records="data.records"
+      :place="data.place"
+      :coursetype="data.coursetype"
+      :racenum="data.racenum"
+      :is_show_all_ranks="data.is_show_all_ranks"
+      :is_raceLoading="data.is_raceLoading"
     />
     <NkResults :results="data.results"/>
     <NkJockeys :jockeys="data.jockeys" :places="data.places"/>
   </main>
 </template>
+
+<script>
+const cols = ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"]
+</script>
 
 <script setup>
 import { reactive } from 'vue'
@@ -25,7 +35,6 @@ import axios from 'axios'
 const data = reactive({
   date: new Date(),
   places: [],
-  cols: ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"],
   records: {schema: {fields: null}, data: []},
   results: {schema: {fields: null}, data: []},
   jockeys: {schema: {fields: null}, data: []},
