@@ -26,20 +26,12 @@ with engine.connect() as conn:
         query = select('*').select_from(text(table))
         columns = inspector.get_columns(table)
         for column in columns:
-            if isinstance(column['type'], TEXT):
+            if isinstance(column['type'], TEXT) and column['name'] not in ['courseinfo2']:
                 records = conn.execute(
                     query.filter(text(f"{column['name']} = '' "))
                 )
                 for record in records:
                     pprint(dict(record))
-
-# %%
-table = 'races'
-column = 'racecondition'
-columns = inspector.get_columns(table)
-for column in columns:
-    if column['name'] == 'racecondition':
-        pprint(column)
 
 print('done.')
 # %%

@@ -35,7 +35,14 @@ class NkdayscraperPipeline():
         )
 
         if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.delete(index=f'{self.schema}.{self.schema}')
+        self.es.indices.create(index=f'{self.schema}.{self.schema}', body={
+            'settings': {'number_of_replicas': 0},
+            'mappings': {'properties': {"results" : {"type": "nested"}}}
+        })
         if self.es.indices.exists(index=f'{self.schema}.results'): self.es.indices.delete(index=f'{self.schema}.results')
+        self.es.indices.create(index=f'{self.schema}.results', body={
+            'settings': {'number_of_replicas': 0}
+        })
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
             except: self.mongo.has_error = True
@@ -47,10 +54,8 @@ class NkdayscraperPipeline():
 
     def close_spider(self, spider):
         self.mongo.conn.close()
-        bulk(self.es, makeEsRecords(self.nkdayDict))
-        if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.put_settings(index=f'{self.schema}.{self.schema}', body={"number_of_replicas": 0})
-        if self.es.indices.exists(index=f'{self.schema}.results'): self.es.indices.put_settings(index=f'{self.schema}.results', body={"number_of_replicas": 0})
-        bulk(self.es, makeEsRecords(self.records))
+        bulk(self.es, makeEsRecords(self.nkdayDict), request_timeout=30000)
+        bulk(self.es, makeEsRecords(self.records), request_timeout=30000)
         for table in self.tables:
             index = f'{self.schema}.{table}'
             exists_index = self.es.indices.exists(index=index)
@@ -144,7 +149,7 @@ class JrarecordsscraperPipeline():
 
 
 
-        bulk(self.es, makeEsRecords(self.records))
+        bulk(self.es, makeEsRecords(self.records), request_timeout=30000)
         for table in self.tables:
             index = f'{self.schema}.{table}'
             self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
