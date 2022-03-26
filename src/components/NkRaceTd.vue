@@ -36,50 +36,24 @@ const props = defineProps({
   },
   displaymode: {
     type: Object,
-    default: ()=>({
+    default: () => ({
       hasBtn: false,
       hasLink: false,
       urlinfo: null,
-      callback: ()=>{}
+      callback: () => {}
     })
   },
   record: {
     type: Object,
-    default: ()=>({})
+    default: () => ({})
   }
 })
 
 const ref_target = ref(null);
-
-const getCaptionFromEachUrl = (urlType)=>{
-  if(urlType != null){
-    if(urlType === '馬URL') return getPedigreeFromHorseId;
-    else if(urlType === '結果URL') return getRaceInfoFromRaceId;
-  }
-}
-
-const getCallbackParamFromEachUrl = (target, urlType)=>{
-  if(urlType != null && target != null){
-    let param;
-    if(urlType === '馬URL'){
-      const horse_id = target.href.split('/').pop();
-      param = horse_id;
-    }else if(urlType === '結果URL'){
-      let querys = {};
-      const keyvalues = target.href.split('?').pop().split('&');
-      keyvalues.forEach((keyvalue)=>{
-        keyvalue = keyvalue.split('=');
-        querys[keyvalue[0]] = keyvalue[1];
-      })
-      param = querys.race_id;
-    }
-    return param;
-  }
-}
 </script>
 
 <script>
-const getPedigreeFromHorseId = async (horse_id)=>{
+const getPedigreeFromHorseId = async (horse_id) => {
   const response = await axios.get(`http://localhost:5000/pedigree/${horse_id}`);
   const parser = new DOMParser();
   const html = parser.parseFromString(response.data, 'text/html');
@@ -91,12 +65,38 @@ const getPedigreeFromHorseId = async (horse_id)=>{
   return `父：${sire_name}、母父：${broodmare_sire_name}、母：${mare_name}`;
 }
 
-const getRaceInfoFromRaceId = async (race_id)=>{
+const getRaceInfoFromRaceId = async (race_id) => {
   const response = await axios.get(`http://localhost:5000/nkrace/${race_id}`);
   const parser = new DOMParser();
   const html = parser.parseFromString(response.data, 'text/html');
   const raceList_item02 = html.querySelectorAll('.RaceList_NameBox .RaceList_Item02');
   return raceList_item02[0].innerText;
+}
+
+const getCaptionFromEachUrl = (urlType) => {
+  if(urlType != null){
+    if(urlType === '馬URL') return getPedigreeFromHorseId;
+    else if(urlType === '結果URL') return getRaceInfoFromRaceId;
+  }
+}
+
+const getCallbackParamFromEachUrl = (target, urlType) => {
+  if(urlType != null && target != null){
+    let param;
+    if(urlType === '馬URL'){
+      const horse_id = target.href.split('/').pop();
+      param = horse_id;
+    }else if(urlType === '結果URL'){
+      let querys = {};
+      const keyvalues = target.href.split('?').pop().split('&');
+      keyvalues.forEach((keyvalue) => {
+        keyvalue = keyvalue.split('=');
+        querys[keyvalue[0]] = keyvalue[1];
+      })
+      param = querys.race_id;
+    }
+    return param;
+  }
 }
 </script>
 

@@ -49,15 +49,15 @@ const data = reactive({
   isAllDisp: false
 })
 
-const dispExists = (val)=>{
+const dispExists = (val) => {
   return val == 0 ? '...' : val;
 }
 
-const ffDisp = ()=>{
+const ffDisp = () => {
   data.isAllDisp = !data.isAllDisp;
 }
 
-const hasRank = (key, record)=>{
+const hasRank = (key, record) => {
   let response = {};
   const lastword = key.slice(-1);
   if(lastword === '着' || lastword === '率'){
