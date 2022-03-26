@@ -21,7 +21,7 @@ const props = defineProps({
   },
   displayParams: {
     type: Object,
-    default: ()=>({
+    default: () => ({
       place: 'all',
       coursetype: 'all',
       racenum: 'all',
@@ -32,7 +32,7 @@ const props = defineProps({
 
 const store = useStore()
 
-const showTargets = (param, displayParams)=>{
+const showTargets = (param, displayParams) => {
   const displayParams_copy = Object.assign({}, displayParams);
   for(let key in displayParams_copy){
     if(displayParams_copy[key] === 'param') displayParams_copy[key] = param;
