@@ -21,9 +21,6 @@ Tree.gv*
 /nkdayviewer
 /data/json/*.json
 /data/json/*.zip
-/data/json/calendar/*.json
-/data/json/calendar/static
-/data/json/calendar/html
 
 # vue-cli
 /dist
