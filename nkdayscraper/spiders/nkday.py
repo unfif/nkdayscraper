@@ -8,13 +8,13 @@ from nkdayscraper.utils.functions import getTargetDate
 
 class NkdaySpider(CrawlSpider):
     name = 'nkday'
-    allowed_domains = ['race.netkeiba.com', '127.0.0.1']
+    allowed_domains = ['race.netkeiba.com']
     # start_urls = ['http://race.netkeiba.com/']
 
     rules = (
         Rule(
             LinkExtractor(
-                allow = ['race.netkeiba.com', '127.0.0.1'],
+                allow = ['race.netkeiba.com'],
                 deny = ['race.netkeiba.com/race/movie.html'],
                 restrict_css = ['.RaceList_Data']
             ),
@@ -31,6 +31,7 @@ class NkdaySpider(CrawlSpider):
         baseurl = 'https://race.netkeiba.com/top/race_list_sub.html?kaisai_date='
         if not date: date = f'{getTargetDate():%Y%m%d}'
         self.start_urls = [f'{baseurl}{date}']
+        self.date = date
 
     def parse_races(self, response):
         raceinfo = response.css('#page')

@@ -128,3 +128,5 @@ if DATABASE_URL is None:
 # }
 
 # TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+
+LOG_LEVEL = 'ERROR'
