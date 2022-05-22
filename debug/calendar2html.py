@@ -1,6 +1,6 @@
 # %%
 from app import DATABASE_URL
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 # from sqlalchemy.orm import sessionmaker
 from sqlalchemy.types import SmallInteger, Date, Boolean
 import json
@@ -8,14 +8,15 @@ import pandas as pd
 
 is_make_html = False
 # DATABASE_URL = 'postgresql+psycopg2://postgres:marehito@localhost:5432/postgres'
-engine = create_engine(DATABASE_URL, echo=False, future=False)
+engine = create_engine(DATABASE_URL, echo=False, future=True)
 table_name = 'racedates'
-year = 2019
-# month = 1
-# Session = sessionmaker(engine)
-# with Session() as session:
-#     session.query('racedates').filter(date).delete(some_object)
-#     session.commit()
+year = 2022
+
+with engine.connect() as conn:
+    conn.execute(text(f"delete from {table_name} where extract(year from date) = '{year}'"))
+    conn.commit()
+
+# %%
 
 file_dir = 'data/json/calendar/'
 for month in range(1, 13):
@@ -46,8 +47,8 @@ for month in range(1, 13):
             day.pop('info')
             month_data.append(day)
 
-    df = pd.DataFrame(month_data).sort_values('date')
     from sqlalchemy.dialects import postgresql as pg
+    df = pd.DataFrame(month_data).sort_values('date')
     df.to_sql(table_name, con=engine, if_exists='append', index=False,  dtype={
         'date': Date,
         'weekday': SmallInteger,
