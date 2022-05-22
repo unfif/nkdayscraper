@@ -18,7 +18,7 @@ from functools import singledispatch
 jst = dt.timezone(dt.timedelta(hours=9))
 
 class NkdayscraperPipeline():
-    def __init__(self):
+    def __init__(self, date):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.schema = 'nkday'
         self.tables = ['races', 'paybacks', 'horseresults']
@@ -27,6 +27,7 @@ class NkdayscraperPipeline():
         self.engine = engine
         self.Session = sessionmaker(bind=self.engine, future=True)
         self.es = Elasticsearch(hosts='http://localhost:9200', http_compress=True, timeout=30)
+        date = dt.datetime.strptime(date, '%Y%m%d').replace(tzinfo=jst)
 
         self.mongo = Mongo(
             conn=mongo_connect(query={'serverSelectionTimeoutMS': 3000}),
@@ -34,20 +35,57 @@ class NkdayscraperPipeline():
             has_error=False
         )
 
-        if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.delete(index=f'{self.schema}.{self.schema}')
-        self.es.indices.create(index=f'{self.schema}.{self.schema}', body={
-            'settings': {'number_of_replicas': 0},
-            'mappings': {'properties': {"results" : {"type": "nested"}}}
-        })
-        if self.es.indices.exists(index=f'{self.schema}.results'): self.es.indices.delete(index=f'{self.schema}.results')
-        self.es.indices.create(index=f'{self.schema}.results', body={
-            'settings': {'number_of_replicas': 0}
-        })
+        if self.es.indices.exists(index=f'{self.schema}.races'):
+            query = {
+                "bool": {"filter": [{"term": {"date": date}}]}
+            }
+            result = self.es.search(
+                index="nkday.races",
+                filter_path=['hits.hits._source.raceid'],
+                query=query,
+                size=1000
+            )
+            if result.get('hits'):
+                hits = result['hits']['hits']
+                raceids = [hit['_source']['raceid'] for hit in hits]
+
+                indices = self.es.cat.indices(index='nkday.*', h='index').splitlines()
+                indices.remove('nkday.jrarecords')
+                query = {
+                    "bool": {"filter": [{"terms": {"raceid": raceids}}]}
+                }
+                for index in indices:
+                    result = self.es.delete_by_query(index=index, query=query)
+                    # print(index, result)
+
+                    result = self.es.count(index=index)
+                    # print(index, result)
+
+            # self.es.indices.delete(index=f'nothing', ignore=[400, 404])
+            # self.es.indices.delete(index=f'nothing')
+
+        # if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.delete(index=f'{self.schema}.{self.schema}')
+        if not self.es.indices.exists(index=f'{self.schema}.{self.schema}'):
+            self.es.indices.create(index=f'{self.schema}.{self.schema}', body={
+                'settings': {'number_of_replicas': 0},
+                'mappings': {'properties': {"results" : {"type": "nested"}}}
+            })
+        # if self.es.indices.exists(index=f'{self.schema}.results'): self.es.indices.delete(index=f'{self.schema}.results')
+        if not self.es.indices.exists(index=f'{self.schema}.results'):
+            self.es.indices.create(index=f'{self.schema}.results', body={
+                'settings': {'number_of_replicas': 0}
+            })
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
             except: self.mongo.has_error = True
-            index = f'{self.schema}.{table}'
-            if self.es.indices.exists(index=index): self.es.indices.delete(index=index)
+            # index = f'{self.schema}.{table}'
+            # if self.es.indices.exists(index=index): self.es.indices.delete(index=index)
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            date=crawler.spider.date
+        )
 
     def open_spider(self, spider):
         self.open_time = perf_counter()
