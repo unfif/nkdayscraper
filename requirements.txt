@@ -86,7 +86,7 @@ kiwisolver==1.4.2
 lazy-object-proxy==1.7.1
 lightgbm==3.3.2
 line-bot-sdk==2.2.1
-lxml==4.8.0
+lxml==4.9.1
 MarkupSafe==2.1.1
 matplotlib==3.5.1
 matplotlib-inline==0.1.3
