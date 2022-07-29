@@ -288,7 +288,7 @@ rubicon-objc==0.4.2
 Rx==3.2.0
 scikit-learn==1.0.2
 scipy==1.8.0
-Scrapy==2.6.1
+Scrapy==2.6.2
 scrapy-playwright==0.0.14
 Send2Trash==1.8.0
 service-identity==21.1.0
