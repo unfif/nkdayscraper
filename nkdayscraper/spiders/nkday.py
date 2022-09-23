@@ -46,7 +46,7 @@ class NkdaySpider(CrawlSpider):
         item['place'] = racedata02[1]
         item['holdtimesnum'] = racedata02[0].split('回')[0]
         item['holddaysnum'] = racedata02[2].split('日目')[0]
-        item['racenum'] = racelist_namebox.css('.RaceList_Item01 .RaceNum::text').get().split('R')[0]
+        item['racenum'] = racelist_namebox.css('.RaceList_Item01 .RaceNum::text').getall()[1].strip().split('R')[0]
         item['title'] = racelist_namebox.css('.RaceName::text').get().strip()
         coursetype = re.split('(\d+)|m', racelist_namebox.css('.RaceData01 span::text').get().strip())
         item['coursetype'] = {'芝': '芝', 'ダ': 'ダート', '障': '障害'}.get(coursetype[0])
