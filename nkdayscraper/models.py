@@ -371,7 +371,11 @@ class HorseResult(Base):
 
 class Racecourses(Base):
     __tablename__ = 'racecourses'
-    id = Column(Text, primary_key=True, comment='コースID')
+    # __table_args__ = (
+    #     ForeignKeyConstraint(['id'], ['races.place']),
+    #     {}
+    # )
+    id = Column(SmallInteger, primary_key=True, comment='コースID')
     name = Column(Text, primary_key=True, comment='コース名')
 
 class Racedates(Base):
