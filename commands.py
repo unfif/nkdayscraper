@@ -8,16 +8,16 @@ if __name__ == '__main__':
         Base.metadata.create_all(engine, tables=[Racecourses.__table__])
 
         rc_list = [
-            Racecourses(id='01', name='札幌'),
-            Racecourses(id='02', name='函館'),
-            Racecourses(id='03', name='福島'),
-            Racecourses(id='04', name='新潟'),
-            Racecourses(id='05', name='東京'),
-            Racecourses(id='06', name='中山'),
-            Racecourses(id='07', name='中京'),
-            Racecourses(id='08', name='京都'),
-            Racecourses(id='09', name='阪神'),
-            Racecourses(id='10', name='小倉')
+            Racecourses(id=1, name='札幌'),
+            Racecourses(id=2, name='函館'),
+            Racecourses(id=3, name='福島'),
+            Racecourses(id=4, name='新潟'),
+            Racecourses(id=5, name='東京'),
+            Racecourses(id=6, name='中山'),
+            Racecourses(id=7, name='中京'),
+            Racecourses(id=8, name='京都'),
+            Racecourses(id=9, name='阪神'),
+            Racecourses(id=10, name='小倉')
         ]
 
         from sqlalchemy.orm import sessionmaker
