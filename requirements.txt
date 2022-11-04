@@ -320,7 +320,7 @@ torchvision==0.13.1
 tornado==6.2
 tqdm==4.64.1
 traitlets==5.4.0
-Twisted==22.8.0
+Twisted==22.10.0
 typeguard==2.13.3
 typing_extensions==4.3.0
 urllib3==1.26.12
