@@ -19,7 +19,7 @@ bleak==0.17.0
 botorch==0.7.1
 cachetools==5.2.0
 casttube==0.2.1
-certifi==2022.9.14
+certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==2.1.1
 click==8.1.3
