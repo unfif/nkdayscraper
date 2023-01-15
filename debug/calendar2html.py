@@ -10,7 +10,7 @@ is_make_html = False
 # DATABASE_URL = 'postgresql+psycopg2://postgres:marehito@localhost:5432/postgres'
 engine = create_engine(DATABASE_URL, echo=False, future=True)
 table_name = 'racedates'
-year = 2022
+year = 2023
 
 with engine.connect() as conn:
     conn.execute(text(f"delete from {table_name} where extract(year from date) = '{year}'"))
