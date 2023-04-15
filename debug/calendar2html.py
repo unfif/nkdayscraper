@@ -1,13 +1,12 @@
 # %%
 from app import DATABASE_URL
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, select
 # from sqlalchemy.orm import sessionmaker
 from sqlalchemy.types import SmallInteger, Date, Boolean
-import json
 import pandas as pd
+import json
 
-is_make_html = False
-# DATABASE_URL = 'postgresql+psycopg2://postgres:marehito@localhost:5432/postgres'
+is_make_html = True
 engine = create_engine(DATABASE_URL, echo=False, future=True)
 table_name = 'racedates'
 year = 2023
@@ -17,7 +16,6 @@ with engine.connect() as conn:
     conn.commit()
 
 # %%
-
 file_dir = 'data/json/calendar/'
 for month in range(1, 13):
     file_name = f'{year}{month:02}.json'
@@ -49,7 +47,7 @@ for month in range(1, 13):
 
     from sqlalchemy.dialects import postgresql as pg
     df = pd.DataFrame(month_data).sort_values('date')
-    df.to_sql(table_name, con=engine, if_exists='append', index=False,  dtype={
+    df.to_sql(table_name, con=engine, if_exists='replace', index=False, dtype={
         'date': Date,
         'weekday': SmallInteger,
         'is_holiday': Boolean,

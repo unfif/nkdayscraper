@@ -1,23 +1,23 @@
 # %%
 if __name__ == '__main__':
-    from nkdayscraper.models import engine, Base, Racecourses, Racedates, drop_race_related_tables, drop_race_tables
+    from nkdayscraper.models import engine, Base, Racecourse, Racedate, drop_race_related_tables, drop_race_tables
     from sys import argv
 
     def recreate_racecourses():
-        Base.metadata.drop_all(engine, tables=[Racecourses.__table__])
-        Base.metadata.create_all(engine, tables=[Racecourses.__table__])
+        Base.metadata.drop_all(engine, tables=[Racecourse.__table__])
+        Base.metadata.create_all(engine, tables=[Racecourse.__table__])
 
         rc_list = [
-            Racecourses(id=1, name='札幌'),
-            Racecourses(id=2, name='函館'),
-            Racecourses(id=3, name='福島'),
-            Racecourses(id=4, name='新潟'),
-            Racecourses(id=5, name='東京'),
-            Racecourses(id=6, name='中山'),
-            Racecourses(id=7, name='中京'),
-            Racecourses(id=8, name='京都'),
-            Racecourses(id=9, name='阪神'),
-            Racecourses(id=10, name='小倉')
+            Racecourse(id=1, place='札幌'),
+            Racecourse(id=2, place='函館'),
+            Racecourse(id=3, place='福島'),
+            Racecourse(id=4, place='新潟'),
+            Racecourse(id=5, place='東京'),
+            Racecourse(id=6, place='中山'),
+            Racecourse(id=7, place='中京'),
+            Racecourse(id=8, place='京都'),
+            Racecourse(id=9, place='阪神'),
+            Racecourse(id=10, place='小倉')
         ]
 
         from sqlalchemy.orm import sessionmaker
@@ -32,8 +32,8 @@ if __name__ == '__main__':
                 raise
 
     def recreate_racedates():
-        Base.metadata.drop_all(engine, tables=[Racedates.__table__])
-        Base.metadata.create_all(engine, tables=[Racedates.__table__])
+        Base.metadata.drop_all(engine, tables=[Racedate.__table__])
+        Base.metadata.create_all(engine, tables=[Racedate.__table__])
 
     def check_records():
         from nkdayscraper.models import Race, HorseResult
@@ -88,8 +88,8 @@ if __name__ == '__main__':
         print('create_tables:            this command creates all tables in model.')
         print('drop_race_related_tables: this command drops all tables related race.')
         print('drop_race_tables:         this command drops tables of race.')
-        print('recreate_racecourses:     this command drops and creates Racecourses table.')
-        print('recreate_racedates        this command drops and creates Racedates table.')
+        print('recreate_racecourses:     this command drops and creates Racecourse table.')
+        print('recreate_racedates        this command drops and creates Racedate table.')
         print('check_records:            this command checks incomplate records and displays race date.')
         print('exists_records:           this command checks exists records and displays race date.')
         print('count_records:            this command count for Race and HorseResult')
