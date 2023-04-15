@@ -1,9 +1,10 @@
 # %%
-from sqlalchemy import create_engine, Column, ForeignKeyConstraint, func, text
+from sqlalchemy import create_engine, ForeignKeyConstraint, func, text
 from sqlalchemy.types import Integer, SmallInteger, Float, Text, Date, DateTime, Time, Boolean
 from sqlalchemy.future import select
 from sqlalchemy.dialects import postgresql as pg
-from sqlalchemy.orm import declarative_base, aliased, relationship
+from sqlalchemy.orm import declarative_base, aliased, relationship, Mapped, mapped_column
+from typing import Optional, List, Any
 from nkdayscraper.utils.functions import getTargetDate
 from scrapy.utils.project import get_project_settings
 from pymongo import MongoClient
@@ -83,36 +84,36 @@ class Race(Base):
     __table_args__ = (ForeignKeyConstraint(
         ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
         ['jrarecords.place', 'jrarecords.coursetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courseinfo1', 'jrarecords.courseinfo2']),
-        {}
+        {'comment': 'レース'}
     )
-    raceid = Column(Text, primary_key=True, comment='レースID')
-    year = Column(Integer, comment='年')
-    place = Column(Text, comment='場所')
-    holdtimesnum = Column(Integer, comment='開催回数')
-    holddaysnum = Column(Integer, comment='開催日数')
-    racenum = Column(Integer, comment='R')
-    title = Column(Text, comment='タイトル')
-    coursetype = Column(Text, comment='形式')
-    distance = Column(Integer, comment='距離')
-    courseinfo1 = Column(Text, comment='情報1')
-    courseinfo2 = Column(Text, comment='情報2')
-    agecondition = Column(Text, comment='馬齢条件')
-    classcondition = Column(Text, comment='クラス')
-    racecondition = Column(Text, comment='条件')
-    weight = Column(Text, comment='重量')
-    weather = Column(Text, comment='天候')
-    coursecondition = Column(Text, comment='状態')
-    date = Column(Date, comment='日程')
-    datetime = Column(DateTime(timezone=True), comment='日時')
-    posttime = Column(Time(timezone=True), comment='時刻')
-    generation = Column(Text, comment='世代')
-    starters = Column(Integer, comment='頭数')
-    addedmoney_1st = Column(Integer, comment='1着賞金')
-    addedmoney_2nd = Column(Integer, comment='2着賞金')
-    addedmoney_3rd = Column(Integer, comment='3着賞金')
-    addedmoney_4th = Column(Integer, comment='4着賞金')
-    addedmoney_5th = Column(Integer, comment='5着賞金')
-    requrl = Column(Text, comment='結果URL')
+    raceid: Mapped[str] = mapped_column(Text, primary_key=True, comment='レースID')
+    year: Mapped[Optional[int]] = mapped_column(Integer, comment='年')
+    place: Mapped[Optional[str]] = mapped_column(Text, comment='場所')
+    holdtimesnum: Mapped[Optional[int]] = mapped_column(Integer, comment='開催回数')
+    holddaysnum: Mapped[Optional[int]] = mapped_column(Integer, comment='開催日数')
+    racenum: Mapped[Optional[int]] = mapped_column(Integer, comment='R')
+    title: Mapped[Optional[str]] = mapped_column(Text, comment='タイトル')
+    coursetype: Mapped[Optional[str]] = mapped_column(Text, comment='形式')
+    distance: Mapped[Optional[int]] = mapped_column(Integer, comment='距離')
+    courseinfo1: Mapped[Optional[str]] = mapped_column(Text, comment='情報1')
+    courseinfo2: Mapped[Optional[str]] = mapped_column(Text, comment='情報2')
+    agecondition: Mapped[Optional[str]] = mapped_column(Text, comment='馬齢条件')
+    classcondition: Mapped[Optional[str]] = mapped_column(Text, comment='クラス')
+    racecondition: Mapped[Optional[str]] = mapped_column(Text, comment='条件')
+    weight: Mapped[Optional[str]] = mapped_column(Text, comment='重量')
+    weather: Mapped[Optional[str]] = mapped_column(Text, comment='天候')
+    coursecondition: Mapped[Optional[str]] = mapped_column(Text, comment='状態')
+    date: Mapped[Optional[dt.date]] = mapped_column(Date, comment='日程')
+    datetime: Mapped[Optional[dt.datetime]] = mapped_column(DateTime(timezone=True), comment='日時')
+    posttime: Mapped[Optional[dt.time]] = mapped_column(Time(timezone=True), comment='時刻')
+    generation: Mapped[Optional[str]] = mapped_column(Text, comment='世代')
+    starters: Mapped[Optional[int]] = mapped_column(Integer, comment='頭数')
+    addedmoney_1st: Mapped[Optional[int]] = mapped_column(Integer, comment='1着賞金')
+    addedmoney_2nd: Mapped[Optional[int]] = mapped_column(Integer, comment='2着賞金')
+    addedmoney_3rd: Mapped[Optional[int]] = mapped_column(Integer, comment='3着賞金')
+    addedmoney_4th: Mapped[Optional[int]] = mapped_column(Integer, comment='4着賞金')
+    addedmoney_5th: Mapped[Optional[int]] = mapped_column(Integer, comment='5着賞金')
+    requrl: Mapped[Optional[str]] = mapped_column(Text, comment='結果URL')
 
     jrarecord = relationship('Jrarecord')
 
@@ -142,38 +143,39 @@ class Payback(Base):
     __tablename__ = 'paybacks'
     __table_args__ = (
         ForeignKeyConstraint(['raceid'], ['races.raceid']),
-        {}
+        {'comment': '払戻し'}
     )
-    raceid = Column(Text, primary_key=True, comment='レースID')
-    tansho = Column(pg.ARRAY(Integer), comment='単勝')
-    tanshopay = Column(pg.ARRAY(Integer), comment='単勝払戻')
-    tanshofav = Column(pg.ARRAY(Integer), comment='単勝人気')
-    fukusho = Column(pg.ARRAY(Integer), comment='複勝')
-    fukushopay = Column(pg.ARRAY(Integer), comment='複勝払戻')
-    fukushofav = Column(pg.ARRAY(Integer), comment='複勝人気')
-    wakuren = Column(pg.ARRAY(Integer), comment='枠連')
-    wakurenpay = Column(pg.ARRAY(Integer), comment='枠連払戻')
-    wakurenfav = Column(pg.ARRAY(Integer), comment='枠連人気')
-    umaren = Column(pg.ARRAY(Integer), comment='馬連')
-    umarenpay = Column(pg.ARRAY(Integer), comment='馬連払戻')
-    umarenfav = Column(pg.ARRAY(Integer), comment='馬連人気')
-    wide = Column(pg.ARRAY(Integer), comment='ワイド')
-    widepay = Column(pg.ARRAY(Integer), comment='ワイド払戻')
-    widefav = Column(pg.ARRAY(Integer), comment='ワイド人気')
-    umatan = Column(pg.ARRAY(Integer), comment='馬単')
-    umatanpay = Column(pg.ARRAY(Integer), comment='馬単払戻')
-    umatanfav = Column(pg.ARRAY(Integer), comment='馬単人気')
-    fuku3 = Column(pg.ARRAY(Integer), comment='3連複')
-    fuku3pay = Column(pg.ARRAY(Integer), comment='3連複払戻')
-    fuku3fav = Column(pg.ARRAY(Integer), comment='3連複人気')
-    tan3 = Column(pg.ARRAY(Integer), comment='3連単')
-    tan3pay = Column(pg.ARRAY(Integer), comment='3連単払戻')
-    tan3fav = Column(pg.ARRAY(Integer), comment='3連単人気')
+    raceid: Mapped[str] = mapped_column(Text, primary_key=True, comment='レースID')
+    tansho: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='単勝')
+    tanshopay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='単勝払戻')
+    tanshofav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='単勝人気')
+    fukusho: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='複勝')
+    fukushopay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='複勝払戻')
+    fukushofav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='複勝人気')
+    wakuren: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='枠連')
+    wakurenpay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='枠連払戻')
+    wakurenfav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='枠連人気')
+    umaren: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='馬連')
+    umarenpay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='馬連払戻')
+    umarenfav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='馬連人気')
+    wide: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='ワイド')
+    widepay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='ワイド払戻')
+    widefav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='ワイド人気')
+    umatan: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='馬単')
+    umatanpay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='馬単払戻')
+    umatanfav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='馬単人気')
+    fuku3: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='3連複')
+    fuku3pay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='3連複払戻')
+    fuku3fav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='3連複人気')
+    tan3: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='3連単')
+    tan3pay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='3連単払戻')
+    tan3fav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='3連単人気')
 
     race = relationship('Race')
 
 class Jrarecord(Base):
     __tablename__ = 'jrarecords'
+    __table_args__ = {'comment': 'JRAレコード'}
     # __table_args__ = (ForeignKeyConstraint(
     #     ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
     #     ['races.place', 'races.coursetype', 'races.generation', 'races.distance', 'races.courseinfo1', 'races.courseinfo2']),
@@ -184,25 +186,25 @@ class Jrarecord(Base):
     #     {}
     # )
     # __mapper_args__ = {'column_prefix': 'jrarecords_'}
-    place = Column(Text, primary_key=True, comment='場所')
-    coursetype = Column(Text, primary_key=True, comment='形式')
-    generation = Column(Text, primary_key=True, comment='世代')
-    distance = Column(Integer, primary_key=True, comment='距離')
-    courseinfo1 = Column(Text, primary_key=True, comment='情報1')
-    courseinfo2 = Column(Text, primary_key=True, comment='情報2')
-    time = Column(Time(timezone=False), comment='タイム')
-    horsename = Column(Text, comment='馬名')
-    sire = Column(Text, comment='父馬')
-    dam = Column(Text, comment='母馬')
-    sex = Column(Text, comment='性')
-    age = Column(Integer, comment='齢')
-    jockeyweight = Column(Float, comment='斤量')
-    jockey = Column(Text, comment='騎手')
-    jockeyfullname = Column(Text, comment='騎手姓名')
-    date = Column(Date, comment='日程')
-    weather = Column(Text, comment='天候')
-    coursecondition = Column(Text, comment='状態')
-    reference = Column(Boolean, comment='基準')
+    place: Mapped[str] = mapped_column(Text, primary_key=True, comment='場所')
+    coursetype: Mapped[str] = mapped_column(Text, primary_key=True, comment='形式')
+    generation: Mapped[str] = mapped_column(Text, primary_key=True, comment='世代')
+    distance: Mapped[int] = mapped_column(Integer, primary_key=True, comment='距離')
+    courseinfo1: Mapped[str] = mapped_column(Text, primary_key=True, comment='情報1')
+    courseinfo2: Mapped[str] = mapped_column(Text, primary_key=True, comment='情報2')
+    time: Mapped[Optional[dt.time]] = mapped_column(Time(timezone=False), comment='タイム')
+    horsename: Mapped[Optional[str]] = mapped_column(Text, comment='馬名')
+    sire: Mapped[Optional[str]] = mapped_column(Text, comment='父馬')
+    dam: Mapped[Optional[str]] = mapped_column(Text, comment='母馬')
+    sex: Mapped[Optional[str]] = mapped_column(Text, comment='性')
+    age: Mapped[Optional[int]] = mapped_column(Integer, comment='齢')
+    jockeyweight: Mapped[Optional[float]] = mapped_column(Float, comment='斤量')
+    jockey: Mapped[Optional[str]] = mapped_column(Text, comment='騎手')
+    jockeyfullname: Mapped[Optional[str]] = mapped_column(Text, comment='騎手姓名')
+    date: Mapped[Optional[dt.date]] = mapped_column(Date, comment='日程')
+    weather: Mapped[Optional[str]] = mapped_column(Text, comment='天候')
+    coursecondition: Mapped[Optional[str]] = mapped_column(Text, comment='状態')
+    reference: Mapped[Optional[bool]] = mapped_column(Boolean, comment='基準')
 
     # race = relationship('Race')
 
@@ -210,39 +212,39 @@ class HorseResult(Base):
     __tablename__ = 'horseresults'
     __table_args__ = (
         ForeignKeyConstraint(['raceid'], ['races.raceid']),
-        {}
+        {'comment': '結果'}
     )
-    raceid = Column(Text, primary_key=True, comment='レースID')
+    raceid: Mapped[str] = mapped_column(Text, primary_key=True, comment='レースID')
 
-    ranking = Column(Integer, comment='着順')
-    postnum = Column(Integer, comment='枠番')
-    horseid = Column(Integer, comment='馬ID')
-    horsenum = Column(Integer, primary_key=True, comment='馬番')
-    horsename = Column(Text, comment='馬名')
-    horseurl = Column(Text, comment='馬URL')
-    sex = Column(Text, comment='性')
-    age = Column(Integer, comment='齢')
-    jockeyweight = Column(Float, comment='斤量')
-    jockey = Column(Text, comment='騎手')
-    jockeyurl = Column(Text, comment='騎手URL')
-    time = Column(Time(timezone=False), comment='タイム')
-    margin = Column(Text, comment='着差')
+    ranking: Mapped[Optional[int]] = mapped_column(Integer, comment='着順')
+    postnum: Mapped[Optional[int]] = mapped_column(Integer, comment='枠番')
+    horseid: Mapped[Optional[int]] = mapped_column(Integer, comment='馬ID')
+    horsenum: Mapped[int] = mapped_column(Integer, primary_key=True, comment='馬番')
+    horsename: Mapped[Optional[str]] = mapped_column(Text, comment='馬名')
+    horseurl: Mapped[Optional[str]] = mapped_column(Text, comment='馬URL')
+    sex: Mapped[Optional[str]] = mapped_column(Text, comment='性')
+    age: Mapped[Optional[int]] = mapped_column(Integer, comment='齢')
+    jockeyweight: Mapped[Optional[float]] = mapped_column(Float, comment='斤量')
+    jockey: Mapped[Optional[str]] = mapped_column(Text, comment='騎手')
+    jockeyurl: Mapped[Optional[str]] = mapped_column(Text, comment='騎手URL')
+    time: Mapped[Optional[dt.time]] = mapped_column(Time(timezone=False), comment='タイム')
+    margin: Mapped[Optional[str]] = mapped_column(Text, comment='着差')
 
-    fav = Column(Integer, comment='人気')
-    odds = Column(Float, comment='オッズ')
-    last3f = Column(Float, comment='上り')
-    if engine.name in ['postgresql', 'mongodb']: passageratelist = Column(pg.ARRAY(Integer), comment='通過')
-    else: passageratelist = Column(Text, comment='通過')
-    passageratelist = Column(Text, comment='通過')
-    passagerate_1st = Column(Integer, comment='通過1')
-    passagerate_2nd = Column(Integer, comment='通過2')
-    passagerate_3rd = Column(Integer, comment='通過3')
-    passagerate_4th = Column(Integer, comment='通過4')
-    affiliate = Column(Text, comment='所属')
-    trainer = Column(Text, comment='調教師')
-    trainerurl = Column(Text, comment='調教師URL')
-    horseweight = Column(Float, comment='馬体重')
-    horseweightdiff = Column(Integer, comment='増減')
+    fav: Mapped[int] = mapped_column(Integer, comment='人気')
+    odds: Mapped[float] = mapped_column(Float, comment='オッズ')
+    last3f: Mapped[float] = mapped_column(Float, comment='上り')
+    if engine.name in ['postgresql', 'mongodb']: passageratelist: Mapped[List[int]] = mapped_column(pg.ARRAY(Integer), comment='通過')
+    else: passageratelist: Mapped[str] = mapped_column(Text, comment='通過')
+    passageratelist: Mapped[str] = mapped_column(Text, comment='通過')
+    passagerate_1st: Mapped[int] = mapped_column(Integer, comment='通過1')
+    passagerate_2nd: Mapped[int] = mapped_column(Integer, comment='通過2')
+    passagerate_3rd: Mapped[int] = mapped_column(Integer, comment='通過3')
+    passagerate_4th: Mapped[int] = mapped_column(Integer, comment='通過4')
+    affiliate: Mapped[str] = mapped_column(Text, comment='所属')
+    trainer: Mapped[str] = mapped_column(Text, comment='調教師')
+    trainerurl: Mapped[str] = mapped_column(Text, comment='調教師URL')
+    horseweight: Mapped[float] = mapped_column(Float, comment='馬体重')
+    horseweightdiff: Mapped[int] = mapped_column(Integer, comment='増減')
 
     race = relationship('Race')
 
@@ -369,20 +371,21 @@ class HorseResult(Base):
         counts = {'count': {'Race': race, 'HorseResult': horse_results}}
         return counts
 
-class Racecourses(Base):
+class Racecourse(Base):
     __tablename__ = 'racecourses'
     # __table_args__ = (
-    #     ForeignKeyConstraint(['id'], ['races.place']),
-    #     {}
+    #     ForeignKeyConstraint(['place'], ['races.place']),
+    #     {'comment': 'コース'}
     # )
-    id = Column(SmallInteger, primary_key=True, comment='コースID')
-    name = Column(Text, primary_key=True, comment='コース名')
+    id: Mapped[int] = mapped_column(SmallInteger, primary_key=True, comment='コースID')
+    place: Mapped[str] = mapped_column(Text, primary_key=True, comment='コース名')
 
-class Racedates(Base):
+class Racedate(Base):
     __tablename__ = 'racedates'
-    date = Column(Date, primary_key=True, comment='日程')
-    weekday = Column(SmallInteger, comment='曜日')
-    is_holiday = Column(Boolean, comment='祝日')
-    gradeRace = Column(pg.ARRAY(pg.JSONB), comment='レース')
-    option = Column(pg.ARRAY(pg.JSONB), comment='option')
-    race = Column(pg.ARRAY(pg.JSONB), comment='開催')
+    __table_args__ = {'comment': '開催日'}
+    date: Mapped[dt.date] = mapped_column(Date, primary_key=True, comment='日程')
+    weekday: Mapped[Optional[int]] = mapped_column(SmallInteger, comment='曜日')
+    is_holiday: Mapped[Optional[bool]] = mapped_column(Boolean, comment='祝日')
+    gradeRace: Mapped[Optional[dict[str, Any]]] = mapped_column(pg.ARRAY(pg.JSONB), comment='レース')
+    option: Mapped[Optional[dict[str, Any]]] = mapped_column(pg.ARRAY(pg.JSONB), comment='option')
+    race: Mapped[Optional[dict[str, Any]]] = mapped_column(pg.ARRAY(pg.JSONB), comment='開催')
