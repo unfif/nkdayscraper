@@ -18,6 +18,8 @@ Tree.gv*
 /tmp_*.py
 /data/tmp
 /data/pickle/tmp
+/data/dump/*.dmp
+/data/dump/*.sql
 /nkdayviewer
 /data/json/*.json
 /data/json/*.zip
