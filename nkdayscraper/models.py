@@ -81,10 +81,11 @@ def drop_race_related_tables(engine):
 
 class Race(Base):
     __tablename__ = 'races'
-    __table_args__ = (ForeignKeyConstraint(
-        ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
-        ['jrarecords.place', 'jrarecords.coursetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courseinfo1', 'jrarecords.courseinfo2']),
-        {'comment': 'レース'}
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
+            ['jrarecords.place', 'jrarecords.coursetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courseinfo1', 'jrarecords.courseinfo2']
+        ), {'comment': 'レース'}
     )
     raceid: Mapped[str] = mapped_column(Text, primary_key=True, comment='レースID')
     year: Mapped[Optional[int]] = mapped_column(Integer, comment='年')
