@@ -20,11 +20,17 @@ engine = create_engine(DATABASE_URL, echo=False, future=True)
 
 class RBase():
     def __repr__(self):
-        columns = ', '.join([
-            f'{key}={repr(self.__dict__[key])}'
-            for key in self.__dict__.keys() if not key.startswith('_')
-        ])
-        return f'<{self.__class__.__name__}({columns})>'
+        columns = [
+            f'{column.name}={repr(self.__dict__[column.name])}'
+            for column in self.__table__.c
+        ]
+        relationships = [
+            f'{relationship.key}={repr(self.__dict__[relationship.key])}'
+            for relationship in self.__mapper__.relationships
+        ]
+        key_values = ', '.join(columns + relationships)
+        return f'<{self.__class__.__name__}({key_values})>'
+
 
     @staticmethod
     def makeCommentsQuery():
