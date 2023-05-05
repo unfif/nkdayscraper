@@ -43,7 +43,7 @@ class Query(graphene.ObjectType):
 
 schema = graphene.Schema(query=Query)
 
-gql = '''
+query = '''
 	query {
 		horseresults {
 			raceid,
@@ -83,5 +83,5 @@ with Session() as session:
 	# load_data = horseresult_schema.load(dump_data, session=session)
 	# pprint(load_data)
 
-	result = schema.execute(gql, context_value={'session': session})
+	result = schema.execute(query, context_value={'session': session})
 	print(result)
