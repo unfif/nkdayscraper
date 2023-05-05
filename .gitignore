@@ -23,6 +23,7 @@ Tree.gv*
 /nkdayviewer
 /data/json/*.json
 /data/json/*.zip
+/tmp
 
 # vue-cli
 /dist
