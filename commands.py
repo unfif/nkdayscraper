@@ -3,11 +3,8 @@ if __name__ == '__main__':
     from nkdayscraper.models import engine, Base, Racecourse, Racedate, drop_race_related_tables, drop_race_tables
     from sys import argv
 
-    def recreate_racecourses():
-        Base.metadata.drop_all(engine, tables=[Racecourse.__table__])
-        Base.metadata.create_all(engine, tables=[Racecourse.__table__])
-
-        rc_list = [
+    def upsert_racecourses():
+        racecourses = [
             Racecourse(id=1, place='札幌'),
             Racecourse(id=2, place='函館'),
             Racecourse(id=3, place='福島'),
@@ -20,15 +17,20 @@ if __name__ == '__main__':
             Racecourse(id=10, place='小倉')
         ]
 
+        from sqlalchemy import delete
         from sqlalchemy.orm import sessionmaker
         Session = sessionmaker(bind=engine, future=True)
 
         with Session() as session:
             try:
-                session.add_all(rc_list)
+                for racecourse in racecourses:
+                    session.merge(racecourse)
+
                 session.commit()
+                print('succeeded.')
             except:
                 session.rollback()
+                print('failed.')
                 raise
 
     def recreate_racedates():
@@ -88,7 +90,7 @@ if __name__ == '__main__':
         print('create_tables:            this command creates all tables in model.')
         print('drop_race_related_tables: this command drops all tables related race.')
         print('drop_race_tables:         this command drops tables of race.')
-        print('recreate_racecourses:     this command drops and creates Racecourse table.')
+        print('upsert_racecourses:       this command drops and creates Racecourse table.')
         print('recreate_racedates        this command drops and creates Racedate table.')
         print('check_records:            this command checks incomplate records and displays race date.')
         print('exists_records:           this command checks exists records and displays race date.')
@@ -104,8 +106,8 @@ if __name__ == '__main__':
         drop_race_related_tables(engine)
     elif argv[1] == 'drop_race_tables':
         drop_race_tables(engine)
-    elif argv[1] == 'recreate_racecourses':
-        recreate_racecourses()
+    elif argv[1] == 'upsert_racecourses':
+        upsert_racecourses()
     elif argv[1] == 'recreate_racedates':
         recreate_racedates()
     elif argv[1] == 'check_records':
@@ -122,6 +124,6 @@ if __name__ == '__main__':
         print(f"'{argv[1]}' is not found in prepared commands.")
         display_help()
 
-    print('done...')
+    print('done.')
 
 # %%
