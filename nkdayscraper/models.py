@@ -34,7 +34,7 @@ class RBase():
 
     @staticmethod
     def makeCommentsQuery():
-        schema = 'public'
+        schema = 'postgres'
         query = "SELECT psat.relname as table_name, pa.attname as column_name, pd.description as column_comment "
         query += "FROM pg_stat_all_tables psat "
         query += "JOIN pg_description pd ON psat.relid = pd.objoid "
@@ -91,9 +91,10 @@ class Race(Base):
         ForeignKeyConstraint(
             ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
             ['jrarecords.place', 'jrarecords.coursetype', 'jrarecords.generation', 'jrarecords.distance', 'jrarecords.courseinfo1', 'jrarecords.courseinfo2']
-        ), {'comment': 'レース'}
+        ),
+        {'comment': 'レース'}
     )
-    raceid: Mapped[str] = mapped_column(Text, primary_key=True, comment='レースID')
+    raceid: Mapped[str] = mapped_column(Text, primary_key=True, unique=True, comment='レースID')
     year: Mapped[Optional[int]] = mapped_column(Integer, comment='年')
     place: Mapped[Optional[str]] = mapped_column(Text, comment='場所')
     holdtimesnum: Mapped[Optional[int]] = mapped_column(Integer, comment='開催回数')
@@ -122,7 +123,9 @@ class Race(Base):
     addedmoney_5th: Mapped[Optional[int]] = mapped_column(Integer, comment='5着賞金')
     requrl: Mapped[Optional[str]] = mapped_column(Text, comment='結果URL')
 
-    jrarecord = relationship('Jrarecord')
+    jrarecord = relationship('Jrarecord', back_populates='races')
+    horseresults = relationship('HorseResult', back_populates='race')
+    payback = relationship('Payback', back_populates='race')
 
     def getRecords(self, date=None):
         with engine.connect() as conn:
@@ -149,10 +152,12 @@ class Race(Base):
 class Payback(Base):
     __tablename__ = 'paybacks'
     __table_args__ = (
-        ForeignKeyConstraint(['raceid'], ['races.raceid']),
+        ForeignKeyConstraint(
+            ['raceid'], ['races.raceid']
+        ),
         {'comment': '払戻し'}
     )
-    raceid: Mapped[str] = mapped_column(Text, primary_key=True, comment='レースID')
+    raceid: Mapped[str] = mapped_column(Text, primary_key=True, unique=True, comment='レースID')
     tansho: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='単勝')
     tanshopay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='単勝払戻')
     tanshofav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='単勝人気')
@@ -178,21 +183,14 @@ class Payback(Base):
     tan3pay: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='3連単払戻')
     tan3fav: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='3連単人気')
 
-    race = relationship('Race')
+    race = relationship('Race', back_populates='payback')
 
 class Jrarecord(Base):
     __tablename__ = 'jrarecords'
-    __table_args__ = {'comment': 'JRAレコード'}
-    # __table_args__ = (ForeignKeyConstraint(
-    #     ['place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'],
-    #     ['races.place', 'races.coursetype', 'races.generation', 'races.distance', 'races.courseinfo1', 'races.courseinfo2']),
-    #     {}
-    # )
-    # __table_args__ = (UniqueConstraint(
-    #     'place', 'coursetype', 'generation', 'distance', 'courseinfo1', 'courseinfo2'),
-    #     {}
-    # )
-    # __mapper_args__ = {'column_prefix': 'jrarecords_'}
+    __table_args__ = (
+        ForeignKeyConstraint(['place'], ['racecourses.place']),
+        {'comment': 'JRAレコード'}
+    )
     place: Mapped[str] = mapped_column(Text, primary_key=True, comment='場所')
     coursetype: Mapped[str] = mapped_column(Text, primary_key=True, comment='形式')
     generation: Mapped[str] = mapped_column(Text, primary_key=True, comment='世代')
@@ -213,7 +211,7 @@ class Jrarecord(Base):
     coursecondition: Mapped[Optional[str]] = mapped_column(Text, comment='状態')
     reference: Mapped[Optional[bool]] = mapped_column(Boolean, comment='基準')
 
-    # race = relationship('Race')
+    races = relationship('Race', back_populates='jrarecord')
 
 class HorseResult(Base):
     __tablename__ = 'horseresults'
@@ -237,23 +235,23 @@ class HorseResult(Base):
     time: Mapped[Optional[dt.time]] = mapped_column(Time(timezone=False), comment='タイム')
     margin: Mapped[Optional[str]] = mapped_column(Text, comment='着差')
 
-    fav: Mapped[int] = mapped_column(Integer, comment='人気')
-    odds: Mapped[float] = mapped_column(Float, comment='オッズ')
-    last3f: Mapped[float] = mapped_column(Float, comment='上り')
-    if engine.name in ['postgresql', 'mongodb']: passageratelist: Mapped[List[int]] = mapped_column(pg.ARRAY(Integer), comment='通過')
-    else: passageratelist: Mapped[str] = mapped_column(Text, comment='通過')
-    passageratelist: Mapped[str] = mapped_column(Text, comment='通過')
-    passagerate_1st: Mapped[int] = mapped_column(Integer, comment='通過1')
-    passagerate_2nd: Mapped[int] = mapped_column(Integer, comment='通過2')
-    passagerate_3rd: Mapped[int] = mapped_column(Integer, comment='通過3')
-    passagerate_4th: Mapped[int] = mapped_column(Integer, comment='通過4')
-    affiliate: Mapped[str] = mapped_column(Text, comment='所属')
-    trainer: Mapped[str] = mapped_column(Text, comment='調教師')
-    trainerurl: Mapped[str] = mapped_column(Text, comment='調教師URL')
-    horseweight: Mapped[float] = mapped_column(Float, comment='馬体重')
-    horseweightdiff: Mapped[int] = mapped_column(Integer, comment='増減')
+    fav: Mapped[Optional[int]] = mapped_column(Integer, comment='人気')
+    odds: Mapped[Optional[float]] = mapped_column(Float, comment='オッズ')
+    last3f: Mapped[Optional[float]] = mapped_column(Float, comment='上り')
+    if engine.name in ['postgresql', 'mongodb']: passageratelist: Mapped[Optional[List[int]]] = mapped_column(pg.ARRAY(Integer), comment='通過')
+    else: passageratelist: Mapped[Optional[str]] = mapped_column(Text, comment='通過')
+    passageratelist: Mapped[Optional[str]] = mapped_column(Text, comment='通過')
+    passagerate_1st: Mapped[Optional[int]] = mapped_column(Integer, comment='通過1')
+    passagerate_2nd: Mapped[Optional[int]] = mapped_column(Integer, comment='通過2')
+    passagerate_3rd: Mapped[Optional[int]] = mapped_column(Integer, comment='通過3')
+    passagerate_4th: Mapped[Optional[int]] = mapped_column(Integer, comment='通過4')
+    affiliate: Mapped[Optional[str]] = mapped_column(Text, comment='所属')
+    trainer: Mapped[Optional[str]] = mapped_column(Text, comment='調教師')
+    trainerurl: Mapped[Optional[str]] = mapped_column(Text, comment='調教師URL')
+    horseweight: Mapped[Optional[float]] = mapped_column(Float, comment='馬体重')
+    horseweightdiff: Mapped[Optional[int]] = mapped_column(Integer, comment='増減')
 
-    race = relationship('Race')
+    race = relationship('Race', back_populates='horseresults')
 
     def getRecords(self, date=None):
         if date is None: date = getTargetDate()
@@ -380,16 +378,17 @@ class HorseResult(Base):
 
 class Racecourse(Base):
     __tablename__ = 'racecourses'
-    # __table_args__ = (
-    #     ForeignKeyConstraint(['place'], ['races.place']),
-    #     {'comment': 'コース'}
-    # )
-    id: Mapped[int] = mapped_column(SmallInteger, primary_key=True, comment='コースID')
-    place: Mapped[str] = mapped_column(Text, primary_key=True, comment='コース名')
+    __table_args__ = (
+        {'comment': 'コース'}
+    )
+    id: Mapped[int] = mapped_column(SmallInteger, primary_key=True, unique=True, comment='コースID')
+    place: Mapped[str] = mapped_column(Text, primary_key=True, unique=True, comment='コース名')
 
 class Racedate(Base):
     __tablename__ = 'racedates'
-    __table_args__ = {'comment': '開催日'}
+    __table_args__ = (
+        {'comment': '開催日'}
+    )
     date: Mapped[dt.date] = mapped_column(Date, primary_key=True, comment='日程')
     weekday: Mapped[Optional[int]] = mapped_column(SmallInteger, comment='曜日')
     is_holiday: Mapped[Optional[bool]] = mapped_column(Boolean, comment='祝日')
