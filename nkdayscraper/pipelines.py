@@ -50,7 +50,7 @@ class NkdayscraperPipeline():
                 raceids = [hit['_source']['raceid'] for hit in hits]
 
                 indices = self.es.cat.indices(index='nkday.*', h='index').splitlines()
-                indices.remove('nkday.jrarecords')
+                if 'nkday.jrarecords' in indices: indices.remove('nkday.jrarecords')
                 query = {
                     "bool": {"filter": [{"terms": {"raceid": raceids}}]}
                 }
