@@ -25,8 +25,8 @@ class RBase():
             for column in self.__table__.c
         ]
         relationships = [
-            f'{relationship.key}={repr(self.__dict__[relationship.key])}'
-            for relationship in self.__mapper__.relationships
+            f'{relation.key}={repr(self.__dict__.get(relation.key, {}))}'
+            for relation in self.__mapper__.relationships
         ]
         key_values = ', '.join(columns + relationships)
         return f'<{self.__class__.__name__}({key_values})>'

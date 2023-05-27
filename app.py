@@ -5,7 +5,7 @@ from flask_cors import CORS
 from scrapy.crawler import CrawlerRunner#, CrawlerProcess
 # from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
-from nkdayscraper.models import HorseResult#, Base, engine
+from nkdayscraper.models import HorseResult
 from nkdayscraper.spiders.nkday import NkdaySpider
 from nkdayscraper.utils.functions import getTargetDate
 from twisted.internet import reactor
@@ -54,7 +54,7 @@ if platform.system() == 'Windows':
     ])
 
 app = Flask(__name__) if args.orig else Flask(
-    __name__, static_folder = 'dist', template_folder = 'dist'
+    __name__, static_folder='dist', template_folder='dist'
 )
 app.jinja_env.add_extension('jinja2.ext.do')
 app.jinja_env.variable_start_string = '{@'
@@ -63,7 +63,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
-# Base.metadata.create_all(engine)
 # %%
 horseResult = HorseResult()
 date = getTargetDate()
