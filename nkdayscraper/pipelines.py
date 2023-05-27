@@ -21,12 +21,13 @@ class NkdayscraperPipeline():
     def __init__(self, date):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.schema = 'nkday'
-        self.tables = ['races', 'paybacks', 'horseresults']
         self.records = []
-        self.nkdayDict = {}
         self.engine = engine
         self.Session = sessionmaker(bind=self.engine, future=True)
         self.es = Elasticsearch(hosts='http://localhost:9200', http_compress=True, timeout=30)
+        self.exists_es = self.es.ping()
+        self.tables = ['races', 'paybacks', 'horseresults']
+        self.nkdayDict = {}
         date = dt.datetime.strptime(date, '%Y%m%d').replace(tzinfo=jst)
 
         self.mongo = Mongo(
@@ -35,7 +36,7 @@ class NkdayscraperPipeline():
             has_error=False
         )
 
-        if self.es.indices.exists(index=f'{self.schema}.races'):
+        if self.exists_es and self.es.indices.exists(index=f'{self.schema}.races'):
             query = {
                 "bool": {"filter": [{"term": {"date": date}}]}
             }
@@ -65,21 +66,19 @@ class NkdayscraperPipeline():
             # self.es.indices.delete(index=f'nothing')
 
         # if self.es.indices.exists(index=f'{self.schema}.{self.schema}'): self.es.indices.delete(index=f'{self.schema}.{self.schema}')
-        if not self.es.indices.exists(index=f'{self.schema}.{self.schema}'):
+        if self.exists_es and not self.es.indices.exists(index=f'{self.schema}.{self.schema}'):
             self.es.indices.create(index=f'{self.schema}.{self.schema}', body={
                 'settings': {'number_of_replicas': 0},
                 'mappings': {'properties': {"results" : {"type": "nested"}}}
             })
         # if self.es.indices.exists(index=f'{self.schema}.results'): self.es.indices.delete(index=f'{self.schema}.results')
-        if not self.es.indices.exists(index=f'{self.schema}.results'):
+        if self.exists_es and not self.es.indices.exists(index=f'{self.schema}.results'):
             self.es.indices.create(index=f'{self.schema}.results', body={
                 'settings': {'number_of_replicas': 0}
             })
         for table in self.tables:
             try: getattr(self.mongo.db, table).drop()
             except: self.mongo.has_error = True
-            # index = f'{self.schema}.{table}'
-            # if self.es.indices.exists(index=index): self.es.indices.delete(index=index)
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -92,14 +91,15 @@ class NkdayscraperPipeline():
 
     def close_spider(self, spider):
         self.mongo.conn.close()
-        bulk(self.es, makeEsRecords(self.nkdayDict), request_timeout=30000)
-        bulk(self.es, makeEsRecords(self.records), request_timeout=30000)
-        for table in self.tables:
-            index = f'{self.schema}.{table}'
-            exists_index = self.es.indices.exists(index=index)
-            if exists_index: self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
-            alias = f'analysis-index-{index}'
-            if exists_index: self.es.indices.put_alias(index=index, name=alias)
+        if self.exists_es:
+            bulk(self.es, makeEsRecords(self.nkdayDict), request_timeout=30000)
+            bulk(self.es, makeEsRecords(self.records), request_timeout=30000)
+            for table in self.tables:
+                index = f'{self.schema}.{table}'
+                exists_index = self.es.indices.exists(index=index)
+                if exists_index: self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
+                alias = f'analysis-index-{index}'
+                if exists_index: self.es.indices.put_alias(index=index, name=alias)
 
         self.es.close()
         print(f'【spider_processing_time: {str(perf_counter() - self.open_time)}】')
@@ -132,7 +132,10 @@ class NkdayscraperPipeline():
         for target in ['date', 'datetime']:
             if target in esRecord and esRecord[target] is not None: esRecord[target] = esRecord[target].isoformat()
 
+
         raceid = esRecord['raceid']
+
+
 
         esRecord['_index'] = f'{self.schema}.{self.schema}'
         if isinstance(item, (RaceItem, PaybackItem)):
@@ -158,12 +161,14 @@ class JrarecordsscraperPipeline():
     def __init__(self):
         """Initializes database connection and sessionmaker. Creates deals table."""
         self.schema = 'nkday'
-        self.tables = ['jrarecords']
         self.records = []
-
         self.engine = engine
         self.Session = sessionmaker(bind=self.engine, future=True)
         self.es = Elasticsearch(hosts='http://localhost:9200', http_compress=True, timeout=30)
+        self.exists_es = self.es.ping()
+        self.tables = ['jrarecords']
+
+
 
         self.mongo = Mongo(
             conn=mongo_connect(query={'serverSelectionTimeoutMS': 3000}),
@@ -177,7 +182,9 @@ class JrarecordsscraperPipeline():
             try: getattr(self.mongo.db, table).drop()
             except: self.mongo.has_error = True
             index = f'{self.schema}.{table}'
-            if self.es.indices.exists(index=index): self.es.indices.delete(index=index)
+            if self.exists_es and self.es.indices.exists(index=index): self.es.indices.delete(index=index)
+
+
 
     def open_spider(self, spider):
         self.open_time = perf_counter()
@@ -185,12 +192,12 @@ class JrarecordsscraperPipeline():
     def close_spider(self, spider):
         self.mongo.conn.close()
 
+        if self.exists_es:
+            bulk(self.es, makeEsRecords(self.records), request_timeout=30000)
+            for table in self.tables:
+                index = f'{self.schema}.{table}'
+                self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
 
-
-        bulk(self.es, makeEsRecords(self.records), request_timeout=30000)
-        for table in self.tables:
-            index = f'{self.schema}.{table}'
-            self.es.indices.put_settings(index=index, body={"number_of_replicas": 0})
 
 
 
