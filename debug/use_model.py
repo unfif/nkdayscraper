@@ -9,4 +9,15 @@ date = getTargetDate()
 data = horseResult.getRecords(date)
 records = data['records']
 print(records.iloc[0, :])
+print(records[[
+    '場所',
+    'R',
+    'タイトル',
+    '形式',
+    '距離',
+    '情報1',
+    '情報2',
+]].drop_duplicates())
 print(data.keys())
+
+# %%
