@@ -191,8 +191,8 @@ class JrarecordsscraperPipeline():
 
     def close_spider(self, spider):
         self.mongo.conn.close()
-
         if self.exists_es:
+
             bulk(self.es, makeEsRecords(self.records), request_timeout=30000)
             for table in self.tables:
                 index = f'{self.schema}.{table}'
