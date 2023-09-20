@@ -227,7 +227,7 @@
         }
       });
 
-      var cols = ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"];
+      var cols = ["場所", "R", "タイトル", "形式", "距離", "情報1", "情報2", "情報3", "レコード", "天候", "状態", "時刻", "着順", "枠番", "馬番", "馬名", "性", "齢", "斤量", "騎手", "タイム", "着差", "人気", "オッズ", "上り", "通過", "所属", "調教師", "馬体重", "増減"];
       var recordsGrid = new Vue({
         el: "#grid-root",
         data: {// 初期化
@@ -244,7 +244,7 @@
       // .then(response => {recordsGrid.records = response.data.data;console.log(response)})
       // .catch(err => console.log('err:', err))
 
-      // axios.post('http://localhost:8360/v1/graphql', {"query": "{ races { date distance place racenum title coursetype courseinfo1 courseinfo2 jrarecord { time } weather condition posttime horseresults { ranking postnum horsenum horsename sex age jockeyweight jockey time margin fav odds last3f passageratelist affiliate trainer horseweight horseweightdiff } } }"})
+      // axios.post('http://localhost:8360/v1/graphql', {"query": "{ races { date distance place racenum title coursetype courseinfo1 courseinfo2 courseinfo3 jrarecord { time } weather condition posttime horseresults { ranking postnum horsenum horsename sex age jockeyweight jockey time margin fav odds last3f passageratelist affiliate trainer horseweight horseweightdiff } } }"})
       // .then(response => {console.log(response)})
     </script>
     <script src="{@url_for('static', filename='js/jquery-3.5.1.min.js')@}"></script>

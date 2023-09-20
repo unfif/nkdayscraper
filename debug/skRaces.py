@@ -16,12 +16,12 @@ data = race.getRecords()
 from pandas import set_option; set_option('display.max_columns', 100); set_option('display.max_rows', 500)
 df = data['records']
 # %%
-feature_columns = ['年', '場所', 'R', 'タイトル', '形式', '距離', '情報1', '情報2', '天候', '状態', '日時', '日程', '時刻', '世代', '頭数']
+feature_columns = ['年', '場所', 'R', 'タイトル', '形式', '距離', '情報1', '情報2', '情報3', '天候', '状態', '日時', '日程', '時刻', '世代', '頭数']
 features_orig = df[feature_columns]
 # %%
 from sklearn.preprocessing import LabelEncoder
 lb = LabelEncoder()
-encoding_columns = ['場所', 'タイトル', '形式', '情報1', '情報2', '天候', '状態', '日時', '日程', '時刻', '世代']
+encoding_columns = ['場所', 'タイトル', '形式', '情報1', '情報2', '情報3', '天候', '状態', '日時', '日程', '時刻', '世代']
 features = features_orig
 for encoding_column in encoding_columns:
     features[encoding_column] = lb.fit_transform(features_orig[encoding_column])

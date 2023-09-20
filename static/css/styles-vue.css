@@ -166,7 +166,8 @@ th.col_時刻{
   width: 3.25em;
 }
 th.col_情報1,
-th.col_情報2{
+th.col_情報2,
+th.col_情報3{
   width: 2.75em;
 }
 th.col_レコード{
@@ -255,6 +256,7 @@ table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_to
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_距離,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_情報1,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_情報2,
+table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_情報3,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_レコード,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_天候,
 table.raceresults tbody tr:not(.rankinfo_initdisp_top):not(.rankinfo_initdisp_topend) .col_状態,
