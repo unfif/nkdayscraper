@@ -14,6 +14,7 @@ query = """query MyQuery {
     distance
     courseinfo1
     courseinfo2
+    courseinfo3
     jrarecord {
       time
     }

@@ -257,7 +257,8 @@ th.col_オッズ {
   width: 3.5em;
 }
 th.col_情報1,
-th.col_情報2 {
+th.col_情報2,
+th.col_情報3 {
   width: 2.75em;
 }
 th.col_性,
@@ -320,6 +321,7 @@ table.raceresults tbody {
     .col_距離,
     .col_情報1,
     .col_情報2,
+    .col_情報3,
     .col_レコード,
     .col_天候,
     .col_状態,

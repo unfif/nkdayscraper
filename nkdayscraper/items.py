@@ -22,6 +22,7 @@ class RaceItem(scrapy.Item):
     distance = scrapy.Field()
     courseinfo1 = scrapy.Field()
     courseinfo2 = scrapy.Field()
+    courseinfo3 = scrapy.Field()
     agecondition = scrapy.Field()
     classcondition = scrapy.Field()
     racecondition = scrapy.Field()

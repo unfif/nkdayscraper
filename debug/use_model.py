@@ -1,5 +1,5 @@
 # %%
-from nkdayscraper.models import HorseResult
+from nkdayscraper.models import Race, HorseResult
 from nkdayscraper.utils.functions import getTargetDate
 import pandas as pd
 # %%
@@ -17,7 +17,13 @@ print(records[[
     '距離',
     '情報1',
     '情報2',
+    '情報3',
 ]].drop_duplicates())
 print(data.keys())
+
+race = Race()
+data = race.getRecords(date)
+records = data['records']
+print(records.iloc[0, :])
 
 # %%
